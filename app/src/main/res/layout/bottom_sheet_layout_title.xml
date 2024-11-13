@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:background="@android:color/transparent"
+    android:layout_gravity="bottom">
+
+    <LinearLayout
+        android:id="@+id/bottom_sheet_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/dialog_background"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="26dp"
+            android:layout_height="4dp"
+            android:background="@drawable/bottom_sheet_close_background"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="10dp"/>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:id="@+id/titleContainer"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="20dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Title"
+                            android:textSize="15dp"
+                            android:layout_gravity="bottom"
+                            android:letterSpacing="-0.02"
+                            android:textColor="@color/text3"
+                            android:layout_marginEnd="2dp"
+                            android:fontFamily="@font/inter_semibold" />
+                        <ImageButton
+                            android:id="@+id/copyTitle"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:padding="4.5dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/copy"
+                            android:background="@drawable/ripple_background"
+                            app:tint="@color/icon"
+                            android:scaleType="centerInside" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="20dp">
+                        <TextView
+                            android:id="@+id/title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14dp"
+                            android:textColor="@color/text2"
+                            android:text="Title goes here"/>
+                    </LinearLayout>
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        app:dividerColor="@color/dividerColor"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="8dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/origTitleContainer"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="20dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Original title"
+                            android:textSize="15dp"
+                            android:layout_gravity="bottom"
+                            android:letterSpacing="-0.02"
+                            android:layout_marginEnd="2dp"
+                            android:textColor="@color/text3"
+                            android:fontFamily="@font/inter_semibold" />
+                        <ImageButton
+                            android:id="@+id/copyOrigTitle"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:padding="4.5dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/copy"
+                            android:background="@drawable/ripple_background"
+                            app:tint="@color/icon"
+                            android:scaleType="centerInside" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="20dp">
+                        <TextView
+                            android:id="@+id/originalTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14dp"
+                            android:textColor="@color/text2"
+                            android:text="Original title goes here"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/otherTitleContainer"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        app:dividerColor="@color/dividerColor"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="8dp"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="20dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Other title"
+                            android:textSize="15dp"
+                            android:layout_gravity="bottom"
+                            android:letterSpacing="-0.02"
+                            android:layout_marginEnd="2dp"
+                            android:textColor="@color/text3"
+                            android:fontFamily="@font/inter_semibold" />
+                        <ImageButton
+                            android:id="@+id/copyOtherTitle"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:padding="4.5dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/copy"
+                            android:background="@drawable/ripple_background"
+                            app:tint="@color/icon"
+                            android:scaleType="centerInside" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="20dp">
+                        <TextView
+                            android:id="@+id/otherTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14dp"
+                            android:textColor="@color/text2"
+                            android:text="Other title goes here"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <FrameLayout
+            android:id="@+id/closeButton"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:background="@drawable/button_background_close"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="20dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@color/text2"
+                android:textSize="16dp"
+                android:letterSpacing="0.04"
+                android:fontFamily="@font/inter_semibold"
+                android:text="Close"/>
+        </FrameLayout>
+
+    </LinearLayout>
+</FrameLayout>

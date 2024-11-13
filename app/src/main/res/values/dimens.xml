@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="anime_item_width">116dp</dimen>
+    <dimen name="drawable_padding">8dp</dimen>
+    <dimen name="borderWidth">0dp</dimen>
+    <dimen name="borderWidth1">0.5dp</dimen>
+    <dimen name="padding">0dp</dimen>
+    <dimen name="strokeWidth">1dp</dimen>
+    <dimen name="dividerHeight">0.6dp</dimen>
+    <dimen name="dividerHeight1">0.75dp</dimen>
+</resources>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <color name="black">#141414</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="gray">#757575</color>
+
+    <color name="main">#ff5252</color>
+    <color name="mainAccent">#26ff5252</color>
+    <color name="mainAccent1">#26ff5252</color>
+    <color name="mainDisabled">#f6a6a5</color>
+
+    <color name="surface">#0b57cf</color>
+
+    <color name="text">@color/white</color>
+    <color name="text1">@color/main</color>
+    <color name="text2">@color/gray</color>
+    <color name="text3">#242424</color>
+    <color name="text4">#3E3E3E</color>
+    <color name="text5">#282828</color>
+
+    <color name="border">#1A000000</color>
+
+    <color name="dividerColor">#1A000000</color>
+    <color name="dividerColor1">#0D000000</color>
+
+    <color name="background">@color/white</color>
+    <color name="OnBackground">@color/white</color>
+
+    <color name="bottom_nav_unselected_icon_color">@color/gray</color>
+
+    <color name="rippleColor">#33000000</color>
+    <color name="rippleColor1">#1A000000</color>
+    <color name="rippleColor2">#dfe1e0</color>
+
+    <color name="buttonCloseColor">#eeeeee</color>
+
+    <color name="closeBottomSheetColor">#dee0df</color>
+
+    <color name="tooltipBackground">#f26463</color>
+
+    <color name="imagePlaceholderColor">#ffffff</color>
+
+    <color name="progressBackground">#e0e0e0</color>
+
+    <color name="mainBottom">#ff5252</color>
+
+    <color name="gradientStartColor">#5a47f0</color>
+    <color name="gradientEndColor">#ec5b48</color>
+
+    <color name="icon">#565656</color>
+    <color name="icon1">#141414</color>
+
+    <color name="swipeColor">#ff5252</color>
+    <color name="swipeColorAccent">#eecdd2</color>
+
+    <color name="goldColor">#fdd841</color>
+
+    <color name="statusColor">#E65BA25E</color>
+    <color name="statusColor1">#E6936396</color>
+    <color name="statusColor2">#E6535F8D</color>
+    <color name="statusColor3">#E6bc872c</color>
+    <color name="statusColor4">#E6ab4043</color>
+
+    <color name="statusColor5">#67bb6d</color>
+    <color name="statusColor6">#b565ba</color>
+    <color name="statusColor7">#5c6cc1</color>
+    <color name="statusColor8">#fdc730</color>
+    <color name="statusColor9">#f05352</color>
+
+    <color name="iconColorButton1">#fe590c</color>
+    <color name="iconColorButton2">#2996e1</color>
+    <color name="iconColorButton3">#a656ad</color>
+    <color name="iconColorButton4">#0c978c</color>
+    <color name="iconColorButton5">#4cb349</color>
+
+    <color name="searchField">#feffff</color>
+
+    <color name="button">#f7f7f7</color>
+    <color name="statusCard">#262626</color>
+    <color name="seasonCard">#80CACACA</color>
+
+    <color name="buttonColor">#feffff</color>
+
+    <color name="snackBarBackground">#313133</color>
+    <color name="snackBarText">#e6e1e5</color>
+
+    <color name="inactiveColor">#d9d9d9</color>
+    <color name="activeColor">#727272</color>
+
+    <color name="exo_white" tools:override="true">#ffffff</color>
+    <color name="exo_white_opacity_70" tools:override="true">#B3ffffff</color>
+    <color name="exo_black_opacity_70" tools:override="true">#B3000000</color>
+    <color name="exo_black_opacity_60" tools:override="true">#98000000</color>
+    <color name="exo_styled_error_message_background" tools:override="true">#80808080</color>
+    <color name="exo_bottom_bar_background" tools:override="true">#b0000000</color>
+</resources>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+
+    </style>
+
+    <style name="BottomNavigationTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textSize">13.5sp</item>
+        <item name="fontFamily">@font/inter_semibold</item>
+        <item name="android:letterSpacing">-0.01</item>
+    </style>
+
+    <style name="MediumText" parent="@android:style/TextAppearance">
+        <item name="android:textSize">14.5sp</item>
+    </style>
+
+    <style name="BoldText" parent="@android:style/TextAppearance">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="HeaderText" parent="@android:style/TextAppearance">
+        <item name="android:textSize">19sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Widget.Material3.BottomNavigationView.ActiveIndicator" parent="">
+        <item name="android:width">64dp</item>
+        <item name="android:height">32dp</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.M3.Comp.NavigationBar.ActiveIndicator.Shape</item>
+        <item name="android:color">@color/mainAccent1</item>
+    </style>
+
+    <style name="CustomDialogStyle" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowBackground">@drawable/dialog_shape</item>
+        <item name="android:windowMinWidthMajor">67%</item>
+        <item name="android:windowMinWidthMinor">95%</item>
+        <item name="android:windowElevation">8dp</item>
+    </style>
+
+    <style name="CustomSheetStyle" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:colorBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.4</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
+
+    <style name="roundedImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">6dp</item>
+        <item name="android:antialias">true</item>
+    </style>
+</resources>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="16dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="8dp">
+
+    <TextView
+        android:id="@+id/headerTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+        android:text="Search history"
+        android:textAllCaps="true"
+        android:textColor="@color/text2"
+        android:letterSpacing="0.02"
+        android:textSize="12dp" />
+
+    <TextView
+        android:id="@+id/headerButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:fontFamily="sans-serif-medium"
+        android:text="Clear all"
+        android:textColor="@color/text2"
+        android:textSize="13.5dp" />
+</FrameLayout>

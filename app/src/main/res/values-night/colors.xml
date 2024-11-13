@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#141414</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="main">#e0e0e0</color>
+    <color name="mainAccent">#26e0e0e0</color>
+    <color name="mainAccent1">#494458</color>
+    <color name="mainDisabled">#797979</color>
+
+    <color name="surface">#a8c8fb</color>
+
+    <color name="dividerColor">#1AFFFFFF</color>
+    <color name="dividerColor1">#0DFFFFFF</color>
+
+    <color name="text">@color/black</color>
+    <color name="text1">@color/main</color>
+    <color name="text3">@color/white</color>
+    <color name="text4">#BABABA</color>
+    <color name="text5">#DEDEDE</color>
+
+    <color name="background">#121212</color>
+    <color name="OnBackground">#252525</color>
+
+    <color name="bottom_nav_unselected_icon_color">#c1c1c1</color>
+
+    <color name="rippleColor">#33FFFFFF</color>
+    <color name="rippleColor1">#33000000</color>
+    <color name="rippleColor2">#515151</color>
+
+    <color name="buttonCloseColor">#424242</color>
+
+    <color name="closeBottomSheetColor">#616161</color>
+
+    <color name="tooltipBackground">#494458</color>
+
+    <color name="imagePlaceholderColor">#424242</color>
+
+    <color name="progressBackground">#424242</color>
+
+    <color name="mainBottom">#eaddf9</color>
+
+    <color name="gradientStartColor">#494658</color>
+    <color name="gradientEndColor">#908ba1</color>
+
+    <color name="icon">#BDBDBD</color>
+    <color name="icon1">#EFEFEF</color>
+
+    <color name="swipeColor">#e0e0e0</color>
+    <color name="swipeColorAccent">#5e5e5e</color>
+
+    <color name="iconColorButton1">#dedede</color>
+    <color name="iconColorButton2">#dedede</color>
+    <color name="iconColorButton3">#dedede</color>
+    <color name="iconColorButton4">#dedede</color>
+    <color name="iconColorButton5">#dedede</color>
+
+    <color name="searchField">#252525</color>
+
+    <color name="button">#191919</color>
+    <color name="statusCard">#7A7A7A</color>
+    <color name="seasonCard">#80000000</color>
+
+    <color name="buttonColor">#252525</color>
+
+    <color name="snackBarBackground">#313133</color>
+    <color name="snackBarText">#e6e1e5</color>
+
+    <color name="inactiveColor">#313131</color>
+    <color name="activeColor">#777777</color>
+</resources>

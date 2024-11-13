@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/background"
+    android:padding="8dp"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/textDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text3"
+        android:maxLines="5"
+        android:layout_marginBottom="8dp"
+        android:text="Description"
+        style="@style/MediumText"/>
+
+    <FrameLayout
+        android:id="@+id/detailsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/ripple_background_main"
+        android:paddingHorizontal="12dp"
+        android:clickable="true"
+        android:focusable="true"
+        tools:ignore="TouchTargetSizeCheck">
+
+        <TextView
+            android:id="@+id/detailsButtonText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Details..."
+            android:letterSpacing="0.02"
+            android:textColor="@color/text1"
+            android:textAlignment="center"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            style="@style/MediumText"/>
+    </FrameLayout>
+</LinearLayout>
