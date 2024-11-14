@@ -2,7 +2,11 @@ package com.kawaidev.kawaime
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
+import com.kawaidev.kawaime.network.dao.helpers.WatchedRelease
+import com.kawaidev.kawaime.ui.listeners.FavoriteListener
 import com.kawaidev.kawaime.ui.listeners.SearchListener
+import com.kawaidev.kawaime.ui.listeners.WatchedListener
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.lang.ref.WeakReference
@@ -14,6 +18,8 @@ class Prefs private constructor(context: Context) {
     private val json = Json { ignoreUnknownKeys = true }
 
     private val searchListeners = mutableListOf<WeakReference<SearchListener>>()
+    private val watchedListeners = mutableListOf<WeakReference<WatchedListener>>()
+    private val favoriteListeners = mutableListOf<WeakReference<FavoriteListener>>()
 
     companion object {
         @Volatile
@@ -28,6 +34,14 @@ class Prefs private constructor(context: Context) {
 
     fun setSearchListener(listener: SearchListener) {
         searchListeners.add(WeakReference(listener))
+    }
+
+    fun setWatchedListener(listener: WatchedListener) {
+        watchedListeners.add(WeakReference(listener))
+    }
+
+    fun setFavoriteListener(listener: FavoriteListener) {
+        favoriteListeners.add(WeakReference(listener))
     }
 
     fun addSearchTerm(searchTerm: String) {
@@ -58,5 +72,67 @@ class Prefs private constructor(context: Context) {
     fun getSearches(): List<String> {
         val jsonStr = sharedPreferences.getString("searches", null) ?: return mutableListOf()
         return json.decodeFromString<List<String>>(jsonStr)
+    }
+
+    // New Methods for WatchedRelease
+
+    fun saveWatchedRelease(watchedRelease: WatchedRelease) {
+        // Get all saved watched releases and filter out any with the same episode ID
+        val watchedReleases = getAllWatched().toMutableList().apply {
+            removeAll { it.episodeId == watchedRelease.episodeId }
+        }
+
+        // Add the new watched release
+        watchedReleases.add(watchedRelease)
+
+        Log.d("Prefs", json.encodeToString(watchedRelease))
+
+        // Save the updated list back to SharedPreferences
+        val jsonStr = json.encodeToString(watchedReleases)
+        sharedPreferences.edit().putString("watched_releases", jsonStr).apply()
+
+        watchedListeners.forEach { it.get()?.onChange() }
+    }
+
+    fun getAllWatched(): List<WatchedRelease> {
+        val jsonStr = sharedPreferences.getString("watched_releases", null) ?: return emptyList()
+        return json.decodeFromString<List<WatchedRelease>>(jsonStr)
+    }
+
+    fun findByEpisodeId(episodeId: String): WatchedRelease? {
+        println(getAllWatched().find { it.episodeId == episodeId })
+        return getAllWatched().find { it.episodeId == episodeId }
+    }
+
+    fun clearWatchedReleases() {
+        sharedPreferences.edit().remove("watched_releases").apply()
+    }
+
+    fun addFavorite(id: String) {
+        val favorites = getFavorites().toMutableSet()
+        if (favorites.add(id)) {  // Add only if it does not already exist
+            saveFavorites(favorites)
+            favoriteListeners.forEach { it.get()?.onChange() }
+        }
+    }
+
+    fun removeFavorite(id: String) {
+        val favorites = getFavorites().toMutableSet()
+        if (favorites.remove(id)) {  // Remove only if it exists
+            saveFavorites(favorites)
+            favoriteListeners.forEach { it.get()?.onChange() }
+        }
+    }
+
+    fun getFavorites(): Set<String> {
+        return sharedPreferences.getStringSet("favorites", emptySet()) ?: emptySet()
+    }
+
+    fun isFavorite(id: String): Boolean {
+        return getFavorites().contains(id)
+    }
+
+    private fun saveFavorites(favorites: Set<String>) {
+        sharedPreferences.edit().putStringSet("favorites", favorites).apply()
     }
 }

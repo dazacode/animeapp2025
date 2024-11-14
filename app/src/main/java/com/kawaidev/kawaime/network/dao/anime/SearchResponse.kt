@@ -13,5 +13,6 @@ data class SearchResponse(
     val jname: String? = null,
     val episodes: EpisodeCounts? = null,
     val type: String? = null,
+    val rating: String? = null,
     @SerialName("otherInfo") val otherInfo: List<String>? = null
 )

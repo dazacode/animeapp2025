@@ -5,12 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.ImageView
+import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.network.dao.anime.SearchResponse
 import com.kawaidev.kawaime.ui.activity.MainActivity
@@ -24,7 +23,9 @@ class AnimeAdapter(
     private var isLoading: Boolean = false,
     private var isError: Boolean = false,
     private var isEmpty: Boolean = false,
-    private var nextPage: Boolean = false
+    private var nextPage: Boolean = false,
+    private var emptyMessage: String = "Opps, nothing is here!",
+    private var onAgain: (() -> Unit?)? = null
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -79,6 +80,15 @@ class AnimeAdapter(
         fun bind(anime: SearchResponse) {
             LoadImage().loadImage(itemView.context, anime.poster, itemView.findViewById(R.id.animeImage))
 
+            val rating = anime.rating
+            val adultRatings = listOf("R", "R+", "Rx", "18+")
+
+            if (rating != null && rating in adultRatings) {
+                itemView.findViewById<CardView>(R.id.ratingCard).visibility = View.VISIBLE
+            } else {
+                itemView.findViewById<CardView>(R.id.ratingCard).visibility = View.GONE
+            }
+
             itemView.findViewById<FrameLayout>(R.id.imageButton).setOnClickListener {
                 val bundle = Bundle().apply {
                     putString("id", anime.id)
@@ -97,11 +107,24 @@ class AnimeAdapter(
     }
 
     inner class ErrorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        fun bind() {}
+        private val helpButton: FrameLayout = view.findViewById(R.id.negative_button)
+        private val tryAgainButton: FrameLayout = view.findViewById(R.id.details_button)
+
+        fun bind() {
+            helpButton.setOnClickListener {
+                (fragment.requireActivity() as MainActivity).dialogs.onHelp()
+            }
+
+            tryAgainButton.setOnClickListener {
+                onAgain
+            }
+        }
     }
 
     inner class EmptyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        fun bind() {}
+        fun bind() {
+            itemView.findViewById<TextView>(R.id.emptyText).text = emptyMessage
+        }
     }
 
     inner class BottomLoadingViewHolder(view: View) : RecyclerView.ViewHolder(view) {

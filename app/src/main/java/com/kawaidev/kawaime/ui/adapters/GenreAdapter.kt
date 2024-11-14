@@ -11,8 +11,6 @@ import com.google.android.material.card.MaterialCardView
 import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.ui.activity.MainActivity
 import com.kawaidev.kawaime.ui.fragments.search.SearchFragment
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 class GenreAdapter(
     private val fragment: Fragment,
@@ -29,7 +27,7 @@ class GenreAdapter(
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
             HEADER_VIEW -> HeaderViewHolder(inflater.inflate(R.layout.header_item, parent, false))
-            GENRE_VIEW -> GenresViewHolder(inflater.inflate(R.layout.genre_item, parent, false))
+            GENRE_VIEW -> GenresViewHolder(inflater.inflate(R.layout.small_button_item, parent, false))
             else -> throw IllegalArgumentException("Invalid view type")
         }
     }
@@ -51,9 +49,11 @@ class GenreAdapter(
 
     inner class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val headerText: TextView = view.findViewById(R.id.headerTitle)
+        private val headerNote: TextView = view.findViewById(R.id.headerNote)
 
         fun bind(title: String) {
             headerText.text = title
+            headerNote.visibility = View.GONE
         }
     }
 

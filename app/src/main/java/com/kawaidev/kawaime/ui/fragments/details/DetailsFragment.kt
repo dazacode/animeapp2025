@@ -12,21 +12,25 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.kawaidev.kawaime.App
+import com.kawaidev.kawaime.Prefs
 import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.network.dao.anime.Release
 import com.kawaidev.kawaime.network.interfaces.AnimeService
 import com.kawaidev.kawaime.ui.activity.MainActivity
 import com.kawaidev.kawaime.ui.adapters.details.DetailsAdapter
+import com.kawaidev.kawaime.ui.listeners.FavoriteListener
 import com.kawaidev.kawaime.utils.LoadImage
 import icepick.Icepick
 import icepick.State
 import kotlinx.coroutines.launch
 
-class DetailsFragment : Fragment() {
+class DetailsFragment : Fragment(), FavoriteListener {
     private lateinit var service: AnimeService
     private lateinit var adapter: DetailsAdapter
     private lateinit var refresh: SwipeRefreshLayout
     private lateinit var image: ImageView
+    lateinit var prefs: Prefs
 
     private var id: String = ""
 
@@ -43,6 +47,8 @@ class DetailsFragment : Fragment() {
 
         service = AnimeService.create()
         adapter = DetailsAdapter(this, release)
+        prefs = App.prefs
+        prefs.setFavoriteListener(this)
     }
 
     override fun onCreateView(
@@ -94,7 +100,7 @@ class DetailsFragment : Fragment() {
         return view
     }
 
-    private fun getAnime(refresh: Boolean = false, onComplete: () -> Unit) {
+    fun getAnime(refresh: Boolean = false, onComplete: () -> Unit) {
         if (refresh) this@DetailsFragment.refresh.isRefreshing = true
         else {
             adapter.setLoading(true)
@@ -126,5 +132,9 @@ class DetailsFragment : Fragment() {
 
     companion object {
         const val ID = "id"
+    }
+
+    override fun onChange() {
+        adapter.notifyDataSetChanged()
     }
 }

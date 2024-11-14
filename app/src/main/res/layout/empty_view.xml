@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout
-        android:id="@+id/empty_message2"
+        android:id="@+id/empty_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="50dp"
@@ -11,12 +11,14 @@
         android:orientation="vertical">
         <!-- Empty list message view -->
         <TextView
+            android:id="@+id/emptyText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Opps, nothings was found for your request"
             android:visibility="visible"
             android:layout_gravity="center"
             android:textSize="14dp"
+            android:textAlignment="center"
             android:textColor="@color/text2" />
     </LinearLayout>
 </FrameLayout>

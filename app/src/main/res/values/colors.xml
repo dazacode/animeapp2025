@@ -3,6 +3,7 @@
     <color name="black">#141414</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#757575</color>
+    <color name="red">#D32F2F</color>
 
     <color name="main">#ff5252</color>
     <color name="mainAccent">#26ff5252</color>
@@ -19,6 +20,7 @@
     <color name="text5">#282828</color>
 
     <color name="border">#1A000000</color>
+    <color name="border1">#eeeeee</color>
 
     <color name="dividerColor">#1A000000</color>
     <color name="dividerColor1">#0D000000</color>

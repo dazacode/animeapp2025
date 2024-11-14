@@ -1,0 +1,190 @@
+package com.kawaidev.kawaime.ui.adapters.details.helpers
+
+import android.animation.ValueAnimator
+import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.TextPaint
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.view.View
+import android.widget.FrameLayout
+import android.widget.ImageButton
+import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
+import androidx.recyclerview.widget.RecyclerView
+import com.kawaidev.kawaime.R
+import com.kawaidev.kawaime.network.dao.anime.Release
+import com.kawaidev.kawaime.network.dao.anime.SearchResponse
+import com.kawaidev.kawaime.ui.activity.MainActivity
+import com.kawaidev.kawaime.ui.adapters.AnimeAdapter
+import com.kawaidev.kawaime.ui.custom.LinearSpacingItemDecoration
+import com.kawaidev.kawaime.ui.custom.VerticalGradientImage
+import com.kawaidev.kawaime.ui.fragments.details.DetailsFragment
+import com.kawaidev.kawaime.ui.fragments.search.SearchFragment
+import com.kawaidev.kawaime.ui.fragments.streaming.EpisodesFragment
+import com.kawaidev.kawaime.utils.LoadImage
+import java.util.Locale
+
+object DetailsHelper {
+    fun headerBind(fragment: DetailsFragment, itemView: View, release: Release) {
+        val image = itemView.findViewById<VerticalGradientImage>(R.id.image)
+        val rating = release.anime?.info?.stats?.rating
+        val animeId = release.anime?.info?.id ?: ""
+
+        LoadImage().loadImage(itemView.context, release.anime?.info?.poster, image)
+
+        itemView.findViewById<TextView>(R.id.title).apply {
+            text = release.anime?.info?.name
+            setOnClickListener {
+                (fragment.requireActivity() as MainActivity).bottomSheets.onTitleSheet(release)
+            }
+        }
+
+        itemView.findViewById<TextView>(R.id.type).text = release.anime?.info?.stats?.type
+        itemView.findViewById<TextView>(R.id.rating).text = rating
+        itemView.findViewById<TextView>(R.id.season).text = release.anime?.moreInfo?.premiered
+        itemView.findViewById<TextView>(R.id.status).text = release.anime?.moreInfo?.status
+        itemView.findViewById<TextView>(R.id.duration).text = release.anime?.moreInfo?.duration
+        itemView.findViewById<TextView>(R.id.score).text = release.anime?.moreInfo?.malscore
+
+        val adultRatings = listOf("R", "R+", "Rx", "18+")
+
+        if (rating != null && rating in adultRatings) {
+            itemView.findViewById<CardView>(R.id.ratingCard).visibility = View.VISIBLE
+        } else {
+            itemView.findViewById<CardView>(R.id.ratingCard).visibility = View.GONE
+        }
+
+
+        val textGenres: TextView = itemView.findViewById(R.id.genres)
+        val genresText = SpannableStringBuilder()
+        release.anime?.moreInfo?.genres?.forEachIndexed { index, genre ->
+            if (index != 0) genresText.append(" • ")
+            val start = genresText.length
+
+            val formattedGenre = genre.lowercase(Locale.getDefault()).replaceFirstChar { it.uppercaseChar() }
+            genresText.append(formattedGenre)
+
+            genresText.setSpan(object : ClickableSpan() {
+                override fun onClick(widget: View) {
+                    val bundle = Bundle().apply {
+                        putString("search", formattedGenre)
+                    }
+                    val searchFragment = SearchFragment().apply {
+                        arguments = bundle
+                    }
+
+                    (fragment.requireActivity() as MainActivity).pushFragment(searchFragment)
+                }
+
+                override fun updateDrawState(ds: TextPaint) {
+                    ds.color = ContextCompat.getColor(fragment.requireContext(), R.color.text5)
+                }
+            }, start, genresText.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        textGenres.text = genresText
+        textGenres.movementMethod = LinkMovementMethod.getInstance()
+
+        itemView.findViewById<FrameLayout>(R.id.watch_button).setOnClickListener {
+            val bundle = Bundle().apply {
+                putString("id", animeId)
+                putString("title", release.anime?.info?.name)
+            }
+            val episodesFragment = EpisodesFragment().apply {
+                arguments = bundle
+            }
+
+            (fragment.requireActivity() as MainActivity).pushFragment(episodesFragment)
+        }
+
+        var isFavorite = fragment.prefs.isFavorite(animeId)
+
+        val favorite: ImageButton = itemView.findViewById(R.id.favoriteButton)
+
+        updateFavoriteIcon(isFavorite, favorite, fragment)
+
+        favorite.setOnClickListener {
+            isFavorite = if (isFavorite) {
+                fragment.prefs.removeFavorite(animeId)
+                false
+            } else {
+                fragment.prefs.addFavorite(animeId)
+                true
+            }
+        }
+    }
+
+    private fun updateFavoriteIcon(isFavorite: Boolean, favoriteButton: ImageButton, fragment: DetailsFragment) {
+        if (isFavorite) {
+            favoriteButton.setImageResource(R.drawable.favorite)
+            favoriteButton.setColorFilter(ContextCompat.getColor(fragment.requireContext(), R.color.red))
+        } else {
+            favoriteButton.setImageResource(R.drawable.favorite_outlined)
+            favoriteButton.setColorFilter(ContextCompat.getColor(fragment.requireContext(), R.color.icon))
+        }
+    }
+
+    fun descBind(description: String, itemView: View, isExpanded: Boolean, onExpanded: ((expanded: Boolean) -> Unit)) {
+        val textDescription: TextView = itemView.findViewById(R.id.textDescription)
+        val detailsButton: FrameLayout = itemView.findViewById(R.id.detailsButton)
+        val detailsButtonText: TextView = itemView.findViewById(R.id.detailsButtonText)
+
+        textDescription.text = description
+        textDescription.maxLines = if (isExpanded) Integer.MAX_VALUE else 5
+        detailsButtonText.text = if (isExpanded) "Hide" else "Details..."
+
+        textDescription.post {
+            textDescription.layout?.let { layout ->
+                detailsButton.visibility = if (layout.lineCount > 5) View.VISIBLE else View.GONE
+            }
+        }
+
+        detailsButton.setOnClickListener {
+            onExpanded(!isExpanded)
+
+            val startHeight = textDescription.height
+            textDescription.maxLines = if (isExpanded) Integer.MAX_VALUE else 5
+
+            textDescription.measure(
+                View.MeasureSpec.makeMeasureSpec(textDescription.width, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.UNSPECIFIED
+            )
+            val endHeight = textDescription.measuredHeight
+
+            val valueAnimator = ValueAnimator.ofInt(startHeight, endHeight)
+            valueAnimator.addUpdateListener { animation ->
+                val value = animation.animatedValue as Int
+                textDescription.layoutParams.height = value
+                textDescription.requestLayout()
+            }
+
+            detailsButtonText.text = if (isExpanded) "Hide" else "Details..."
+            valueAnimator.duration = 250
+            valueAnimator.start()
+        }
+    }
+
+    fun adapterBind(itemView: View, fragment: DetailsFragment, items: List<SearchResponse>, title: String) {
+        val titleTextView: TextView = itemView.findViewById(R.id.title)
+        titleTextView.text = title
+
+        val latestAdapter = AnimeAdapter(fragment, items)
+        val recycler = itemView.findViewById<RecyclerView>(R.id.recycler)
+        recycler.layoutManager = LinearLayoutManager(itemView.context, RecyclerView.HORIZONTAL, false)
+        recycler.adapter = latestAdapter
+
+        val snapHelper = LinearSnapHelper()
+
+        if (recycler.onFlingListener == null) {
+            snapHelper.attachToRecyclerView(recycler)
+        }
+
+        if (recycler.itemDecorationCount == 0) {
+            recycler.addItemDecoration(LinearSpacingItemDecoration(8, true))
+        }
+    }
+}

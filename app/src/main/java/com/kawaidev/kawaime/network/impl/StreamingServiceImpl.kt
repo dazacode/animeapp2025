@@ -106,16 +106,11 @@ class StreamingServiceImpl(
                 val response = client.newCall(request).execute()
                 val playlistContent = response.body?.string() ?: throw Exception("Failed to fetch HLS playlist")
 
-                // Parse the HLS playlist and extract the streams information
                 val streams = parseHlsMasterPlaylist(playlistContent)
 
-                // Find the stream with the highest bandwidth
                 val highestQualityStream = streams.maxByOrNull { it.bandwidth }
 
-                // Log the highest quality stream URL for debugging
-                // Make sure we have a valid highest quality stream
                 val streamUrl = highestQualityStream?.url?.let { streamUrl ->
-                    // Remove the "/master.hls" part from the original URL and replace it with the parsed stream URL
                     val baseUrl = url.substringBeforeLast("/master.m3u8")
                     return@let "$baseUrl/${streamUrl}"
                 } ?: throw Exception("No valid streams found")

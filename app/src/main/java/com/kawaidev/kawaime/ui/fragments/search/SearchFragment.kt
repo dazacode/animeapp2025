@@ -6,9 +6,7 @@ import android.speech.RecognizerIntent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import android.widget.ImageButton
-import android.widget.ProgressBar
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -183,7 +181,10 @@ class SearchFragment : Fragment(), SearchListener {
         prefs = App.prefs
         prefs.setSearchListener(this)
 
-        animeAdapter = AnimeAdapter(this, anime)
+        animeAdapter = AnimeAdapter(this, anime) {
+            searchViewModel.refreshSearch(textField.text.toString())
+        }
+
         historyAdapter = SearchHistoryAdapter(this, prefs.getRecentSearches())
     }
 

@@ -14,27 +14,31 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.appbar.AppBarLayout
+import com.kawaidev.kawaime.App
+import com.kawaidev.kawaime.Prefs
 import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.network.dao.api_utils.StreamingParams
 import com.kawaidev.kawaime.network.dao.streaming.Episodes
 import com.kawaidev.kawaime.network.interfaces.StreamingService
 import com.kawaidev.kawaime.ui.activity.MainActivity
-import com.kawaidev.kawaime.ui.activity.PlayerActivity
-import com.kawaidev.kawaime.ui.adapters.GenreAdapter
+import com.kawaidev.kawaime.ui.activity.player.PlayerActivity
 import com.kawaidev.kawaime.ui.adapters.streaming.EpisodesAdapter
 import com.kawaidev.kawaime.ui.custom.GridSpacingItemDecoration
+import com.kawaidev.kawaime.ui.listeners.WatchedListener
 import icepick.Icepick
 import icepick.State
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-class EpisodesFragment : Fragment() {
+class EpisodesFragment : Fragment(), WatchedListener {
     private lateinit var service: StreamingService
     private lateinit var adapter: EpisodesAdapter
 
     private lateinit var refresh: SwipeRefreshLayout
     private lateinit var recycler: RecyclerView
+
+    lateinit var prefs: Prefs
 
     @State private var isAppBarHidden: Boolean = false
 
@@ -55,6 +59,9 @@ class EpisodesFragment : Fragment() {
 
         service = StreamingService.create()
         adapter = EpisodesAdapter(this, episodes.episodes ?: emptyList())
+        prefs = App.prefs
+
+        prefs.setWatchedListener(this)
     }
 
     override fun onCreateView(
@@ -207,6 +214,8 @@ class EpisodesFragment : Fragment() {
 
                 val intent = Intent(requireContext(), PlayerActivity::class.java)
                 intent.putExtra("streaming", Json.encodeToString(streaming))
+                intent.putExtra("id", streamingParams.animeEpisodeId)
+
                 startActivity(intent)
             } catch (e: Exception) {
             } finally {
@@ -218,5 +227,9 @@ class EpisodesFragment : Fragment() {
     companion object {
         const val ID = "id"
         const val TITLE = "title"
+    }
+
+    override fun onChange() {
+        adapter.notifyDataSetChanged()
     }
 }

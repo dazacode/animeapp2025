@@ -17,21 +17,31 @@ object ViewTypes {
     const val VIEW_TYPE_TOP_10_MONTH = 11
 
     fun getViewType(position: Int, isLoading: Boolean, isError: Boolean, home: Home): Int {
-        return when {
-            isLoading -> VIEW_TYPE_LOADING
-            isError -> VIEW_TYPE_ERROR
-            home.spotlightAnimes.isNotEmpty() && position == 0 -> VIEW_TYPE_SPOTLIGHT
-            home.latestEpisodeAnimes.isNotEmpty() && position == 1 -> VIEW_TYPE_LATEST
-            home.trendingAnimes.isNotEmpty() && position == 2 -> VIEW_TYPE_TRENDING
-            home.topAiringAnimes.isNotEmpty() && position == 3 -> VIEW_TYPE_TOP_AIRING
-            home.mostPopularAnimes.isNotEmpty() && position == 4 -> VIEW_TYPE_POPULAR
-            home.mostFavoriteAnimes.isNotEmpty() && position == 5 -> VIEW_TYPE_MOST_FAVORITE
-            home.latestCompletedAnimes.isNotEmpty() && position == 6 -> VIEW_TYPE_LATEST_COMPLETED
-            home.top10Animes.today.isNotEmpty() && position == 7 -> VIEW_TYPE_TOP_10_TODAY
-            home.top10Animes.week.isNotEmpty() && position == 8 -> VIEW_TYPE_TOP_10_WEEK
-            home.top10Animes.month.isNotEmpty() && position == 9 -> VIEW_TYPE_TOP_10_MONTH
-            else -> VIEW_TYPE_ERROR
+        if (isLoading) return VIEW_TYPE_LOADING
+        if (isError) return VIEW_TYPE_ERROR
+
+        val categories = listOf(
+            home.spotlightAnimes to VIEW_TYPE_SPOTLIGHT,
+            home.latestEpisodeAnimes to VIEW_TYPE_LATEST,
+            home.trendingAnimes to VIEW_TYPE_TRENDING,
+            home.topAiringAnimes to VIEW_TYPE_TOP_AIRING,
+            home.mostPopularAnimes to VIEW_TYPE_POPULAR,
+            home.mostFavoriteAnimes to VIEW_TYPE_MOST_FAVORITE,
+            home.latestCompletedAnimes to VIEW_TYPE_LATEST_COMPLETED,
+            home.top10Animes.today to VIEW_TYPE_TOP_10_TODAY,
+            home.top10Animes.week to VIEW_TYPE_TOP_10_WEEK,
+            home.top10Animes.month to VIEW_TYPE_TOP_10_MONTH
+        )
+
+        var currentPos = 0
+        for ((list, viewType) in categories) {
+            if (list.isNotEmpty() && position == currentPos) {
+                return viewType
+            }
+            currentPos++
         }
+
+        return VIEW_TYPE_ERROR
     }
 
     fun getItemCount(isLoading: Boolean, isError: Boolean, home: Home): Int {

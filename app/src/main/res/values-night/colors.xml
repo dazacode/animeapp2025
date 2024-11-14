@@ -58,7 +58,7 @@
     <color name="searchField">#252525</color>
 
     <color name="button">#191919</color>
-    <color name="statusCard">#7A7A7A</color>
+    <color name="statusCard">#B1B1B1</color>
     <color name="seasonCard">#80000000</color>
 
     <color name="buttonColor">#252525</color>
@@ -68,4 +68,6 @@
 
     <color name="inactiveColor">#313131</color>
     <color name="activeColor">#777777</color>
+
+    <color name="border1">#393939</color>
 </resources>

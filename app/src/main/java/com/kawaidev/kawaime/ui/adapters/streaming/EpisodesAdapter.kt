@@ -1,10 +1,12 @@
 package com.kawaidev.kawaime.ui.adapters.streaming
 
+import android.graphics.Color
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.fragment.app.Fragment
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.kawaidev.kawaime.R
@@ -26,7 +28,7 @@ class EpisodesAdapter(
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
             LOADING_VIEW -> LoadingViewHolder(inflater.inflate(R.layout.loading_view, parent, false))
-            EPISODES_VIEW -> EpisodesViewHolder(inflater.inflate(R.layout.genre_item, parent, false))
+            EPISODES_VIEW -> EpisodesViewHolder(inflater.inflate(R.layout.small_button_item, parent, false))
             else -> throw IllegalArgumentException("Invalid view type")
         }
     }
@@ -64,7 +66,7 @@ class EpisodesAdapter(
 
     inner class LoadingViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind() {
-            // Bind data for loading view if necessary
+
         }
     }
 
@@ -73,6 +75,20 @@ class EpisodesAdapter(
 
         fun bind(episode: EpisodeDetail) {
             text.text = episode.number.toString()
+
+            // Check if the episode has been watched
+            val watchedEpisode = episode.episodeId?.let { fragment.prefs.findByEpisodeId(it) }
+
+            if (watchedEpisode != null) {
+                // Apply strikethrough and color if episode is watched
+                text.paintFlags = text.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                text.setTextColor(Color.RED)
+            } else {
+                // Remove strikethrough and set default color if episode is not watched
+                text.paintFlags = text.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                text.setTextColor(ContextCompat.getColor(itemView.context, R.color.text3))
+            }
+
             itemView.findViewById<MaterialCardView>(R.id.genreCard).setOnClickListener {
                 episode.episodeId?.let { it1 -> fragment.getServers(it1) }
             }

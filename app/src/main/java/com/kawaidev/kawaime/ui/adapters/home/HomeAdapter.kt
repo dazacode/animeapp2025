@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
@@ -20,11 +19,11 @@ import com.kawaidev.kawaime.ui.adapters.diffs.HomeDiffCallback
 import com.kawaidev.kawaime.ui.adapters.home.helpers.ViewTypes
 import com.kawaidev.kawaime.ui.custom.LinearSpacingItemDecoration
 import com.kawaidev.kawaime.ui.fragments.details.DetailsFragment
-import com.kawaidev.kawaime.ui.fragments.search.SearchFragment
+import com.kawaidev.kawaime.ui.fragments.home.HomeFragment
 import com.kawaidev.kawaime.utils.LoadImage
 
 class HomeAdapter(
-    private var fragment: Fragment,
+    private var fragment: HomeFragment,
     private var home: Home,
     private var isLoading: Boolean = false,
     private var isError: Boolean = false
@@ -51,7 +50,7 @@ class HomeAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is LoadingViewHolder -> {}
-            is ErrorViewHolder -> {}
+            is ErrorViewHolder -> holder.bind()
             is SpotlightViewHolder -> holder.bind(home.spotlightAnimes)
             is AnimeViewHolder -> {
                 when (getItemViewType(position)) {
@@ -71,7 +70,20 @@ class HomeAdapter(
 
     inner class LoadingViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
-    inner class ErrorViewHolder(view: View) : RecyclerView.ViewHolder(view)
+    inner class ErrorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val helpButton: FrameLayout = view.findViewById(R.id.negative_button)
+        private val tryAgainButton: FrameLayout = view.findViewById(R.id.details_button)
+
+        fun bind() {
+            helpButton.setOnClickListener {
+                (fragment.requireActivity() as MainActivity).dialogs.onHelp()
+            }
+
+            tryAgainButton.setOnClickListener {
+                fragment.getHome()
+            }
+        }
+    }
 
     inner class SpotlightViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(spotlightData: List<SearchResponse>) {

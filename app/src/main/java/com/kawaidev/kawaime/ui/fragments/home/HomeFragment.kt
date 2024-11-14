@@ -17,6 +17,11 @@ import com.kawaidev.kawaime.network.interfaces.AnimeService
 import com.kawaidev.kawaime.ui.adapters.home.HomeAdapter
 import icepick.Icepick
 import icepick.State
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
@@ -74,7 +79,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun getHome(isRefresh: Boolean = false) {
+    fun getHome(isRefresh: Boolean = false) {
         when(isRefresh) {
             true -> refresh.isRefreshing = true
             false -> adapter.setLoading(true)
@@ -83,21 +88,25 @@ class HomeFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             try {
-                val home = service.getHome()
+                if (isActive) {
+                    val home = service.getHome()
+                    if (isActive) {
+                        adapter.setHome(home)
+                    }
+                }
+            } catch (_: CancellationException) {
 
-                adapter.setHome(home)
-                when(isRefresh) {
-                    true -> refresh.isRefreshing = false
-                    false -> adapter.setLoading(false)
-                }
             } catch (e: Exception) {
-                when(isRefresh) {
-                    true -> refresh.isRefreshing = false
-                    false -> adapter.setLoading(false)
-                }
+                Log.e("HomeError", "Error fetching home data", e)
                 adapter.setError(true)
             } finally {
-                isFetched = true
+                if (isActive) {
+                    when (isRefresh) {
+                        true -> refresh.isRefreshing = false
+                        false -> adapter.setLoading(false)
+                    }
+                    isFetched = true
+                }
             }
         }
     }

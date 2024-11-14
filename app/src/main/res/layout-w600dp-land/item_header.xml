@@ -66,6 +66,26 @@
                     android:textColor="@color/text"/>
             </androidx.cardview.widget.CardView>
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/ratingCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/background"
+                android:layout_marginStart="8dp"
+                app:cardElevation="0dp"
+                app:cardCornerRadius="4dp"
+                app:cardBackgroundColor="@color/red">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="18+"
+                    android:textSize="12sp"
+                    android:paddingHorizontal="6dp"
+                    android:paddingVertical="2dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="@color/white"/>
+            </androidx.cardview.widget.CardView>
+
             <Space
                 android:layout_width="8dp"
                 android:layout_height="wrap_content"/>
@@ -221,6 +241,7 @@
                 android:layout_height="wrap_content"/>
 
             <ImageButton
+                android:id="@+id/favoriteButton"
                 android:layout_width="46dp"
                 android:layout_height="46dp"
                 android:src="@drawable/favorite_outlined"

@@ -1,5 +1,6 @@
 package com.kawaidev.kawaime.ui.adapters.details
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -64,8 +65,10 @@ class ServerAdapter(
     }
 
     inner class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        @SuppressLint("SetTextI18n")
         fun bind() {
             itemView.findViewById<TextView>(R.id.headerTitle).text = "Choose a server"
+            itemView.findViewById<TextView>(R.id.headerNote).text = "* If a server doesn't work, please choose another. "
         }
     }
 

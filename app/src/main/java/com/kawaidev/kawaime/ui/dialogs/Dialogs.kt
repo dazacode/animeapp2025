@@ -20,4 +20,9 @@ class Dialogs(private val activity: MainActivity) {
             }
         }
     }
+
+    fun onHelp() {
+        val fragmentManager = activity.supportFragmentManager
+        HelpDialog.newInstance().show(fragmentManager, "HelpDialog")
+    }
 }

@@ -49,7 +49,9 @@ class ResultFragment : Fragment() {
         }
 
         service = AnimeService.create()
-        adapter = AnimeAdapter(this, anime)
+        adapter = AnimeAdapter(this, anime) {
+            searchAnime(searchParams, 1)
+        }
     }
 
     override fun onCreateView(
