@@ -1,39 +1,26 @@
 package com.kawaidev.kawaime.ui.adapters.details
 
-import android.animation.ValueAnimator
-import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableStringBuilder
-import android.text.TextPaint
-import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
+import android.graphics.Rect
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.ImageButton
 import android.widget.TextView
-import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.grzegorzojdana.spacingitemdecoration.Spacing
+import com.grzegorzojdana.spacingitemdecoration.SpacingItemDecoration
 import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.network.dao.anime.Release
 import com.kawaidev.kawaime.network.dao.anime.SearchResponse
 import com.kawaidev.kawaime.network.dao.anime.Season
 import com.kawaidev.kawaime.ui.activity.MainActivity
-import com.kawaidev.kawaime.ui.adapters.AnimeAdapter
 import com.kawaidev.kawaime.ui.adapters.details.helpers.DetailsHelper
 import com.kawaidev.kawaime.ui.adapters.details.helpers.DetailsViewType
-import com.kawaidev.kawaime.ui.custom.LinearSpacingItemDecoration
-import com.kawaidev.kawaime.ui.custom.VerticalGradientImage
+import com.kawaidev.kawaime.ui.adapters.diffs.ReleaseDiffCallback
 import com.kawaidev.kawaime.ui.fragments.details.DetailsFragment
-import com.kawaidev.kawaime.ui.fragments.search.SearchFragment
-import com.kawaidev.kawaime.ui.fragments.streaming.EpisodesFragment
-import com.kawaidev.kawaime.utils.LoadImage
-import java.util.Locale
+import com.kawaidev.kawaime.utils.Converts
 
 class DetailsAdapter(
     private val fragment: DetailsFragment,
@@ -122,13 +109,23 @@ class DetailsAdapter(
             val titleTextView: TextView = itemView.findViewById(R.id.title)
             titleTextView.text = "Other Seasons"
 
+            val space = Converts.dpToPx(8f, fragment.requireContext()).toInt()
+
             val latestAdapter = SeasonAdapter(fragment, seasons)
             val recycler = itemView.findViewById<RecyclerView>(R.id.recycler)
             recycler.layoutManager = LinearLayoutManager(itemView.context, RecyclerView.HORIZONTAL, false)
             recycler.adapter = latestAdapter
 
             if (recycler.itemDecorationCount == 0) {
-                recycler.addItemDecoration(LinearSpacingItemDecoration(8, true))
+                recycler.addItemDecoration(
+                    SpacingItemDecoration(
+                        Spacing(
+                            horizontal = space,
+                            vertical = space,
+                            edges = Rect(space, space, space, space)
+                        )
+                    )
+                )
             }
         }
     }
@@ -145,13 +142,18 @@ class DetailsAdapter(
         }
     }
 
-    fun setData(release: Release) {
-        this@DetailsAdapter.release = release
-        notifyDataSetChanged()
+    fun setData(newRelease: Release) {
+        val diffCallback = ReleaseDiffCallback(release, newRelease)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+
+        release = newRelease
+        diffResult.dispatchUpdatesTo(this)
     }
 
     fun setLoading(loading: Boolean) {
-        isLoading = loading
-        notifyDataSetChanged()
+        if (isLoading != loading) {
+            isLoading = loading
+            notifyItemChanged(1)
+        }
     }
 }

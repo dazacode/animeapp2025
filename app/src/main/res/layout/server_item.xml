@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingStart="16dp"
-            android:paddingEnd="16dp">
+            android:paddingEnd="8dp">
 
             <!-- Icon with fixed position -->
             <ImageView
@@ -41,6 +41,18 @@
                 android:textColor="@color/text3"
                 android:layout_toEndOf="@id/icon"
                 android:layout_centerVertical="true"/>
+
+            <TextView
+                android:id="@+id/recommended"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="*"
+                android:layout_margin="4dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="false"
+                android:textColor="@color/goldColor"
+                android:textSize="16dp"
+                android:textStyle="bold"/>
         </RelativeLayout>
 
     </com.google.android.material.card.MaterialCardView>

@@ -1,5 +1,6 @@
 package com.kawaidev.kawaime.ui.adapters.home
 
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,16 +11,20 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.grzegorzojdana.spacingitemdecoration.Spacing
+import com.grzegorzojdana.spacingitemdecoration.SpacingItemDecoration
 import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.network.dao.anime.Home
 import com.kawaidev.kawaime.network.dao.anime.SearchResponse
 import com.kawaidev.kawaime.ui.activity.MainActivity
-import com.kawaidev.kawaime.ui.adapters.AnimeAdapter
+import com.kawaidev.kawaime.ui.adapters.anime.AnimeAdapter
+import com.kawaidev.kawaime.ui.adapters.anime.helpers.AnimeParams
 import com.kawaidev.kawaime.ui.adapters.diffs.HomeDiffCallback
+import com.kawaidev.kawaime.ui.adapters.helpers.HorizontalRecycler
 import com.kawaidev.kawaime.ui.adapters.home.helpers.ViewTypes
-import com.kawaidev.kawaime.ui.custom.LinearSpacingItemDecoration
 import com.kawaidev.kawaime.ui.fragments.details.DetailsFragment
 import com.kawaidev.kawaime.ui.fragments.home.HomeFragment
+import com.kawaidev.kawaime.utils.Converts
 import com.kawaidev.kawaime.utils.LoadImage
 
 class HomeAdapter(
@@ -115,20 +120,7 @@ class HomeAdapter(
             val titleTextView: TextView = itemView.findViewById(R.id.title)
             titleTextView.text = title
 
-            val latestAdapter = AnimeAdapter(fragment, latestData)
-            val recycler = itemView.findViewById<RecyclerView>(R.id.recycler)
-            recycler.layoutManager = LinearLayoutManager(itemView.context, RecyclerView.HORIZONTAL, false)
-            recycler.adapter = latestAdapter
-
-            val snapHelper = LinearSnapHelper()
-
-            if (recycler.onFlingListener == null) {
-                snapHelper.attachToRecyclerView(recycler)
-            }
-
-            if (recycler.itemDecorationCount == 0) {
-                recycler.addItemDecoration(LinearSpacingItemDecoration(8, true))
-            }
+            HorizontalRecycler.setup(fragment, latestData, itemView)
         }
     }
 

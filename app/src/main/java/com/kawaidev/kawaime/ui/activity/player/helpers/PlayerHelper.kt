@@ -26,13 +26,14 @@ import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.network.dao.streaming.Streaming
 import com.kawaidev.kawaime.ui.activity.player.PlayerActivity
 import kotlinx.coroutines.launch
+import kotlin.math.max
 
 object PlayerHelper {
 
     @OptIn(UnstableApi::class)
     fun initializePlayer(activity: PlayerActivity) {
         val trackSelector = DefaultTrackSelector(activity).apply {
-            setParameters(buildUponParameters().setMaxVideoSizeSd())
+            setParameters(buildUponParameters().setForceHighestSupportedBitrate(true))
         }
 
         activity.playerViewModel.player = ExoPlayer.Builder(activity)
@@ -49,7 +50,7 @@ object PlayerHelper {
                     val mediaItem = buildMediaItemWithSubtitles(activity.url, activity.streaming)
                     activity.playerViewModel.player?.setMediaItem(mediaItem)
                     activity.playerViewModel.player?.prepare()
-                    activity.playerViewModel.player?.playWhenReady = true
+                    activity.playerViewModel.player?.setHandleAudioBecomingNoisy(true)
 
                     activity.playerViewModel.player?.addListener(object : Player.Listener {
                         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
@@ -59,6 +60,7 @@ object PlayerHelper {
                                     activity.playerViewModel.player?.seekTo(watched.watchedTo)
                                 }
                                 activity.playerViewModel.player?.removeListener(this)
+                                activity.playerViewModel.player?.playWhenReady = playWhenReady
                             }
                         }
                     })
@@ -73,7 +75,6 @@ object PlayerHelper {
     fun initializePlayerUI(activity: PlayerActivity) {
         activity.playerView.player = activity.playerViewModel.player
 
-        // Set up UI configurations
         activity.playerView.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 activity.playerView.viewTreeObserver.removeOnGlobalLayoutListener(this)
@@ -82,15 +83,17 @@ object PlayerHelper {
 
         ViewCompat.setOnApplyWindowInsetsListener(activity.playerView) { v, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val horizontalMargin = max(insets.left, insets.right)
 
             v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                leftMargin = insets.left
+                leftMargin = horizontalMargin
+                rightMargin = horizontalMargin
                 bottomMargin = insets.bottom
-                rightMargin = insets.right
             }
 
             WindowInsetsCompat.CONSUMED
         }
+
 
         activity.playerView.setControllerVisibilityListener(PlayerView.ControllerVisibilityListener { visibility ->
             if (visibility == View.VISIBLE) showSystemUI(activity) else hideSystemUI(activity)
@@ -128,7 +131,6 @@ object PlayerHelper {
 
     @OptIn(UnstableApi::class)
     private fun buildMediaItemWithSubtitles(url: String, streamingData: Streaming): MediaItem {
-        // Subtitle and thumbnail configuration remains the same
         val subtitleConfigs = streamingData.tracks?.mapNotNull { track ->
             if (track.file != null && track.kind == "captions") {
                 MediaItem.SubtitleConfiguration.Builder(Uri.parse(track.file))
@@ -141,18 +143,9 @@ object PlayerHelper {
             }
         } ?: emptyList()
 
-        val thumbnailUrl = streamingData.tracks?.firstOrNull { it.kind == "thumbnails" }?.file
         val mediaItemBuilder = MediaItem.Builder()
             .setUri(url)
             .setSubtitleConfigurations(subtitleConfigs)
-
-        if (thumbnailUrl != null) {
-            mediaItemBuilder.setMediaMetadata(
-                MediaMetadata.Builder()
-                    .setArtworkUri(Uri.parse(thumbnailUrl))
-                    .build()
-            )
-        }
 
         return mediaItemBuilder.build()
     }

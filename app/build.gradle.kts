@@ -47,6 +47,8 @@ dependencies {
     implementation(libs.androidx.recyclerview)
     implementation(libs.blurview)
 
+    implementation(libs.spacingitemdecoration)
+
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.exoplayer.dash)
     implementation(libs.androidx.media3.ui)
@@ -58,6 +60,7 @@ dependencies {
     implementation(libs.androidx.swiperefreshlayout)
     implementation(libs.icepick)
     implementation(libs.androidx.preference)
+    implementation(libs.androidx.media3.session)
     annotationProcessor(libs.icepick.processor)
 
     implementation(libs.kotlinx.coroutines.core)

@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kawaidev.kawaime.Strings
-import com.kawaidev.kawaime.network.callbacks.ReleaseCallback
 import com.kawaidev.kawaime.network.dao.anime.SearchResponse
 import com.kawaidev.kawaime.network.dao.api_utils.SearchParams
 import com.kawaidev.kawaime.network.interfaces.AnimeService
@@ -25,8 +24,8 @@ class SearchViewModel : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> get() = _isLoading
 
-    private val _hasNextPage = MutableLiveData<Boolean>()
-    val hasNextPage: LiveData<Boolean> get() = _hasNextPage
+    private val _nextPage = MutableLiveData<Boolean>()
+    val hasNextPage: LiveData<Boolean> get() = _nextPage
 
     private val _error = MutableLiveData<Exception?>()
     val error: LiveData<Exception?> get() = _error
@@ -42,7 +41,7 @@ class SearchViewModel : ViewModel() {
     fun searchAnime(query: String) {
         updateCategoryEmptyState(false)
 
-        _hasNextPage.postValue(true)
+        _nextPage.postValue(true)
         searchJob?.cancel()
         _query.postValue(query)
         _currentPage.postValue(1)
@@ -65,9 +64,10 @@ class SearchViewModel : ViewModel() {
                 }
 
                 val (animeList, hasNextPage) = animeService.searchAnime(searchParams)
+                _isLoading.postValue(false)
 
                 _searchResults.postValue(animeList.toMutableList())
-                _hasNextPage.postValue(hasNextPage)
+                _nextPage.postValue(hasNextPage)
 
                 if (animeList.isEmpty()) updateCategoryEmptyState(true)
 
@@ -83,8 +83,6 @@ class SearchViewModel : ViewModel() {
         if (_isLoading.value == true) return
 
         updateCategoryEmptyState(false)
-
-        if (_hasNextPage.value == false) return
 
         val nextPage = (_currentPage.value ?: 1) + 1
         _currentPage.postValue(nextPage)
@@ -111,6 +109,8 @@ class SearchViewModel : ViewModel() {
 
                 val (animeList, hasNextPage) = animeService.searchAnime(searchParams)
 
+                _isLoading.postValue(false)
+
                 val currentResults = _searchResults.value ?: mutableListOf()
                 val updatedResults = currentResults.toMutableList().apply {
                     addAll(animeList)
@@ -123,7 +123,7 @@ class SearchViewModel : ViewModel() {
                 }
 
                 _searchResults.postValue(updatedResults)
-                _hasNextPage.postValue(hasNextPage)
+                _nextPage.postValue(hasNextPage)
             } catch (e: Exception) {
                 _isLoading.postValue(false)
                 _error.postValue(e)

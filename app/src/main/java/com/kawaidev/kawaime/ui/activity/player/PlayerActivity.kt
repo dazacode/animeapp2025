@@ -1,5 +1,12 @@
 package com.kawaidev.kawaime.ui.activity.player
 
+import android.bluetooth.BluetoothAdapter
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.media.AudioManager
+import android.media.session.MediaSession
+import android.media.session.MediaSessionManager
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.OptIn
@@ -14,6 +21,9 @@ import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.network.dao.helpers.WatchedRelease
 import com.kawaidev.kawaime.network.dao.streaming.Streaming
 import com.kawaidev.kawaime.network.interfaces.StreamingService
+import com.kawaidev.kawaime.ui.activity.player.helpers.BluetoothReceiver
+import com.kawaidev.kawaime.ui.activity.player.helpers.HeadphoneReceiver
+import com.kawaidev.kawaime.ui.activity.player.helpers.MediaReceiver
 import com.kawaidev.kawaime.ui.activity.player.helpers.PlayerHelper
 import com.kawaidev.kawaime.ui.models.PlayerViewModel
 import icepick.Icepick
@@ -26,6 +36,11 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var player: ExoPlayer
     lateinit var playerView: PlayerView
     lateinit var prefs: Prefs
+
+    private lateinit var headphoneReceiver: HeadphoneReceiver
+    private lateinit var bluetoothReceiver: BluetoothReceiver
+    private lateinit var mediaSession: MediaSession
+    private lateinit var mediaButtonReceiver: MediaReceiver
 
     var streaming: Streaming = Streaming()
     var id: String = ""
@@ -63,12 +78,40 @@ class PlayerActivity : AppCompatActivity() {
         }
 
         PlayerHelper.initializePlayerUI(this)
+
+        mediaSession = MediaSession(this, "MusicService").apply {
+            setCallback(object : MediaSession.Callback() {
+                override fun onPlay() {
+                    super.onPlay()
+                    playerViewModel.player?.play()
+                }
+
+                override fun onPause() {
+                    super.onPause()
+                    playerViewModel.player?.pause()
+                }
+            })
+
+            setFlags(
+                MediaSession.FLAG_HANDLES_MEDIA_BUTTONS or MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS
+            )
+        }
+
+        mediaButtonReceiver = MediaReceiver(playerViewModel.player ?: player)
+
+        val mediaFilter = IntentFilter(Intent.ACTION_MEDIA_BUTTON)
+        registerReceiver(mediaButtonReceiver, mediaFilter)
+
+        val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        audioManager.requestAudioFocus(null, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN)
+
+        mediaSession.isActive = true
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        playerViewModel.playbackPosition = savedInstanceState.getLong("playbackPosition", 0) ?: 0
-        playerViewModel.playWhenReady = savedInstanceState.getBoolean("playWhenReady", true) ?: true
+        playerViewModel.playbackPosition = savedInstanceState.getLong("playbackPosition", 0)
+        playerViewModel.playWhenReady = savedInstanceState.getBoolean("playWhenReady", true)
         Icepick.restoreInstanceState(this, savedInstanceState)
 
         if (showSystemUi) PlayerHelper.showSystemUI(this) else PlayerHelper.hideSystemUI(this)
@@ -85,6 +128,7 @@ class PlayerActivity : AppCompatActivity() {
         super.onPause()
         val currentPosition = playerViewModel.player?.currentPosition ?: 0L
         prefs.saveWatchedRelease(WatchedRelease(episodeId = id, watchedTo = currentPosition))
+        playerViewModel.playWhenReady = playerViewModel.player?.playWhenReady ?: false
         playerViewModel.player?.pause()
     }
 

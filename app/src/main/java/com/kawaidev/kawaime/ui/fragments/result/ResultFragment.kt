@@ -1,6 +1,7 @@
 package com.kawaidev.kawaime.ui.fragments.result
 
 import android.content.Context
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,13 +15,18 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.appbar.AppBarLayout
+import com.grzegorzojdana.spacingitemdecoration.Spacing
+import com.grzegorzojdana.spacingitemdecoration.SpacingItemDecoration
 import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.network.dao.anime.SearchResponse
 import com.kawaidev.kawaime.network.dao.api_utils.SearchParams
 import com.kawaidev.kawaime.network.interfaces.AnimeService
 import com.kawaidev.kawaime.ui.activity.MainActivity
-import com.kawaidev.kawaime.ui.adapters.AnimeAdapter
-import com.kawaidev.kawaime.ui.custom.GridSpacingItemDecoration
+import com.kawaidev.kawaime.ui.adapters.anime.AnimeAdapter
+import com.kawaidev.kawaime.ui.adapters.anime.helpers.AnimeViewType
+import com.kawaidev.kawaime.ui.adapters.anime.helpers.AnimeParams
+import com.kawaidev.kawaime.ui.adapters.helpers.GridRecycler
+import com.kawaidev.kawaime.utils.Converts
 import icepick.Icepick
 import icepick.State
 import kotlinx.coroutines.launch
@@ -29,6 +35,7 @@ import kotlinx.serialization.json.Json
 class ResultFragment : Fragment() {
     private lateinit var service: AnimeService
     private lateinit var adapter: AnimeAdapter
+    private lateinit var recycler: RecyclerView
 
     private var searchParams: SearchParams = SearchParams()
 
@@ -49,7 +56,8 @@ class ResultFragment : Fragment() {
         }
 
         service = AnimeService.create()
-        adapter = AnimeAdapter(this, anime) {
+
+        adapter = AnimeAdapter(AnimeParams(this, anime)) {
             searchAnime(searchParams, 1)
         }
     }
@@ -60,7 +68,7 @@ class ResultFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_result, container, false)
 
-        val recycler: RecyclerView = view.findViewById(R.id.recycler)
+        recycler = view.findViewById(R.id.recycler)
 
         val back: ImageButton = view.findViewById(R.id.back_button)
 
@@ -70,26 +78,7 @@ class ResultFragment : Fragment() {
 
         recycler.apply {
             post {
-                val spanCount = calculateSpanCount(context)
-
-                val gridLayoutManager = GridLayoutManager(context, spanCount)
-                gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-                    override fun getSpanSize(position: Int): Int {
-                        return when (adapter?.getItemViewType(position)) {
-                            AnimeAdapter.VIEW_TYPE_LOADING -> spanCount
-                            AnimeAdapter.VIEW_TYPE_BOTTOM_LOADING -> spanCount
-                            AnimeAdapter.VIEW_TYPE_ERROR -> spanCount
-                            AnimeAdapter.VIEW_TYPE_EMPTY -> spanCount
-                            else -> 1
-                        }
-                    }
-                }
-
-                recycler.layoutManager = gridLayoutManager
-
-                if (recycler.itemDecorationCount == 0) {
-                    recycler.addItemDecoration(GridSpacingItemDecoration(spanCount, 6, true))
-                }
+                GridRecycler.setup(requireContext(), this@ResultFragment.adapter, recycler)
             }
             adapter = this@ResultFragment.adapter
             addOnScrollListener(scrollListener())

@@ -150,25 +150,30 @@
                 android:layout_width="8dp"
                 android:layout_height="wrap_content"/>
 
-            <ImageView
-                android:id="@+id/star"
-                android:layout_width="13dp"
-                android:layout_height="13dp"
-                android:layout_gravity="center"
-                android:src="@drawable/star"
-                app:tint="@color/text4" />
-
-            <Space
-                android:layout_width="4dp"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:id="@+id/score"
+            <LinearLayout
+                android:id="@+id/scoreLayout"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="7.8"
-                android:textSize="13sp"
-                android:textColor="@color/text4"/>
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/star"
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/star"
+                    app:tint="@color/text4" />
+
+                <Space
+                    android:layout_width="4dp"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="7.8"
+                    android:textSize="13sp"
+                    android:textColor="@color/text4"/>
+            </LinearLayout>
         </LinearLayout>
 
         <Space

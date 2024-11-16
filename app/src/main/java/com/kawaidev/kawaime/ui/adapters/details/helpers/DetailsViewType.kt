@@ -52,4 +52,8 @@ object DetailsViewType {
 
         return count
     }
+
+    fun getItemTypeAtPosition(position: Int, release: Release): Int {
+        return getItemViewType(false, false, position, release)
+    }
 }

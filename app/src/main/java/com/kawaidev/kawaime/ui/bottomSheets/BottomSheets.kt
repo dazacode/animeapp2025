@@ -1,6 +1,7 @@
 package com.kawaidev.kawaime.ui.bottomSheets
 
 import android.annotation.SuppressLint
+import android.graphics.Rect
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -13,14 +14,16 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.grzegorzojdana.spacingitemdecoration.Spacing
+import com.grzegorzojdana.spacingitemdecoration.SpacingItemDecoration
 import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.network.dao.anime.Release
 import com.kawaidev.kawaime.network.dao.streaming.EpisodeServers
 import com.kawaidev.kawaime.ui.activity.MainActivity
 import com.kawaidev.kawaime.ui.adapters.details.ServerAdapter
 import com.kawaidev.kawaime.ui.adapters.streaming.EpisodesAdapter
-import com.kawaidev.kawaime.ui.custom.GridSpacingItemDecoration
 import com.kawaidev.kawaime.ui.fragments.streaming.EpisodesFragment
+import com.kawaidev.kawaime.utils.Converts
 
 class BottomSheets(private val activity: MainActivity) {
     fun onBottomSheet(episodeServers: EpisodeServers, fragment: EpisodesFragment) {
@@ -48,6 +51,8 @@ class BottomSheets(private val activity: MainActivity) {
         recycler.apply {
             post {
                 val spanCount = 2
+                val space = Converts.dpToPx(4f, fragment.requireContext()).toInt()
+
 
                 val gridLayoutManager = GridLayoutManager(context, spanCount)
                 gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
@@ -61,8 +66,16 @@ class BottomSheets(private val activity: MainActivity) {
 
                 layoutManager = gridLayoutManager
 
-                if (itemDecorationCount == 0) {
-                    addItemDecoration(GridSpacingItemDecoration(spanCount, 4, true, isHeaderEnabled = true))
+                if (recycler.itemDecorationCount == 0) {
+                    recycler.addItemDecoration(
+                        SpacingItemDecoration(
+                            Spacing(
+                                horizontal = space,
+                                vertical = space,
+                                edges = Rect(space, space, space, space)
+                            )
+                        )
+                    )
                 }
             }
 

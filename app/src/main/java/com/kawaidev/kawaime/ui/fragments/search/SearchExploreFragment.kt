@@ -1,23 +1,24 @@
 package com.kawaidev.kawaime.ui.fragments.search
 
+import android.graphics.Rect
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.google.android.material.appbar.AppBarLayout
+import com.grzegorzojdana.spacingitemdecoration.Spacing
+import com.grzegorzojdana.spacingitemdecoration.SpacingItemDecoration
 import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.Strings
 import com.kawaidev.kawaime.ui.activity.MainActivity
-import com.kawaidev.kawaime.ui.adapters.AnimeAdapter
 import com.kawaidev.kawaime.ui.adapters.GenreAdapter
-import com.kawaidev.kawaime.ui.custom.GridSpacingItemDecoration
+import com.kawaidev.kawaime.utils.Converts
 import icepick.Icepick
 import icepick.State
 
@@ -59,6 +60,7 @@ class SearchExploreFragment : Fragment() {
         recycler.apply {
             post {
                 val spanCount = 3
+                val space = Converts.dpToPx(4f, requireContext()).toInt()
 
                 val gridLayoutManager = GridLayoutManager(context, spanCount)
                 gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
@@ -72,8 +74,16 @@ class SearchExploreFragment : Fragment() {
 
                 layoutManager = gridLayoutManager
 
-                if (itemDecorationCount == 0) {
-                    addItemDecoration(GridSpacingItemDecoration(spanCount, 4, true, isHeaderEnabled = true))
+                if (recycler.itemDecorationCount == 0) {
+                    recycler.addItemDecoration(
+                        SpacingItemDecoration(
+                            Spacing(
+                                horizontal = space,
+                                vertical = space,
+                                edges = Rect(space, space, space, space)
+                            )
+                        )
+                    )
                 }
             }
 

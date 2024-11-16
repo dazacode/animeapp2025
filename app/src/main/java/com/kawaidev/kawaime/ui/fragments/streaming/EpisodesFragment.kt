@@ -1,6 +1,7 @@
 package com.kawaidev.kawaime.ui.fragments.streaming
 
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.appbar.AppBarLayout
+import com.grzegorzojdana.spacingitemdecoration.Spacing
+import com.grzegorzojdana.spacingitemdecoration.SpacingItemDecoration
 import com.kawaidev.kawaime.App
 import com.kawaidev.kawaime.Prefs
 import com.kawaidev.kawaime.R
@@ -23,8 +26,8 @@ import com.kawaidev.kawaime.network.interfaces.StreamingService
 import com.kawaidev.kawaime.ui.activity.MainActivity
 import com.kawaidev.kawaime.ui.activity.player.PlayerActivity
 import com.kawaidev.kawaime.ui.adapters.streaming.EpisodesAdapter
-import com.kawaidev.kawaime.ui.custom.GridSpacingItemDecoration
 import com.kawaidev.kawaime.ui.listeners.WatchedListener
+import com.kawaidev.kawaime.utils.Converts
 import icepick.Icepick
 import icepick.State
 import kotlinx.coroutines.launch
@@ -82,6 +85,7 @@ class EpisodesFragment : Fragment(), WatchedListener {
         recycler.apply {
             post {
                 val spanCount = 5
+                val space = Converts.dpToPx(4f, requireContext()).toInt()
 
                 val gridLayoutManager = GridLayoutManager(context, spanCount)
                 gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
@@ -95,8 +99,16 @@ class EpisodesFragment : Fragment(), WatchedListener {
 
                 layoutManager = gridLayoutManager
 
-                if (itemDecorationCount == 0) {
-                    addItemDecoration(GridSpacingItemDecoration(spanCount, 4, true))
+                if (recycler.itemDecorationCount == 0) {
+                    recycler.addItemDecoration(
+                        SpacingItemDecoration(
+                            Spacing(
+                                horizontal = space,
+                                vertical = space,
+                                edges = Rect(space, space, space, space)
+                            )
+                        )
+                    )
                 }
             }
 

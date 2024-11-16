@@ -2,6 +2,7 @@ package com.kawaidev.kawaime.ui.fragments.search.helpers
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Handler
 import android.os.Looper
 import android.speech.RecognizerIntent
@@ -19,10 +20,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.google.android.material.textfield.TextInputEditText
+import com.grzegorzojdana.spacingitemdecoration.Spacing
+import com.grzegorzojdana.spacingitemdecoration.SpacingItemDecoration
 import com.kawaidev.kawaime.R
-import com.kawaidev.kawaime.ui.adapters.AnimeAdapter
-import com.kawaidev.kawaime.ui.custom.GridSpacingItemDecoration
+import com.kawaidev.kawaime.ui.adapters.anime.AnimeAdapter
+import com.kawaidev.kawaime.ui.adapters.anime.helpers.AnimeViewType
+import com.kawaidev.kawaime.ui.adapters.helpers.GridRecycler
 import com.kawaidev.kawaime.ui.fragments.search.SearchFragment
+import com.kawaidev.kawaime.utils.Converts
 import java.util.Locale
 
 object SearchHelpers {
@@ -128,26 +133,7 @@ object SearchHelpers {
 
         searchFragment.searchRecycler.apply {
             post {
-                val spanCount = calculateSpanCount(context)
-
-                val gridLayoutManager = GridLayoutManager(context, spanCount)
-                gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-                    override fun getSpanSize(position: Int): Int {
-                        return when (searchFragment.animeAdapter.getItemViewType(position)) {
-                            AnimeAdapter.VIEW_TYPE_LOADING -> spanCount
-                            AnimeAdapter.VIEW_TYPE_BOTTOM_LOADING -> spanCount
-                            AnimeAdapter.VIEW_TYPE_ERROR -> spanCount
-                            AnimeAdapter.VIEW_TYPE_EMPTY -> spanCount
-                            else -> 1
-                        }
-                    }
-                }
-
-                searchFragment.searchRecycler.layoutManager = gridLayoutManager
-
-                if (searchFragment.searchRecycler.itemDecorationCount == 0) {
-                    searchFragment.searchRecycler.addItemDecoration(GridSpacingItemDecoration(spanCount, 6, true))
-                }
+                GridRecycler.setup(context, searchFragment.animeAdapter, searchFragment.searchRecycler)
             }
             adapter = searchFragment.animeAdapter
             addOnScrollListener(searchFragment.scrollListener())
@@ -156,13 +142,6 @@ object SearchHelpers {
         }
 
         searchFragment.historyAdapter.updateData(searchFragment.prefs.getSearches())
-    }
-
-    private fun calculateSpanCount(context: Context): Int {
-        val displayMetrics = context.resources.displayMetrics
-        val screenWidth = displayMetrics.widthPixels
-        val itemWidth = context.resources.getDimensionPixelSize(R.dimen.anime_item_width)
-        return maxOf(1, screenWidth / itemWidth)
     }
 
     fun showSoftKeyboard(view: View) {

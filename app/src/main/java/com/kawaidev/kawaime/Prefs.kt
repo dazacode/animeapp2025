@@ -109,11 +109,13 @@ class Prefs private constructor(context: Context) {
     }
 
     fun addFavorite(id: String) {
-        val favorites = getFavorites().toMutableSet()
-        if (favorites.add(id)) {  // Add only if it does not already exist
-            saveFavorites(favorites)
-            favoriteListeners.forEach { it.get()?.onChange() }
-        }
+        val favorites = getFavorites().toMutableList()
+
+        favorites.remove(id)
+        favorites.add(0, id)
+
+        saveFavorites(favorites.toSet())
+        favoriteListeners.forEach { it.get()?.onChange() }
     }
 
     fun removeFavorite(id: String) {

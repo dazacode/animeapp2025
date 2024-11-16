@@ -31,7 +31,7 @@ class ServerAdapter(
     }
 
     override fun getItemCount(): Int {
-        return episodeServers.sub.size + episodeServers.dub.size + episodeServers.raw.size
+        return episodeServers.sub.size + episodeServers.dub.size + episodeServers.raw.size + 1
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -51,7 +51,7 @@ class ServerAdapter(
         if (holder is HeaderViewHolder) {
             holder.bind()
         } else if (holder is ServerViewHolder) {
-            val (server, type) = getServerAtPosition(position)
+            val (server, type) = getServerAtPosition(position - 1)
             holder.bind(server, type)
         }
     }
@@ -68,13 +68,14 @@ class ServerAdapter(
         @SuppressLint("SetTextI18n")
         fun bind() {
             itemView.findViewById<TextView>(R.id.headerTitle).text = "Choose a server"
-            itemView.findViewById<TextView>(R.id.headerNote).text = "* If a server doesn't work, please choose another. "
+            itemView.findViewById<TextView>(R.id.headerNote).text = "If a server doesn't work, please choose another. "
         }
     }
 
     inner class ServerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val serverNameTextView: TextView = view.findViewById(R.id.server)
         private val serverIcon: ImageView = view.findViewById(R.id.icon)
+        private val recommended: TextView = view.findViewById(R.id.recommended)
 
         fun bind(server: Server, type: String) {
             serverNameTextView.text = formatServerName(server.serverName ?: "")
@@ -88,13 +89,26 @@ class ServerAdapter(
 
             serverIcon.setImageResource(iconResId)
 
-            itemView.findViewById<MaterialCardView>(R.id.genreCard).setOnClickListener {
-                fragment.getStreaming(StreamingParams(
-                    animeEpisodeId = episodeServers.episodeId ?: "",
-                    server = server.serverName ?: "",
-                    category = type
-                ))
+            // Determine if the current server is the first in its category
+            val position = adapterPosition - 1 // Adjust for the header
+            val isRecommended = when (type) {
+                "sub" -> position == 0
+                "dub" -> position == episodeServers.sub.size
+                "raw" -> position == episodeServers.sub.size + episodeServers.dub.size
+                else -> false
+            }
 
+            // Show/hide the recommended text
+            recommended.visibility = if (isRecommended) View.VISIBLE else View.GONE
+
+            itemView.findViewById<MaterialCardView>(R.id.genreCard).setOnClickListener {
+                fragment.getStreaming(
+                    StreamingParams(
+                        animeEpisodeId = episodeServers.episodeId ?: "",
+                        server = server.serverName ?: "",
+                        category = type
+                    )
+                )
                 onServerSelectedListener?.onServerSelected()
             }
         }

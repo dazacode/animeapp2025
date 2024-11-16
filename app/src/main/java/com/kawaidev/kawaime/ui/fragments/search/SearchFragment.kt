@@ -19,8 +19,9 @@ import com.kawaidev.kawaime.Prefs
 import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.network.dao.anime.SearchResponse
 import com.kawaidev.kawaime.ui.activity.MainActivity
-import com.kawaidev.kawaime.ui.adapters.AnimeAdapter
+import com.kawaidev.kawaime.ui.adapters.anime.AnimeAdapter
 import com.kawaidev.kawaime.ui.adapters.SearchHistoryAdapter
+import com.kawaidev.kawaime.ui.adapters.anime.helpers.AnimeParams
 import com.kawaidev.kawaime.ui.fragments.search.helpers.SearchHelpers
 import com.kawaidev.kawaime.ui.listeners.SearchListener
 import com.kawaidev.kawaime.ui.models.SearchViewModel
@@ -181,7 +182,7 @@ class SearchFragment : Fragment(), SearchListener {
         prefs = App.prefs
         prefs.setSearchListener(this)
 
-        animeAdapter = AnimeAdapter(this, anime) {
+        animeAdapter = AnimeAdapter(AnimeParams(this, anime)) {
             searchViewModel.refreshSearch(textField.text.toString())
         }
 

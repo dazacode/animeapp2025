@@ -21,9 +21,11 @@ media3Exoplayer = "1.4.1"
 okhttp = "4.10.0"
 playerVersion = "3.92.0"
 recyclerview = "1.3.2"
+spacingitemdecoration = "1.1.0"
 stfalconimageviewer = "v1.0.1"
 swiperefreshlayout = "1.1.0"
 preference = "1.2.1"
+media3Session = "1.4.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -51,9 +53,11 @@ material = { group = "com.google.android.material", name = "material", version.r
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+spacingitemdecoration = { module = "com.github.grzegorzojdana:SpacingItemDecoration", version.ref = "spacingitemdecoration" }
 stfalconimageviewer = { module = "com.github.stfalcon-studio:StfalconImageViewer", version.ref = "stfalconimageviewer" }
 androidx-swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefreshlayout" }
 androidx-preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
+androidx-media3-session = { group = "androidx.media3", name = "media3-session", version.ref = "media3Session" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
