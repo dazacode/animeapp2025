@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.network.dao.streaming.EpisodeDetail
-import com.kawaidev.kawaime.ui.fragments.streaming.EpisodesFragment
+import com.kawaidev.kawaime.ui.fragments.streaming.episodes.EpisodesFragment
 
 class EpisodesAdapter(
     private val fragment: EpisodesFragment,
@@ -90,7 +90,7 @@ class EpisodesAdapter(
             }
 
             itemView.findViewById<MaterialCardView>(R.id.genreCard).setOnClickListener {
-                episode.episodeId?.let { it1 -> fragment.getServers(it1) }
+                episode.episodeId?.let { it1 -> fragment.episodesCalls.getServers(it1) }
             }
         }
     }

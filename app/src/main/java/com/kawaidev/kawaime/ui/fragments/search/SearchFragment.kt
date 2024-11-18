@@ -21,12 +21,14 @@ import com.kawaidev.kawaime.network.dao.anime.SearchResponse
 import com.kawaidev.kawaime.ui.activity.MainActivity
 import com.kawaidev.kawaime.ui.adapters.anime.AnimeAdapter
 import com.kawaidev.kawaime.ui.adapters.SearchHistoryAdapter
+import com.kawaidev.kawaime.ui.adapters.anime.helpers.AnimeHelper
 import com.kawaidev.kawaime.ui.adapters.anime.helpers.AnimeParams
 import com.kawaidev.kawaime.ui.fragments.search.helpers.SearchHelpers
 import com.kawaidev.kawaime.ui.listeners.SearchListener
 import com.kawaidev.kawaime.ui.models.SearchViewModel
 import icepick.Icepick
 import icepick.State
+import kotlin.math.abs
 
 class SearchFragment : Fragment(), SearchListener {
     private lateinit var textField: TextInputEditText
@@ -94,7 +96,7 @@ class SearchFragment : Fragment(), SearchListener {
 
     private fun handleObserve() {
         searchViewModel.searchResults.observe(viewLifecycleOwner) { searchResults ->
-            updateAnimeList(searchResults)
+            AnimeHelper.updateData(animeAdapter, searchResults, searchRecycler)
         }
 
         searchViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
@@ -138,23 +140,16 @@ class SearchFragment : Fragment(), SearchListener {
 
     fun clearSearches() = prefs.clearSearches()
 
-    private fun updateAnimeList(animeList: List<SearchResponse>) {
-        if (animeList.isNotEmpty()) {
-            animeAdapter.updateData(animeList)
-            anime = animeList
-        }
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         Icepick.saveInstanceState(this, outState)
     }
 
-    private fun setupAppBarListener(appBarLayout: AppBarLayout) {
-        appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
-            val isCollapsed = Math.abs(verticalOffset) == appBarLayout.totalScrollRange
+    private fun setupAppBarListener(appBar: AppBarLayout) {
+        appBar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+            val isCollapsed = abs(verticalOffset) == appBarLayout.totalScrollRange
             isAppBarHidden = isCollapsed
-        })
+        }
     }
 
     fun scrollListener() = object : RecyclerView.OnScrollListener() {

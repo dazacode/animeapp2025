@@ -1,7 +1,6 @@
 package com.kawaidev.kawaime.ui.adapters.details.helpers
 
 import android.animation.ValueAnimator
-import android.graphics.Rect
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
@@ -15,23 +14,15 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSnapHelper
-import androidx.recyclerview.widget.RecyclerView
-import com.grzegorzojdana.spacingitemdecoration.Spacing
-import com.grzegorzojdana.spacingitemdecoration.SpacingItemDecoration
 import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.network.dao.anime.Release
 import com.kawaidev.kawaime.network.dao.anime.SearchResponse
 import com.kawaidev.kawaime.ui.activity.MainActivity
-import com.kawaidev.kawaime.ui.adapters.anime.AnimeAdapter
-import com.kawaidev.kawaime.ui.adapters.anime.helpers.AnimeParams
 import com.kawaidev.kawaime.ui.adapters.helpers.HorizontalRecycler
 import com.kawaidev.kawaime.ui.custom.VerticalGradientImage
 import com.kawaidev.kawaime.ui.fragments.details.DetailsFragment
 import com.kawaidev.kawaime.ui.fragments.search.SearchFragment
-import com.kawaidev.kawaime.ui.fragments.streaming.EpisodesFragment
-import com.kawaidev.kawaime.utils.Converts
+import com.kawaidev.kawaime.ui.fragments.streaming.episodes.EpisodesFragment
 import com.kawaidev.kawaime.utils.LoadImage
 import java.util.Locale
 
@@ -181,12 +172,5 @@ object DetailsHelper {
             valueAnimator.duration = 250
             valueAnimator.start()
         }
-    }
-
-    fun adapterBind(itemView: View, fragment: DetailsFragment, items: List<SearchResponse>, title: String) {
-        val titleTextView: TextView = itemView.findViewById(R.id.title)
-        titleTextView.text = title
-
-        HorizontalRecycler.setup(fragment, items, itemView)
     }
 }

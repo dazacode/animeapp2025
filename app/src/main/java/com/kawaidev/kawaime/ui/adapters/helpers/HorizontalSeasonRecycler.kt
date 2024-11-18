@@ -11,22 +11,24 @@ import com.grzegorzojdana.spacingitemdecoration.Spacing
 import com.grzegorzojdana.spacingitemdecoration.SpacingItemDecoration
 import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.network.dao.anime.SearchResponse
+import com.kawaidev.kawaime.network.dao.anime.Season
 import com.kawaidev.kawaime.ui.adapters.anime.AnimeAdapter
 import com.kawaidev.kawaime.ui.adapters.anime.helpers.AnimeParams
+import com.kawaidev.kawaime.ui.adapters.details.SeasonAdapter
 import com.kawaidev.kawaime.utils.Converts
 
-object HorizontalRecycler {
+object HorizontalSeasonRecycler {
     private val recyclerViewStates = mutableMapOf<String, Parcelable?>()
 
     fun setup(
         fragment: Fragment,
-        data: List<SearchResponse>,
+        data: List<Season>,
         itemView: View,
         snap: Boolean = true
     ) {
         val space = Converts.dpToPx(8f, fragment.requireContext()).toInt()
         val recycler = itemView.findViewById<RecyclerView>(R.id.recycler)
-        val latestAdapter = AnimeAdapter(AnimeParams(fragment, data))
+        val latestAdapter = SeasonAdapter(fragment, data)
 
         recycler.layoutManager = LinearLayoutManager(itemView.context, RecyclerView.HORIZONTAL, false)
         recycler.adapter = latestAdapter

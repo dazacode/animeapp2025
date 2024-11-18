@@ -17,6 +17,7 @@ import com.kawaidev.kawaime.network.dao.anime.SearchResponse
 import com.kawaidev.kawaime.network.dao.anime.Season
 import com.kawaidev.kawaime.ui.activity.MainActivity
 import com.kawaidev.kawaime.ui.adapters.details.helpers.DetailsHelper
+import com.kawaidev.kawaime.ui.adapters.details.helpers.DetailsRecycler
 import com.kawaidev.kawaime.ui.adapters.details.helpers.DetailsViewType
 import com.kawaidev.kawaime.ui.adapters.diffs.ReleaseDiffCallback
 import com.kawaidev.kawaime.ui.fragments.details.DetailsFragment
@@ -104,41 +105,19 @@ class DetailsAdapter(
 
     inner class SeasonsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(seasonItems: List<Season>) {
-            val seasons = seasonItems.filter { it.isCurrent == false }
-
-            val titleTextView: TextView = itemView.findViewById(R.id.title)
-            titleTextView.text = "Other Seasons"
-
-            val space = Converts.dpToPx(8f, fragment.requireContext()).toInt()
-
-            val latestAdapter = SeasonAdapter(fragment, seasons)
-            val recycler = itemView.findViewById<RecyclerView>(R.id.recycler)
-            recycler.layoutManager = LinearLayoutManager(itemView.context, RecyclerView.HORIZONTAL, false)
-            recycler.adapter = latestAdapter
-
-            if (recycler.itemDecorationCount == 0) {
-                recycler.addItemDecoration(
-                    SpacingItemDecoration(
-                        Spacing(
-                            horizontal = space,
-                            vertical = space,
-                            edges = Rect(space, space, space, space)
-                        )
-                    )
-                )
-            }
+            DetailsRecycler.seasonBind(itemView, fragment, seasonItems, "Seasons")
         }
     }
 
     inner class RelatedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(relatedItems: List<SearchResponse>) {
-            DetailsHelper.adapterBind(itemView, fragment, relatedItems, "Related")
+            DetailsRecycler.animeBind(itemView, fragment, relatedItems, "Related")
         }
     }
 
     inner class RecommendationsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(recommendationItems: List<SearchResponse>) {
-            DetailsHelper.adapterBind(itemView, fragment, recommendationItems, "Recommendations")
+            DetailsRecycler.animeBind(itemView, fragment, recommendationItems, "Recommendations")
         }
     }
 

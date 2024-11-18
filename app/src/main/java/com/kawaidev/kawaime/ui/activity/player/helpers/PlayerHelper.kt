@@ -32,9 +32,7 @@ object PlayerHelper {
 
     @OptIn(UnstableApi::class)
     fun initializePlayer(activity: PlayerActivity) {
-        val trackSelector = DefaultTrackSelector(activity).apply {
-            setParameters(buildUponParameters().setForceHighestSupportedBitrate(true))
-        }
+        val trackSelector = DefaultTrackSelector(activity)
 
         activity.playerViewModel.player = ExoPlayer.Builder(activity)
             .setTrackSelector(trackSelector)

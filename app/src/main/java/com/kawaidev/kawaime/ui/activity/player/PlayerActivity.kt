@@ -78,34 +78,6 @@ class PlayerActivity : AppCompatActivity() {
         }
 
         PlayerHelper.initializePlayerUI(this)
-
-        mediaSession = MediaSession(this, "MusicService").apply {
-            setCallback(object : MediaSession.Callback() {
-                override fun onPlay() {
-                    super.onPlay()
-                    playerViewModel.player?.play()
-                }
-
-                override fun onPause() {
-                    super.onPause()
-                    playerViewModel.player?.pause()
-                }
-            })
-
-            setFlags(
-                MediaSession.FLAG_HANDLES_MEDIA_BUTTONS or MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS
-            )
-        }
-
-        mediaButtonReceiver = MediaReceiver(playerViewModel.player ?: player)
-
-        val mediaFilter = IntentFilter(Intent.ACTION_MEDIA_BUTTON)
-        registerReceiver(mediaButtonReceiver, mediaFilter)
-
-        val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        audioManager.requestAudioFocus(null, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN)
-
-        mediaSession.isActive = true
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -127,9 +99,11 @@ class PlayerActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         val currentPosition = playerViewModel.player?.currentPosition ?: 0L
-        prefs.saveWatchedRelease(WatchedRelease(episodeId = id, watchedTo = currentPosition))
-        playerViewModel.playWhenReady = playerViewModel.player?.playWhenReady ?: false
-        playerViewModel.player?.pause()
+        if (currentPosition > 0L) {
+            prefs.saveWatchedRelease(WatchedRelease(episodeId = id, watchedTo = currentPosition))
+            playerViewModel.playWhenReady = playerViewModel.player?.playWhenReady ?: false
+            playerViewModel.player?.pause()
+        }
     }
 
     override fun onResume() {

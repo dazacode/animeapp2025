@@ -21,8 +21,7 @@ import com.kawaidev.kawaime.network.dao.anime.Release
 import com.kawaidev.kawaime.network.dao.streaming.EpisodeServers
 import com.kawaidev.kawaime.ui.activity.MainActivity
 import com.kawaidev.kawaime.ui.adapters.details.ServerAdapter
-import com.kawaidev.kawaime.ui.adapters.streaming.EpisodesAdapter
-import com.kawaidev.kawaime.ui.fragments.streaming.EpisodesFragment
+import com.kawaidev.kawaime.ui.fragments.streaming.episodes.EpisodesFragment
 import com.kawaidev.kawaime.utils.Converts
 
 class BottomSheets(private val activity: MainActivity) {

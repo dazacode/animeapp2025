@@ -12,7 +12,7 @@ import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.network.dao.api_utils.StreamingParams
 import com.kawaidev.kawaime.network.dao.streaming.EpisodeServers
 import com.kawaidev.kawaime.network.dao.streaming.Server
-import com.kawaidev.kawaime.ui.fragments.streaming.EpisodesFragment
+import com.kawaidev.kawaime.ui.fragments.streaming.episodes.EpisodesFragment
 
 class ServerAdapter(
     private val fragment: EpisodesFragment,
@@ -102,7 +102,7 @@ class ServerAdapter(
             recommended.visibility = if (isRecommended) View.VISIBLE else View.GONE
 
             itemView.findViewById<MaterialCardView>(R.id.genreCard).setOnClickListener {
-                fragment.getStreaming(
+                fragment.episodesCalls.getStreaming(
                     StreamingParams(
                         animeEpisodeId = episodeServers.episodeId ?: "",
                         server = server.serverName ?: "",

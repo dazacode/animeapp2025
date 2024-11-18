@@ -13,6 +13,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromJsonElement
 import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
@@ -46,8 +47,14 @@ class StreamingServiceImpl(
                 return@withContext Episodes()
             }
         } else {
-            println("Failed to fetch episodes: ${response.message}")
-            return@withContext Episodes()
+            val errorBody = response.body?.string()
+            val errorMessage = try {
+                errorBody?.let { json.parseToJsonElement(it).jsonObject["message"]?.jsonPrimitive?.content }
+            } catch (e: Exception) {
+                null
+            } ?: "Unknown error"
+
+            throw Exception(errorMessage)
         }
     }
 
@@ -68,8 +75,14 @@ class StreamingServiceImpl(
                 return@withContext EpisodeServers()
             }
         } else {
-            println("Failed to fetch servers: ${response.message}")
-            return@withContext EpisodeServers()
+            val errorBody = response.body?.string()
+            val errorMessage = try {
+                errorBody?.let { json.parseToJsonElement(it).jsonObject["message"]?.jsonPrimitive?.content }
+            } catch (e: Exception) {
+                null
+            } ?: "Unknown error"
+
+            throw Exception(errorMessage)
         }
     }
 
@@ -86,12 +99,17 @@ class StreamingServiceImpl(
                 val animeElement = jsonResponse.jsonObject["data"]?.jsonObject
                 return@withContext json.decodeFromJsonElement<Streaming>(animeElement ?: jsonResponse)
             } else {
-                println("Failed to fetch streaming: Empty response")
-                return@withContext Streaming()
+                throw Exception("Failed to fetch streaming: Empty response")
             }
         } else {
-            println("Failed to fetch streaming: ${response.message}")
-            return@withContext Streaming()
+            val errorBody = response.body?.string()
+            val errorMessage = try {
+                errorBody?.let { json.parseToJsonElement(it).jsonObject["message"]?.jsonPrimitive?.content }
+            } catch (e: Exception) {
+                null
+            } ?: "Unknown error"
+
+            throw Exception(errorMessage)
         }
     }
 
