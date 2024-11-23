@@ -53,6 +53,9 @@ dependencies {
     implementation(libs.androidx.media3.exoplayer.dash)
     implementation(libs.androidx.media3.ui)
     implementation(libs.androidx.media3.exoplayer.hls)
+    implementation(libs.androidx.media3.session)
+    implementation(libs.androidx.media3.datasource)
+    implementation(libs.androidx.media3.datasource.okhttp)
 
     implementation(libs.stfalconimageviewer)
     implementation(libs.glide)
@@ -60,7 +63,6 @@ dependencies {
     implementation(libs.androidx.swiperefreshlayout)
     implementation(libs.icepick)
     implementation(libs.androidx.preference)
-    implementation(libs.androidx.media3.session)
     annotationProcessor(libs.icepick.processor)
 
     implementation(libs.kotlinx.coroutines.core)

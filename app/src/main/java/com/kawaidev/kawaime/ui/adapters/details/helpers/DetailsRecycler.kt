@@ -28,6 +28,6 @@ object DetailsRecycler {
         val titleTextView: TextView = itemView.findViewById(R.id.title)
         titleTextView.text = title
 
-        HorizontalSeasonRecycler.setup(fragment, items, itemView, snap = false)
+        HorizontalSeasonRecycler.setup(fragment, items, itemView)
     }
 }

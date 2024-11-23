@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">Kawaime</string>
+    <string name="app_name" translatable="false">Kawaime</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <!-- Preference Titles -->
@@ -16,4 +17,59 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
+    <string name="home">Home</string>
+    <string name="explore">Explore</string>
+    <string name="search">Search</string>
+    <string name="favorite">Favorite</string>
+    <string name="latest">Latest</string>
+    <string name="trending">Trending</string>
+    <string name="top_airing">Top Airing</string>
+    <string name="most_popular">Most Popular</string>
+    <string name="most_favorite">Most Favorite</string>
+    <string name="latest_completed">Latest Completed</string>
+    <string name="top_10_today">Top 10 Today</string>
+    <string name="top_10_week">Top 10 This Week</string>
+    <string name="top_10_month">Top 10 This Month</string>
+    <string name="details">Details</string>
+    <string name="details...">Details...</string>
+    <string name="hide">Hide</string>
+    <string name="close">Close</string>
+    <string name="watch">Watch</string>
+    <string name="seasons">Seasons</string>
+    <string name="related">Related</string>
+    <string name="recommendations">Recommendations</string>
+    <string name="episodes">Episodes</string>
+    <string name="choose_server">Choose a server</string>
+    <string name="server_work">If a server doesn\'t work, please choose another.</string>
+    <string name="error">Error</string>
+    <string name="click_show">Click to show details</string>
+    <string name="click_hide">Click to hide details</string>
+    <string name="title">Title</string>
+    <string name="orig_title">Original title</string>
+    <string name="other_titles">Other titles</string>
+    <string name="search_anime">Search anime</string>
+    <string name="genres">Genres</string>
+    <string name="search_history">Search History</string>
+    <string name="clear_all">Clear All</string>
+    <string name="opps_nothings_was_found_for_your_request">Opps, nothings was found for your request</string>
+    <string name="opps_it_went_wrong">Opps, it went wrong...</string>
+    <string name="there_is_error_occured_while_loading">There is error occured while loading</string>
+    <string name="help">Help</string>
+    <string name="ok">Ok</string>
+    <string name="try_again">Try again</string>
+
+    <string name="channel_name">Download Notifications</string>
+    <string name="channel_description">Notifications for ongoing video downloads</string>
+    <string name="download_notification_title">Downloading</string>
+    <string name="download_notification_text">Video is being downloaded...</string>
+    <string name="download_server">Download</string>
+    <string name="cancel">Cancel</string>
+    <string name="choose_quality">Choose quality</string>
+    <string name="download_success">Successfully downloaded</string>
+    <string name="no_active_downloads">No active downloads</string>
+    <string name="waiting_for_downloads">Waiting for downloads</string>
+    <string name="episode">Episode %1$s</string>
+    <string name="added_to_favorites">Added to favorites</string>
+    <string name="removed_from_favorites">Removed from favorites</string>
 </resources>

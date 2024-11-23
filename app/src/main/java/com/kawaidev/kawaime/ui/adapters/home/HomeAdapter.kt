@@ -1,30 +1,22 @@
 package com.kawaidev.kawaime.ui.adapters.home
 
-import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
+import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.grzegorzojdana.spacingitemdecoration.Spacing
-import com.grzegorzojdana.spacingitemdecoration.SpacingItemDecoration
 import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.network.dao.anime.Home
 import com.kawaidev.kawaime.network.dao.anime.SearchResponse
 import com.kawaidev.kawaime.ui.activity.MainActivity
-import com.kawaidev.kawaime.ui.adapters.anime.AnimeAdapter
-import com.kawaidev.kawaime.ui.adapters.anime.helpers.AnimeParams
 import com.kawaidev.kawaime.ui.adapters.diffs.HomeDiffCallback
 import com.kawaidev.kawaime.ui.adapters.helpers.HorizontalRecycler
 import com.kawaidev.kawaime.ui.adapters.home.helpers.ViewTypes
 import com.kawaidev.kawaime.ui.fragments.details.DetailsFragment
 import com.kawaidev.kawaime.ui.fragments.home.HomeFragment
-import com.kawaidev.kawaime.utils.Converts
 import com.kawaidev.kawaime.utils.LoadImage
 
 class HomeAdapter(
@@ -59,15 +51,15 @@ class HomeAdapter(
             is SpotlightViewHolder -> holder.bind(home.spotlightAnimes)
             is AnimeViewHolder -> {
                 when (getItemViewType(position)) {
-                    ViewTypes.VIEW_TYPE_LATEST -> holder.bind(home.latestEpisodeAnimes, "Latest")
-                    ViewTypes.VIEW_TYPE_TRENDING -> holder.bind(home.trendingAnimes, "Trending")
-                    ViewTypes.VIEW_TYPE_TOP_AIRING -> holder.bind(home.topAiringAnimes, "Top Airing")
-                    ViewTypes.VIEW_TYPE_POPULAR -> holder.bind(home.mostPopularAnimes, "Most Popular")
-                    ViewTypes.VIEW_TYPE_MOST_FAVORITE -> holder.bind(home.mostFavoriteAnimes, "Most Favorite")
-                    ViewTypes.VIEW_TYPE_LATEST_COMPLETED -> holder.bind(home.latestCompletedAnimes, "Latest Completed")
-                    ViewTypes.VIEW_TYPE_TOP_10_TODAY -> holder.bind(home.top10Animes.today, "Top 10 Today")
-                    ViewTypes.VIEW_TYPE_TOP_10_WEEK -> holder.bind(home.top10Animes.week, "Top 10 This Week")
-                    ViewTypes.VIEW_TYPE_TOP_10_MONTH -> holder.bind(home.top10Animes.month, "Top 10 This Month")
+                    ViewTypes.VIEW_TYPE_LATEST -> holder.bind(home.latestEpisodeAnimes, fragment.requireContext().getString(R.string.latest))
+                    ViewTypes.VIEW_TYPE_TRENDING -> holder.bind(home.trendingAnimes, fragment.requireContext().getString(R.string.trending))
+                    ViewTypes.VIEW_TYPE_TOP_AIRING -> holder.bind(home.topAiringAnimes, fragment.requireContext().getString(R.string.top_airing))
+                    ViewTypes.VIEW_TYPE_POPULAR -> holder.bind(home.mostPopularAnimes, fragment.requireContext().getString(R.string.most_popular))
+                    ViewTypes.VIEW_TYPE_MOST_FAVORITE -> holder.bind(home.mostFavoriteAnimes, fragment.requireContext().getString(R.string.most_favorite))
+                    ViewTypes.VIEW_TYPE_LATEST_COMPLETED -> holder.bind(home.latestCompletedAnimes, fragment.requireContext().getString(R.string.latest_completed))
+                    ViewTypes.VIEW_TYPE_TOP_10_TODAY -> holder.bind(home.top10Animes.today, fragment.requireContext().getString(R.string.top_10_today))
+                    ViewTypes.VIEW_TYPE_TOP_10_WEEK -> holder.bind(home.top10Animes.week, fragment.requireContext().getString(R.string.top_10_week))
+                    ViewTypes.VIEW_TYPE_TOP_10_MONTH -> holder.bind(home.top10Animes.month, fragment.requireContext().getString(R.string.top_10_month))
                 }
             }
         }
@@ -76,8 +68,8 @@ class HomeAdapter(
     inner class LoadingViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
     inner class ErrorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val helpButton: FrameLayout = view.findViewById(R.id.negative_button)
-        private val tryAgainButton: FrameLayout = view.findViewById(R.id.details_button)
+        private val helpButton: Button = view.findViewById(R.id.help_button)
+        private val tryAgainButton: Button = view.findViewById(R.id.again_button)
 
         fun bind() {
             helpButton.setOnClickListener {
@@ -100,7 +92,7 @@ class HomeAdapter(
             val descTextView: TextView = itemView.findViewById(R.id.desc)
             descTextView.text = anime.description
 
-            itemView.findViewById<FrameLayout>(R.id.details_button).setOnClickListener {
+            itemView.findViewById<Button>(R.id.details_button).setOnClickListener {
                 val bundle = Bundle().apply {
                     putString("id", anime.id)
                 }
@@ -116,11 +108,16 @@ class HomeAdapter(
     }
 
     inner class AnimeViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        fun bind(latestData: List<SearchResponse>, title: String) {
+        private lateinit var currentData: List<SearchResponse>
+
+        fun bind(newData: List<SearchResponse>, title: String) {
             val titleTextView: TextView = itemView.findViewById(R.id.title)
             titleTextView.text = title
 
-            HorizontalRecycler.setup(fragment, latestData, itemView)
+            if (!::currentData.isInitialized || currentData != newData) {
+                currentData = newData
+                HorizontalRecycler.setup(fragment, currentData, itemView)
+            }
         }
     }
 

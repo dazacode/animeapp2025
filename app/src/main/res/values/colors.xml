@@ -3,6 +3,7 @@
     <color name="black">#141414</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#757575</color>
+    <color name="grayLight">#A0A0A0</color>
     <color name="red">#D32F2F</color>
 
     <color name="main">#ff5252</color>
@@ -18,6 +19,7 @@
     <color name="text3">#242424</color>
     <color name="text4">#3E3E3E</color>
     <color name="text5">#282828</color>
+    <color name="text6">@color/gray</color>
 
     <color name="border">#1A000000</color>
     <color name="border1">#eeeeee</color>
@@ -44,7 +46,7 @@
 
     <color name="progressBackground">#e0e0e0</color>
 
-    <color name="mainBottom">#ff5252</color>
+    <color name="mainBottom">@color/main</color>
 
     <color name="gradientStartColor">#5a47f0</color>
     <color name="gradientEndColor">#ec5b48</color>
@@ -77,7 +79,8 @@
 
     <color name="searchField">#feffff</color>
 
-    <color name="button">#f7f7f7</color>
+    <color name="button">#08000000</color>
+    <color name="button1">#08000000</color>
     <color name="statusCard">#262626</color>
     <color name="seasonCard">#80CACACA</color>
 
@@ -89,10 +92,5 @@
     <color name="inactiveColor">#d9d9d9</color>
     <color name="activeColor">#727272</color>
 
-    <color name="exo_white" tools:override="true">#ffffff</color>
-    <color name="exo_white_opacity_70" tools:override="true">#B3ffffff</color>
-    <color name="exo_black_opacity_70" tools:override="true">#B3000000</color>
-    <color name="exo_black_opacity_60" tools:override="true">#98000000</color>
-    <color name="exo_styled_error_message_background" tools:override="true">#80808080</color>
-    <color name="exo_bottom_bar_background" tools:override="true">#b0000000</color>
+    <color name="showMore">#08000000</color>
 </resources>

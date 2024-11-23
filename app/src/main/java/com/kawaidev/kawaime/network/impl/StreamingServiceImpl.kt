@@ -1,10 +1,9 @@
 package com.kawaidev.kawaime.network.impl
 
-import android.util.Log
+import com.kawaidev.kawaime.network.dao.api_utils.ApiException
 import com.kawaidev.kawaime.network.dao.api_utils.StreamingParams
 import com.kawaidev.kawaime.network.dao.streaming.EpisodeServers
 import com.kawaidev.kawaime.network.dao.streaming.Episodes
-import com.kawaidev.kawaime.network.dao.streaming.HlsStreamInfo
 import com.kawaidev.kawaime.network.dao.streaming.Streaming
 import com.kawaidev.kawaime.network.interfaces.StreamingService
 import com.kawaidev.kawaime.network.routes.StreamingRoutes
@@ -12,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromJsonElement
+import kotlinx.serialization.json.int
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import okhttp3.OkHttpClient
@@ -30,7 +30,6 @@ class StreamingServiceImpl(
 
     override suspend fun getEpisodes(id: String): Episodes = withContext(Dispatchers.IO) {
         val url = "${routes.episodes}$id/episodes"
-
         println(url)
 
         val request = Request.Builder().url(url).build()
@@ -49,12 +48,22 @@ class StreamingServiceImpl(
         } else {
             val errorBody = response.body?.string()
             val errorMessage = try {
-                errorBody?.let { json.parseToJsonElement(it).jsonObject["message"]?.jsonPrimitive?.content }
+                errorBody?.let {
+                    json.parseToJsonElement(it).jsonObject["message"]?.jsonPrimitive?.content
+                }
             } catch (e: Exception) {
                 null
-            } ?: "Unknown error"
+            } ?: response.message
 
-            throw Exception(errorMessage)
+            val status = try {
+                errorBody?.let {
+                    json.parseToJsonElement(it).jsonObject["status"]?.jsonPrimitive?.int
+                }
+            } catch (e: Exception) {
+                null
+            } ?: response.code
+
+            throw ApiException(status, errorMessage)
         }
     }
 
@@ -77,12 +86,22 @@ class StreamingServiceImpl(
         } else {
             val errorBody = response.body?.string()
             val errorMessage = try {
-                errorBody?.let { json.parseToJsonElement(it).jsonObject["message"]?.jsonPrimitive?.content }
+                errorBody?.let {
+                    json.parseToJsonElement(it).jsonObject["message"]?.jsonPrimitive?.content
+                }
             } catch (e: Exception) {
                 null
-            } ?: "Unknown error"
+            } ?: response.message
 
-            throw Exception(errorMessage)
+            val status = try {
+                errorBody?.let {
+                    json.parseToJsonElement(it).jsonObject["status"]?.jsonPrimitive?.int
+                }
+            } catch (e: Exception) {
+                null
+            } ?: response.code
+
+            throw ApiException(status, errorMessage)
         }
     }
 
@@ -104,61 +123,22 @@ class StreamingServiceImpl(
         } else {
             val errorBody = response.body?.string()
             val errorMessage = try {
-                errorBody?.let { json.parseToJsonElement(it).jsonObject["message"]?.jsonPrimitive?.content }
+                errorBody?.let {
+                    json.parseToJsonElement(it).jsonObject["message"]?.jsonPrimitive?.content
+                }
             } catch (e: Exception) {
                 null
-            } ?: "Unknown error"
+            } ?: response.message
 
-            throw Exception(errorMessage)
-        }
-    }
-
-    override suspend fun getStreamingLink(url: String): String {
-        return withContext(Dispatchers.IO) {
-            try {
-                // Make a request to fetch the HLS master playlist
-                val request = Request.Builder()
-                    .url(url)
-                    .build()
-
-                val response = client.newCall(request).execute()
-                val playlistContent = response.body?.string() ?: throw Exception("Failed to fetch HLS playlist")
-
-                val streams = parseHlsMasterPlaylist(playlistContent)
-
-                val highestQualityStream = streams.maxByOrNull { it.bandwidth }
-
-                val streamUrl = highestQualityStream?.url?.let { streamUrl ->
-                    val baseUrl = url.substringBeforeLast("/master.m3u8")
-                    return@let "$baseUrl/${streamUrl}"
-                } ?: throw Exception("No valid streams found")
-
-                Log.v("Service", streamUrl)
-
-                streamUrl
+            val status = try {
+                errorBody?.let {
+                    json.parseToJsonElement(it).jsonObject["status"]?.jsonPrimitive?.int
+                }
             } catch (e: Exception) {
-                throw Exception("Error fetching streaming link: ${e.message}")
-            }
+                null
+            } ?: response.code
+
+            throw ApiException(status, errorMessage)
         }
-    }
-
-    private fun parseHlsMasterPlaylist(playlistContent: String): List<HlsStreamInfo> {
-        val streamList = mutableListOf<HlsStreamInfo>()
-
-        // Regex to match #EXT-X-STREAM-INF tags and extract the bandwidth and resolution
-        val streamRegex = """#EXT-X-STREAM-INF:.*BANDWIDTH=(\d+),RESOLUTION=(\d+x\d+),.*\n([^\n]+)""".toRegex()
-
-        val matches = streamRegex.findAll(playlistContent)
-
-        for (match in matches) {
-            val bandwidth = match.groupValues[1].toInt()
-            val resolution = match.groupValues[2]
-            val streamUrl = match.groupValues[3]
-
-            // Add the stream info to the list
-            streamList.add(HlsStreamInfo(streamUrl, bandwidth, resolution))
-        }
-
-        return streamList
     }
 }

@@ -17,7 +17,7 @@
             android:id="@+id/dialog_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Error"
+            android:text="@string/error"
             android:textColor="@color/text3"
             android:textSize="18sp"
             android:paddingHorizontal="20dp"
@@ -41,48 +41,53 @@
                     android:textColor="@color/text3"
                     android:paddingVertical="8dp"
                     android:text="You didn't choose orientation"/>
+
+                <TextView android:id="@+id/detailsDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:textSize="16sp"
+                    android:text="Some details"
+                    android:visibility="gone"
+                    android:textColor="@color/text6" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/detailsCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    app:cardCornerRadius="6dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="@color/showMore">
+
+                    <TextView
+                        android:id="@+id/descCardText"
+                        style="@style/MediumText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="8dp"
+                        android:text="Click to show details"
+                        android:textColor="@color/text6" />
+                </androidx.cardview.widget.CardView>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="8dp"/>
             </LinearLayout>
         </ScrollView>
 
-        <!-- Buttons -->
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <Button
+            android:id="@+id/ok_button"
+            style="@style/OutlinedButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="20dp">
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/negative_card"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:backgroundTint="@android:color/transparent"
-                app:cardCornerRadius="24dp"
-                app:strokeColor="@color/border1"
-                app:strokeWidth="1dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
-
-                <FrameLayout
-                    android:id="@+id/negative_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingHorizontal="24dp"
-                    android:background="@drawable/ripple_background_button_negative">
-
-                    <TextView
-                        android:id="@+id/negativeText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Ok"
-                        android:background="@android:color/transparent"
-                        android:layout_gravity="center"
-                        android:textSize="14.5sp"
-                        android:letterSpacing="-0.01"
-                        android:fontFamily="sans-serif-medium"
-                        android:textColor="@color/text1"/>
-                </FrameLayout>
-            </com.google.android.material.card.MaterialCardView>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_height="46dp"
+            android:text="@string/ok"
+            android:layout_marginHorizontal="20dp"
+            app:layout_constraintEnd_toStartOf="@id/space"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
     </LinearLayout>
 </FrameLayout>

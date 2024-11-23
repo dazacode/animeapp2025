@@ -12,8 +12,9 @@ object AnimeViewType {
 
     fun getItemCount(animeList: List<SearchResponse>, isLoading: Boolean, isError: Boolean, isEmpty: Boolean, nextPage: Boolean): Int {
         return when {
-            animeList.isEmpty() && (isLoading || isError) -> 1
-            animeList.isEmpty() && isEmpty -> 1
+            animeList.isEmpty() && isLoading -> 1
+            isError -> 1
+            isEmpty && !isError -> 1
             animeList.isNotEmpty() && isLoading && nextPage -> animeList.size + 1
             else -> animeList.size
         }
@@ -21,9 +22,9 @@ object AnimeViewType {
 
     fun getItemViewType(position: Int, animeList: List<SearchResponse>, isLoading: Boolean, isError: Boolean, isEmpty: Boolean, nextPage: Boolean): Int {
         return when {
-            isError && animeList.isEmpty() -> VIEW_TYPE_ERROR
+            isError -> VIEW_TYPE_ERROR
             isLoading && animeList.isEmpty() -> VIEW_TYPE_LOADING
-            isEmpty && animeList.isEmpty() -> VIEW_TYPE_EMPTY
+            isEmpty && !isError -> VIEW_TYPE_EMPTY
             position == animeList.size && isLoading && nextPage -> VIEW_TYPE_BOTTOM_LOADING
             else -> VIEW_TYPE_ITEM
         }

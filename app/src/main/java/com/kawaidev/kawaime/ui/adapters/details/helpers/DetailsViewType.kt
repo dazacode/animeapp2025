@@ -12,9 +12,9 @@ object DetailsViewType {
     const val VIEW_TYPE_RECOMMENDATIONS = 6
 
     fun getItemViewType(isLoading: Boolean, isError: Boolean, position: Int, release: Release): Int {
-        return if (isLoading) {
+        return if (isLoading && !isError) {
             VIEW_TYPE_LOADING
-        } else if (isError) {
+        } else if (isError && !isLoading) {
             VIEW_TYPE_ERROR
         } else {
             var currentPos = 0
@@ -41,10 +41,11 @@ object DetailsViewType {
     }
 
     fun getItemCount(isLoading: Boolean, isError: Boolean, release: Release): Int {
-        if (isLoading) return 1
-        if (isError) return 1
+        if (isLoading && !isError) return 1
+        if (isError && !isLoading) return 1
 
-        var count = 1
+        var count = 0
+        if (release.anime != null) count++
         if (release.anime?.info?.description.isNullOrEmpty().not()) count++
         if (release.seasons.isNullOrEmpty().not()) count++
         if (release.relatedAnimes.isNullOrEmpty().not()) count++

@@ -3,6 +3,8 @@ package com.kawaidev.kawaime.ui.activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
@@ -24,6 +26,7 @@ import com.kawaidev.kawaime.ui.fragments.explore.ExploreFragment
 import com.kawaidev.kawaime.ui.fragments.home.HomeFragment
 import com.kawaidev.kawaime.ui.fragments.search.SearchExploreFragment
 import com.ncapdevi.fragnav.FragNavController
+import java.util.Locale
 
 class MainActivity : AppCompatActivity(), FragNavController.TransactionListener, FragNavController.RootFragmentListener {
 
@@ -113,21 +116,6 @@ class MainActivity : AppCompatActivity(), FragNavController.TransactionListener,
         }
     }
 
-    private fun popBackstackToRoot(tabIndex: Int, rootFragment: Fragment) {
-        val fragmentManager = supportFragmentManager
-        val backStackName = "${tabIndex}_backstack"
-
-        fragmentManager.popBackStackImmediate(backStackName, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-
-        if (!fragmentManager.fragments.contains(rootFragment)) {
-            fragmentManager.beginTransaction()
-                .replace(R.id.frame, rootFragment, rootFragment::class.java.simpleName)
-                .commitNow()
-        }
-
-        fragNavController.switchTab(tabIndex)
-    }
-
     override fun getRootFragment(index: Int): Fragment {
         return when (index) {
             FragNavController.TAB1 -> HomeFragment().apply { retainInstance = true }
@@ -138,12 +126,12 @@ class MainActivity : AppCompatActivity(), FragNavController.TransactionListener,
         }
     }
 
-    private fun showSnackbar(message: String) {
+    fun showSnackbar(message: String) {
         val snackbar = Snackbar.make(findViewById(R.id.frame), message, Snackbar.LENGTH_LONG)
 
         snackbar.setAnchorView(bottomFrame)
 
-        snackbar.view.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.snack_bar_background))
+        snackbar.setBackgroundTint(ContextCompat.getColor(this, R.color.snackBarBackground))
 
         val textView = snackbar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
         textView.setTextColor(ContextCompat.getColor(this, R.color.snackBarText))

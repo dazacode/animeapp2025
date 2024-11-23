@@ -11,6 +11,7 @@ import android.text.Html
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.StyleSpan
+import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
@@ -24,7 +25,7 @@ class HelpDialog : DialogFragment() {
         val inflater = requireActivity().layoutInflater
         val view = inflater.inflate(R.layout.dialog_layout_help, null)
 
-        val close: FrameLayout = view.findViewById(R.id.negative_button)
+        val close: Button = view.findViewById(R.id.ok_button)
 
         val help: TextView = view.findViewById(R.id.helpDesc)
 

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
@@ -19,7 +20,7 @@ import com.kawaidev.kawaime.ui.fragments.details.DetailsFragment
 import com.kawaidev.kawaime.utils.LoadImage
 
 class AnimeAdapter(
-    private var animeParams: AnimeParams,
+    var animeParams: AnimeParams,
     private var onAgain: (() -> Unit?)? = null
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -83,8 +84,8 @@ class AnimeAdapter(
     }
 
     inner class ErrorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val helpButton: FrameLayout = view.findViewById(R.id.negative_button)
-        private val tryAgainButton: FrameLayout = view.findViewById(R.id.details_button)
+        private val helpButton: Button = view.findViewById(R.id.help_button)
+        private val tryAgainButton: Button = view.findViewById(R.id.again_button)
 
         fun bind() {
             helpButton.setOnClickListener {
@@ -177,10 +178,12 @@ class AnimeAdapter(
 
     fun updateData(newAnimeList: List<SearchResponse?>) {
         val cleanNewAnimeList = newAnimeList.filterNotNull()
+
         val diffCallback = AnimeDiffCallback(animeParams.animeList, cleanNewAnimeList)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
 
         animeParams.animeList = cleanNewAnimeList
+
         diffResult.dispatchUpdatesTo(this)
     }
 }

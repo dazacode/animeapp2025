@@ -1,16 +1,11 @@
 package com.kawaidev.kawaime.ui.adapters.details
 
-import android.graphics.Rect
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.TextView
+import android.widget.Button
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.grzegorzojdana.spacingitemdecoration.Spacing
-import com.grzegorzojdana.spacingitemdecoration.SpacingItemDecoration
 import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.network.dao.anime.Release
 import com.kawaidev.kawaime.network.dao.anime.SearchResponse
@@ -21,7 +16,6 @@ import com.kawaidev.kawaime.ui.adapters.details.helpers.DetailsRecycler
 import com.kawaidev.kawaime.ui.adapters.details.helpers.DetailsViewType
 import com.kawaidev.kawaime.ui.adapters.diffs.ReleaseDiffCallback
 import com.kawaidev.kawaime.ui.fragments.details.DetailsFragment
-import com.kawaidev.kawaime.utils.Converts
 
 class DetailsAdapter(
     private val fragment: DetailsFragment,
@@ -75,8 +69,8 @@ class DetailsAdapter(
     }
 
     inner class ErrorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val helpButton: FrameLayout = view.findViewById(R.id.negative_button)
-        private val tryAgainButton: FrameLayout = view.findViewById(R.id.details_button)
+        private val helpButton: Button = view.findViewById(R.id.help_button)
+        private val tryAgainButton: Button = view.findViewById(R.id.again_button)
 
         fun bind() {
             helpButton.setOnClickListener {
@@ -84,7 +78,7 @@ class DetailsAdapter(
             }
 
             tryAgainButton.setOnClickListener {
-                fragment.getAnime {}
+                fragment.viewModel.fetchAnime(fragment.id)
             }
         }
     }
@@ -105,19 +99,19 @@ class DetailsAdapter(
 
     inner class SeasonsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(seasonItems: List<Season>) {
-            DetailsRecycler.seasonBind(itemView, fragment, seasonItems, "Seasons")
+            DetailsRecycler.seasonBind(itemView, fragment, seasonItems, itemView.context.getString(R.string.seasons))
         }
     }
 
     inner class RelatedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(relatedItems: List<SearchResponse>) {
-            DetailsRecycler.animeBind(itemView, fragment, relatedItems, "Related")
+            DetailsRecycler.animeBind(itemView, fragment, relatedItems, itemView.context.getString(R.string.related))
         }
     }
 
     inner class RecommendationsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(recommendationItems: List<SearchResponse>) {
-            DetailsRecycler.animeBind(itemView, fragment, recommendationItems, "Recommendations")
+            DetailsRecycler.animeBind(itemView, fragment, recommendationItems, itemView.context.getString(R.string.recommendations))
         }
     }
 
@@ -132,7 +126,14 @@ class DetailsAdapter(
     fun setLoading(loading: Boolean) {
         if (isLoading != loading) {
             isLoading = loading
-            notifyItemChanged(1)
+            notifyDataSetChanged()
+        }
+    }
+
+    fun setError(error: Boolean) {
+        if (isError != error) {
+            isError = error
+            notifyDataSetChanged()
         }
     }
 }

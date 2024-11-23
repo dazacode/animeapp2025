@@ -13,7 +13,7 @@
         app:strokeWidth="0dp"
         app:cardElevation="0dp"
         app:cardCornerRadius="6dp"
-        app:cardBackgroundColor="@color/button">
+        app:cardBackgroundColor="@color/button1">
 
         <!-- RelativeLayout to position the icon fixed while allowing the text to grow -->
         <RelativeLayout

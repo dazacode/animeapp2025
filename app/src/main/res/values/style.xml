@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="snackbarStyle">@style/Widget.App.Snackbar</item>
 
+        <!--this item is optional as all the snackbar wont contain the action button-->
+        <item name="snackbarButtonStyle">@style/Widget.App.SnackbarButton</item>
     </style>
 
     <style name="BottomNavigationTextAppearance" parent="@android:style/TextAppearance">
@@ -52,5 +55,98 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">6dp</item>
         <item name="android:antialias">true</item>
+    </style>
+
+    <style name="ExoStyledControls.Button.Center.Back">
+        <item name="android:layout_width">42dp</item>
+        <item name="android:layout_height">42dp</item>
+        <item name="android:src">@drawable/arrow_back</item>
+        <item name="android:contentDescription">Back</item>
+        <item name="tint">@android:color/white</item>
+        <item name="android:scaleType">center</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
+    <style name="CustomButtonShape" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerSize">6dp</item>
+    </style>
+
+    <style name="WatchButtonStyle" parent="Widget.Material3.Button">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="icon">@drawable/play</item>
+        <item name="iconTint">@color/text</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconSize">24dp</item>
+        <item name="android:text">@string/watch</item>
+        <item name="android:textColor">@color/text</item>
+        <item name="android:textSize">14.5sp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:backgroundTint">@color/main</item>
+        <item name="rippleColor">@color/rippleColor1</item>
+    </style>
+
+    <style name="OutlinedButton" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/text1</item>
+        <item name="android:textSize">14.5sp</item>
+        <item name="android:text">Help</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="rippleColor">@color/mainAccent</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="strokeColor">@color/border1</item>
+    </style>
+
+    <style name="FilledButton" parent="Widget.Material3.Button">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/text</item>
+        <item name="android:textSize">14.5sp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:backgroundTint">@color/main</item>
+        <item name="rippleColor">@color/rippleColor1</item>
+    </style>
+
+    <style name="CustomCheckBox" parent="Widget.MaterialComponents.CompoundButton.CheckBox">
+        <item name="android:background">@drawable/ripple_checkbox</item>
+    </style>
+
+    <style name="PlayerTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorControlHighlight">#33FFFFFF</item>
+        <item name="android:statusBarColor">#121212</item>
+        <item name="android:navigationBarColor">#121212</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+
+        <item name="colorControlActivated">#E0E0E0</item>
+        <item name="android:colorEdgeEffect">#E0E0E0</item>
+        <item name="colorPrimary">#121212</item>
+    </style>
+
+    <style name="ExoStyledControls.Button.Center.Progress">
+        <item name="android:padding">@dimen/exo_icon_padding</item>
+    </style>
+
+    <style name="Widget.App.Snackbar" parent="Widget.MaterialComponents.Snackbar">
+
+        <!--this child makes changes to the background color of the snackbar-->
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Snackbar</item>
+
+        <!--if this is made 0 then the action button text color will be white-->
+        <!--if this is 1 then the custom color can be set to action button text-->
+        <item name="actionTextColorAlpha">1</item>
+    </style>
+
+    <!--this is child is needed only when there is action button in snackbar-->
+    <!--otherwise this is not necessary-->
+    <!--in this case the action button color inside the snackbar is set to red-->
+    <style name="Widget.App.SnackbarButton" parent="Widget.MaterialComponents.Button.TextButton.Snackbar">
+        <item name="android:textColor">@color/snackBarText</item>
+    </style>
+
+    <!--this color inside this child is the background color of the snackbar-->
+    <style name="ThemeOverlay.App.Snackbar" parent="">
+        <item name="colorOnSurface">@color/snackBarBackground</item>
     </style>
 </resources>

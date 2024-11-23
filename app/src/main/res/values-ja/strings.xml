@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
+    <string name="home">ホーム</string>
+    <string name="explore">探索</string>
+    <string name="search">検索</string>
+    <string name="favorite">お気に入り</string>
+    <string name="latest">最新</string>
+    <string name="trending">トレンド</string>
+    <string name="top_airing">放送中トップ</string>
+    <string name="most_popular">最も人気のある</string>
+    <string name="most_favorite">最もお気に入り</string>
+    <string name="latest_completed">最新完了</string>
+    <string name="top_10_today">今日のトップ10</string>
+    <string name="top_10_week">今週のトップ10</string>
+    <string name="top_10_month">今月のトップ10</string>
+    <string name="details">詳細</string>
+    <string name="details...">詳細...</string>
+    <string name="hide">隠す</string>
+    <string name="close">閉じる</string>
+    <string name="watch">見る</string>
+    <string name="seasons">シーズン</string>
+    <string name="related">関連</string>
+    <string name="recommendations">おすすめ</string>
+    <string name="episodes">エピソード</string>
+    <string name="choose_server">サーバーを選んでください</string>
+    <string name="server_work">サーバーが動作しない場合は、別のサーバーを選んでください。</string>
+    <string name="error">エラー</string>
+    <string name="click_show">詳細を表示するにはクリックしてください</string>
+    <string name="click_hide">詳細を隠すにはクリックしてください</string>
+    <string name="title">タイトル</string>
+    <string name="orig_title">オリジナルタイトル</string>
+    <string name="other_titles">その他のタイトル</string>
+    <string name="search_anime">アニメを検索</string>
+    <string name="genres">ジャンル</string>
+    <string name="search_history">検索履歴</string>
+    <string name="clear_all">すべてクリア</string>
+    <string name="opps_nothings_was_found_for_your_request">おっと、ご依頼の内容は見つかりませんでした</string>
+    <string name="opps_it_went_wrong">おっと、問題が発生しました...</string>
+    <string name="there_is_error_occured_while_loading">読み込み中にエラーが発生しました</string>
+    <string name="help">ヘルプ</string>
+    <string name="ok">OK</string>
+    <string name="try_again">再試行</string>
+
+    <string name="channel_name">ダウンロード通知</string>
+    <string name="channel_description">進行中のビデオダウンロードの通知</string>
+    <string name="download_notification_title">ダウンロード中</string>
+    <string name="download_notification_text">ビデオをダウンロードしています...</string>
+    <string name="download_server">ダウンロード</string>
+    <string name="choose_quality">Choose quality</string>
+    <string name="cancel">Cancel</string>
+    <string name="download_success">Successfully downloaded</string>
+    <string name="no_active_downloads">No active downloads</string>
+    <string name="waiting_for_downloads">Waiting for downloads</string>
+    <string name="episode">Episode %1$s</string>
+    <string name="added_to_favorites">お気に入りに追加されました</string>
+    <string name="removed_from_favorites">お気に入りから削除されました</string>
+</resources>

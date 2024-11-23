@@ -36,7 +36,7 @@ class FavoriteFragment : Fragment(), FavoriteListener {
         super.onCreate(savedInstanceState)
 
         adapter = AnimeAdapter(AnimeParams(this, emptyList(), emptyMessage = "Opps, nothing is here! \n Your favorite added anime will appear here!")) {
-            viewModel.getAnime()
+            getAnime()
         }
 
         service = AnimeService.create()
@@ -45,29 +45,6 @@ class FavoriteFragment : Fragment(), FavoriteListener {
 
         val factory = FavoriteViewModelFactory(service, prefs)
         viewModel = ViewModelProvider(this, factory).get(FavoriteViewModel::class.java)
-
-        viewModel.anime.observe(this, Observer { updatedAnime ->
-            AnimeHelper.updateData(adapter, updatedAnime, recycler)
-        })
-
-        viewModel.isLoading.observe(this, Observer { isLoading ->
-            adapter.setLoading(isLoading)
-        })
-        viewModel.isRefreshing.observe(this, Observer { isRefreshing ->
-            refresh.isRefreshing = isRefreshing
-        })
-
-        viewModel.isEmpty.observe(this, Observer { isEmpty ->
-            adapter.setEmpty(isEmpty)
-        })
-
-        viewModel.hasNextPage.observe(this, Observer { hasNextPage ->
-            adapter.setNextPage(hasNextPage)
-        })
-
-        viewModel.error.observe(this, Observer { error ->
-            adapter.setError(error.isNullOrEmpty().not())
-        })
     }
 
     override fun onCreateView(
@@ -76,6 +53,13 @@ class FavoriteFragment : Fragment(), FavoriteListener {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_favorite, container, false)
 
+        setupUI(view)
+        setupObservers()
+
+        return view
+    }
+
+    private fun setupUI(view: View) {
         recycler = view.findViewById(R.id.recycler)
 
         recycler.apply {
@@ -90,14 +74,34 @@ class FavoriteFragment : Fragment(), FavoriteListener {
         refresh.setColorSchemeResources(R.color.swipeColor, R.color.swipeColorAccent)
 
         refresh.setOnRefreshListener {
-            viewModel.getAnime(isRefresh = true)
+            getAnime(isRefresh = true)
         }
 
         if (viewModel.anime.value.isNullOrEmpty()) {
-            viewModel.getAnime()
+            getAnime()
+        }
+    }
+
+    private fun setupObservers() {
+        viewModel.anime.observe(viewLifecycleOwner) { updatedAnime ->
+            AnimeHelper.updateData(adapter, updatedAnime, recycler)
         }
 
-        return view
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            adapter.setLoading(isLoading)
+        }
+
+        viewModel.isRefreshing.observe(viewLifecycleOwner) { isRefreshing ->
+            refresh.isRefreshing = isRefreshing
+        }
+
+        viewModel.hasNextPage.observe(viewLifecycleOwner) { hasNextPage ->
+            adapter.setNextPage(hasNextPage)
+        }
+
+        viewModel.error.observe(viewLifecycleOwner) { error ->
+            adapter.setError(error.isNullOrEmpty().not())
+        }
     }
 
     private fun scrollListener() = object : RecyclerView.OnScrollListener() {
@@ -117,7 +121,12 @@ class FavoriteFragment : Fragment(), FavoriteListener {
         Icepick.saveInstanceState(this, outState)
     }
 
+    private fun getAnime(isRefresh: Boolean = false, isReload: Boolean = false) {
+        adapter.setEmpty(false)
+        viewModel.getAnime(isRefresh, isReload)
+    }
+
     override fun onChange() {
-        viewModel.getAnime(isReload = true)
+        getAnime(isReload = true)
     }
 }

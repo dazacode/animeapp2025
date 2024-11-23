@@ -14,7 +14,7 @@
             android:id="@+id/emptyText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Opps, nothings was found for your request"
+            android:text="@string/opps_nothings_was_found_for_your_request"
             android:visibility="visible"
             android:layout_gravity="center"
             android:textSize="14dp"

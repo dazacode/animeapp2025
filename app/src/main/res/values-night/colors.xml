@@ -5,7 +5,7 @@
 
     <color name="main">#e0e0e0</color>
     <color name="mainAccent">#26e0e0e0</color>
-    <color name="mainAccent1">#494458</color>
+    <color name="mainAccent1">#40E0E0E0</color>
     <color name="mainDisabled">#797979</color>
 
     <color name="surface">#a8c8fb</color>
@@ -18,6 +18,7 @@
     <color name="text3">@color/white</color>
     <color name="text4">#BABABA</color>
     <color name="text5">#DEDEDE</color>
+    <color name="text6">#9E9E9E</color>
 
     <color name="background">#121212</color>
     <color name="OnBackground">#252525</color>
@@ -38,7 +39,7 @@
 
     <color name="progressBackground">#424242</color>
 
-    <color name="mainBottom">#eaddf9</color>
+    <color name="mainBottom">@color/main</color>
 
     <color name="gradientStartColor">#494658</color>
     <color name="gradientEndColor">#908ba1</color>
@@ -57,17 +58,20 @@
 
     <color name="searchField">#252525</color>
 
-    <color name="button">#191919</color>
+    <color name="button">#80252525</color>
+    <color name="button1">#26000000</color>
     <color name="statusCard">#B1B1B1</color>
     <color name="seasonCard">#80000000</color>
 
     <color name="buttonColor">#252525</color>
 
-    <color name="snackBarBackground">#313133</color>
-    <color name="snackBarText">#e6e1e5</color>
-
     <color name="inactiveColor">#313131</color>
     <color name="activeColor">#777777</color>
 
     <color name="border1">#393939</color>
+
+    <color name="snackBarBackground">@color/main</color>
+    <color name="snackBarText">#313133</color>
+
+    <color name="showMore">#26000000</color>
 </resources>

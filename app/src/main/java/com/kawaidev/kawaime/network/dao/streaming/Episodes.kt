@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Episodes(
     val totalEpisodes: Int? = null,
-    val episodes: List<EpisodeDetail>? = null
+    var episodes: List<EpisodeDetail>? = null
 )
 
 @Serializable

@@ -6,7 +6,7 @@
     </item>
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="@color/OnBackground" />
+            <solid android:color="@color/button" />
         </shape>
     </item>
 </ripple>

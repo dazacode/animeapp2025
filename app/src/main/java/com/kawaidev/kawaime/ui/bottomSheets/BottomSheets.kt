@@ -19,13 +19,14 @@ import com.grzegorzojdana.spacingitemdecoration.SpacingItemDecoration
 import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.network.dao.anime.Release
 import com.kawaidev.kawaime.network.dao.streaming.EpisodeServers
+import com.kawaidev.kawaime.network.dao.streaming.Episodes
 import com.kawaidev.kawaime.ui.activity.MainActivity
-import com.kawaidev.kawaime.ui.adapters.details.ServerAdapter
+import com.kawaidev.kawaime.ui.adapters.streaming.ServerAdapter
 import com.kawaidev.kawaime.ui.fragments.streaming.episodes.EpisodesFragment
 import com.kawaidev.kawaime.utils.Converts
 
 class BottomSheets(private val activity: MainActivity) {
-    fun onBottomSheet(episodeServers: EpisodeServers, fragment: EpisodesFragment) {
+    fun onBottomSheet(episodeServers: EpisodeServers, episodes: Episodes, fragment: EpisodesFragment) {
         val view = activity.layoutInflater.inflate(R.layout.bottom_sheet_layout, null)
 
         val bottomSheetDialog = BottomSheetDialog(activity, R.style.CustomSheetStyle)
@@ -45,7 +46,7 @@ class BottomSheets(private val activity: MainActivity) {
         bottomSheet.layoutParams = layoutParams
 
         val recycler: RecyclerView = view.findViewById(R.id.recycler)
-        val serverAdapter = ServerAdapter(fragment, episodeServers)
+        val serverAdapter = ServerAdapter(fragment, episodeServers, episodes)
 
         recycler.apply {
             post {
@@ -58,6 +59,7 @@ class BottomSheets(private val activity: MainActivity) {
                     override fun getSpanSize(position: Int): Int {
                         return when (serverAdapter.getItemViewType(position)) {
                             ServerAdapter.HEADER_VIEW -> spanCount
+                            ServerAdapter.DOWNLOAD_VIEW -> spanCount
                             else -> 1
                         }
                     }

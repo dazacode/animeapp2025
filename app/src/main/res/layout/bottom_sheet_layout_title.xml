@@ -43,8 +43,8 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Title"
-                            android:textSize="15dp"
+                            android:text="@string/title"
+                            android:textSize="15sp"
                             android:layout_gravity="bottom"
                             android:letterSpacing="-0.02"
                             android:textColor="@color/text3"
@@ -98,8 +98,8 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Original title"
-                            android:textSize="15dp"
+                            android:text="@string/orig_title"
+                            android:textSize="15sp"
                             android:layout_gravity="bottom"
                             android:letterSpacing="-0.02"
                             android:layout_marginEnd="2dp"
@@ -153,8 +153,8 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Other title"
-                            android:textSize="15dp"
+                            android:text="@string/other_titles"
+                            android:textSize="15sp"
                             android:layout_gravity="bottom"
                             android:letterSpacing="-0.02"
                             android:layout_marginEnd="2dp"
@@ -200,10 +200,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:textColor="@color/text2"
-                android:textSize="16dp"
-                android:letterSpacing="0.04"
+                android:textSize="15.5sp"
+                android:letterSpacing="0.02"
                 android:fontFamily="@font/inter_semibold"
-                android:text="Close"/>
+                android:text="@string/close"/>
         </FrameLayout>
 
     </LinearLayout>

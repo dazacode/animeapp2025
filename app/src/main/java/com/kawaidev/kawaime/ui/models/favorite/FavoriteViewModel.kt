@@ -16,12 +16,11 @@ class FavoriteViewModel(private val service: AnimeService, private val prefs: Pr
     val anime = MutableLiveData<List<SearchResponse>>()
     val isLoading = MutableLiveData<Boolean>()
     val isRefreshing = MutableLiveData<Boolean>()
-    val isEmpty = MutableLiveData<Boolean>()
     val hasNextPage = MutableLiveData<Boolean>()
     val error = MutableLiveData<String?>()
     val page = MutableLiveData<Int>()
 
-    private val perPage = 25
+    private val perPage = 12
 
     init {
         page.value = 1
@@ -33,12 +32,12 @@ class FavoriteViewModel(private val service: AnimeService, private val prefs: Pr
             page.value = 1
         }
 
-        if (isRefresh) isRefreshing.value = true else isLoading.value = true
         error.value = null
+        if (isRefresh) isRefreshing.value = true else isLoading.value = true
 
         viewModelScope.launch {
             try {
-                val ids = prefs.getFavorites().toList()
+                val ids = prefs.getFavorites()
                 val totalItems = ids.size
                 val start = (page.value!! - 1) * perPage
                 val end = (start + perPage).coerceAtMost(totalItems)
@@ -50,6 +49,7 @@ class FavoriteViewModel(private val service: AnimeService, private val prefs: Pr
                             val release = service.getAnime(id)
                             convertReleaseToSearchResponse(release)
                         } catch (e: Exception) {
+                            error.value = e.message
                             null
                         }
                     }
@@ -57,15 +57,16 @@ class FavoriteViewModel(private val service: AnimeService, private val prefs: Pr
 
                 val newAnime = animePage.filterNotNull()
 
-                if (isRefresh || isReload) {
-                    anime.value = newAnime
-                } else {
-                    anime.value = anime.value!! + newAnime
-                }
+                if (error.value.isNullOrEmpty()) {
+                    if (isRefresh || isReload) {
+                        anime.value = newAnime
+                    } else {
+                        anime.value = anime.value!! + newAnime
+                    }
 
-                isEmpty.value = anime.value.isNullOrEmpty()
-                hasNextPage.value = end < totalItems
-                page.value = page.value!! + 1
+                    hasNextPage.value = end < totalItems
+                    page.value = page.value!! + 1
+                } else anime.value = emptyList()
             } catch (e: Exception) {
                 error.value = e.message
             } finally {

@@ -14,7 +14,6 @@ import com.google.android.material.appbar.AppBarLayout
 import com.kawaidev.kawaime.App
 import com.kawaidev.kawaime.Prefs
 import com.kawaidev.kawaime.R
-import com.kawaidev.kawaime.network.dao.api_utils.StreamingParams
 import com.kawaidev.kawaime.network.interfaces.StreamingService
 import com.kawaidev.kawaime.ui.activity.MainActivity
 import com.kawaidev.kawaime.ui.adapters.streaming.EpisodesAdapter
@@ -36,7 +35,7 @@ class EpisodesFragment : Fragment(), WatchedListener {
     }
 
     private var id: String = ""
-    private var title: String = ""
+    var title: String = ""
 
     @State private var isCollapsed: Boolean = false
     @State private var isFetched: Boolean = false
@@ -57,7 +56,7 @@ class EpisodesFragment : Fragment(), WatchedListener {
 
         episodesCalls = EpisodesCalls(this)
 
-        adapter = EpisodesAdapter(this, emptyList())
+        adapter = EpisodesAdapter(this)
     }
 
     override fun onCreateView(
@@ -99,9 +98,11 @@ class EpisodesFragment : Fragment(), WatchedListener {
         return view
     }
 
-    private fun fetchEpisodes(isRefresh: Boolean = false) {
-        viewModel.fetchEpisodes(id, onError = { error ->
-            (activity as? MainActivity)?.dialogs?.onError(error)
+    fun fetchEpisodes(isRefresh: Boolean = false) {
+        adapter.setError(false)
+
+        viewModel.fetchEpisodes(id, onError = {
+            adapter.setError(true)
         }, onLoading = { loading ->
             if (isRefresh) {
                 view?.findViewById<SwipeRefreshLayout>(R.id.refresh)?.isRefreshing = loading
@@ -109,7 +110,7 @@ class EpisodesFragment : Fragment(), WatchedListener {
                 adapter.setLoading(loading)
             }
         }, onResult = { episodes ->
-            adapter.setEpisodes(episodes.episodes ?: emptyList())
+            adapter.setEpisodes(episodes)
             isFetched = true
         })
     }

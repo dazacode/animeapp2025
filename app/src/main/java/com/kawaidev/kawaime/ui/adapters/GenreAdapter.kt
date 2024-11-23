@@ -14,8 +14,7 @@ import com.kawaidev.kawaime.ui.fragments.search.SearchFragment
 
 class GenreAdapter(
     private val fragment: Fragment,
-    private var genres: List<String>,
-    private val headerTitle: String = "Genres"
+    private var genres: List<String>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -42,7 +41,7 @@ class GenreAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is HeaderViewHolder -> holder.bind(headerTitle)
+            is HeaderViewHolder -> holder.bind(fragment.requireContext().getString(R.string.genres))
             is GenresViewHolder -> holder.bind(genres[position - 1])
         }
     }

@@ -51,7 +51,7 @@
                             android:layout_width="24dp"
                             android:layout_height="50dp"
                             android:layout_marginEnd="10dp"
-                            android:background="@drawable/icon_ripple"
+                            android:background="@drawable/ripple_background"
                             android:clickable="true"
                             android:focusable="true"
                             android:padding="1dp"
@@ -64,7 +64,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="4dp"
-                            android:text="Search anime"
+                            android:text="@string/search_anime"
                             android:textColor="@color/text2"
                             android:textSize="16sp" />
                     </LinearLayout>

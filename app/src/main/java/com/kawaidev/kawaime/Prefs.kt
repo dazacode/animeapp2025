@@ -111,30 +111,35 @@ class Prefs private constructor(context: Context) {
     fun addFavorite(id: String) {
         val favorites = getFavorites().toMutableList()
 
-        favorites.remove(id)
-        favorites.add(0, id)
+        favorites.remove(id) // Remove if it already exists
+        favorites.add(0, id) // Add to the top
 
-        saveFavorites(favorites.toSet())
+        saveFavorites(favorites)
         favoriteListeners.forEach { it.get()?.onChange() }
     }
 
     fun removeFavorite(id: String) {
-        val favorites = getFavorites().toMutableSet()
-        if (favorites.remove(id)) {  // Remove only if it exists
+        val favorites = getFavorites().toMutableList()
+        if (favorites.remove(id)) { // Remove only if it exists
             saveFavorites(favorites)
             favoriteListeners.forEach { it.get()?.onChange() }
         }
-    }
-
-    fun getFavorites(): Set<String> {
-        return sharedPreferences.getStringSet("favorites", emptySet()) ?: emptySet()
     }
 
     fun isFavorite(id: String): Boolean {
         return getFavorites().contains(id)
     }
 
-    private fun saveFavorites(favorites: Set<String>) {
-        sharedPreferences.edit().putStringSet("favorites", favorites).apply()
+    // Fetch favorites as a list
+    fun getFavorites(): List<String> {
+        val jsonStr = sharedPreferences.getString("favorites", null) ?: return emptyList()
+        return json.decodeFromString(jsonStr)
     }
+
+    // Save favorites as a JSON string
+    private fun saveFavorites(favorites: List<String>) {
+        val jsonStr = json.encodeToString(favorites)
+        sharedPreferences.edit().putString("favorites", jsonStr).apply()
+    }
+
 }

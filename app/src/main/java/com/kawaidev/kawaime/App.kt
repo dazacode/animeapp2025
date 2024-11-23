@@ -1,7 +1,11 @@
 package com.kawaidev.kawaime
 
 import android.app.Application
+import android.content.Intent
+import android.content.res.Configuration
+import com.kawaidev.kawaime.ui.activity.MainActivity
 import okhttp3.OkHttpClient
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 class App : Application() {

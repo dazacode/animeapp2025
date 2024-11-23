@@ -69,7 +69,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Episodes"
+                            android:text="@string/episodes"
                             android:textColor="@color/text2"
                             android:textSize="14sp" />
                     </LinearLayout>

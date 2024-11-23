@@ -31,6 +31,7 @@ object EpisodesUtils {
                     override fun getSpanSize(position: Int): Int {
                         return when (adapter.getItemViewType(position)) {
                             EpisodesAdapter.LOADING_VIEW -> spanCount
+                            EpisodesAdapter.ERROR_VIEW -> spanCount
                             else -> 1
                         }
                     }

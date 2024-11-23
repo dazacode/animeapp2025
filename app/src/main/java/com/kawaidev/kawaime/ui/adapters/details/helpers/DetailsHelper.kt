@@ -8,6 +8,7 @@ import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.View
+import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.LinearLayout
@@ -93,7 +94,7 @@ object DetailsHelper {
         textGenres.text = genresText
         textGenres.movementMethod = LinkMovementMethod.getInstance()
 
-        itemView.findViewById<FrameLayout>(R.id.watch_button).setOnClickListener {
+        itemView.findViewById<Button>(R.id.watch_button).setOnClickListener {
             val bundle = Bundle().apply {
                 putString("id", animeId)
                 putString("title", release.anime?.info?.name)
@@ -114,9 +115,11 @@ object DetailsHelper {
         favorite.setOnClickListener {
             isFavorite = if (isFavorite) {
                 fragment.prefs.removeFavorite(animeId)
+                (fragment.requireActivity() as MainActivity).showSnackbar(itemView.context.getString(R.string.removed_from_favorites))
                 false
             } else {
                 fragment.prefs.addFavorite(animeId)
+                (fragment.requireActivity() as MainActivity).showSnackbar(itemView.context.getString(R.string.added_to_favorites))
                 true
             }
         }
@@ -134,14 +137,16 @@ object DetailsHelper {
 
     fun descBind(description: String, itemView: View, isExpanded: Boolean, onExpanded: ((expanded: Boolean) -> Unit)) {
         val textDescription: TextView = itemView.findViewById(R.id.textDescription)
-        val detailsButton: FrameLayout = itemView.findViewById(R.id.detailsButton)
-        val detailsButtonText: TextView = itemView.findViewById(R.id.detailsButtonText)
+        val detailsButton: Button = itemView.findViewById(R.id.detailsButton)
 
         var expanded = isExpanded
 
+        val details = itemView.context.getString(R.string.details___)
+        val hide = itemView.context.getString(R.string.hide)
+
         textDescription.text = description
         textDescription.maxLines = if (expanded) Integer.MAX_VALUE else 5
-        detailsButtonText.text = if (expanded) "Hide" else "Details..."
+        detailsButton.text = if (expanded) hide else details
 
         textDescription.post {
             textDescription.layout?.let { layout ->
@@ -168,7 +173,7 @@ object DetailsHelper {
                 textDescription.requestLayout()
             }
 
-            detailsButtonText.text = if (expanded) "Hide" else "Details..."
+            detailsButton.text = if (expanded) hide else details
             valueAnimator.duration = 250
             valueAnimator.start()
         }

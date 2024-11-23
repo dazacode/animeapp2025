@@ -41,10 +41,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:textColor="@color/text2"
-                android:textSize="15.5dp"
+                android:textSize="15.5sp"
                 android:letterSpacing="0.02"
                 android:fontFamily="@font/inter_semibold"
-                android:text="Close"/>
+                android:text="@string/close"/>
         </FrameLayout>
     </LinearLayout>
 </FrameLayout>

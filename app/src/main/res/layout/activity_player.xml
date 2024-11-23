@@ -13,6 +13,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@android:color/black"
+        android:clipToPadding="false"
         app:show_subtitle_button="true"
         app:use_controller="true"
         app:player_layout_id="@layout/custom_exo_player_view"

@@ -42,6 +42,8 @@ object GridRecycler {
                 )
             )
         }
+
+        recycler.setHasFixedSize(true)
     }
 
     private fun calculateSpanCount(context: Context): Int {

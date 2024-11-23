@@ -44,11 +44,15 @@ class SearchFragment : Fragment(), SearchListener {
 
     lateinit var prefs: Prefs
 
-    @State private var isLoading = false
+    @State
+    var isLoading = false
     @State private var isEmpty = false
-    @State private var hasNextPage = false
-    @State private var error: Exception? = null
+    @State
+    var hasNextPage = false
+    @State
+    var error: Exception? = null
     @State private var isAppBarHidden: Boolean = false
+    @State private var isInit: Boolean = false
     @State private var anime: List<SearchResponse> = emptyList()
 
     var initSearch: String? = null
@@ -94,6 +98,11 @@ class SearchFragment : Fragment(), SearchListener {
         handleObserve()
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        handleInitSearch()
+    }
+
     private fun handleObserve() {
         searchViewModel.searchResults.observe(viewLifecycleOwner) { searchResults ->
             AnimeHelper.updateData(animeAdapter, searchResults, searchRecycler)
@@ -127,6 +136,13 @@ class SearchFragment : Fragment(), SearchListener {
         }
     }
 
+    private fun handleInitSearch() {
+        if (!isInit) {
+            SearchHelpers.handleInitSearch(requireView(), this)
+            isInit = true
+        }
+    }
+
     fun pasteText(search: String) {
         if (isAdded && ::textField.isInitialized) {
             textField.setText(search)
@@ -149,23 +165,6 @@ class SearchFragment : Fragment(), SearchListener {
         appBar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
             val isCollapsed = abs(verticalOffset) == appBarLayout.totalScrollRange
             isAppBarHidden = isCollapsed
-        }
-    }
-
-    fun scrollListener() = object : RecyclerView.OnScrollListener() {
-        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-            val layoutManager = recyclerView.layoutManager ?: return
-            val totalItemCount = layoutManager.itemCount
-            val lastVisibleItem = when (layoutManager) {
-                is LinearLayoutManager -> layoutManager.findLastVisibleItemPosition()
-                is StaggeredGridLayoutManager -> layoutManager.findLastVisibleItemPositions(null).maxOrNull() ?: 0
-                else -> 0
-            }
-            if (!isLoading && hasNextPage && error == null) {
-                if (totalItemCount <= lastVisibleItem + 5) {
-                    searchViewModel.loadNextSearch()
-                }
-            }
         }
     }
 

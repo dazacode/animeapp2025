@@ -8,4 +8,5 @@
     <dimen name="strokeWidth">1dp</dimen>
     <dimen name="dividerHeight">0.6dp</dimen>
     <dimen name="dividerHeight1">0.75dp</dimen>
+    <dimen name="player_top_padding">32dp</dimen>
 </resources>
