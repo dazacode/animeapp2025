@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragments.explore.schedule.ScheduleFragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|snap|enterAlways">
+
+            <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                app:contentInsetStart="4dp"
+                android:background="@color/background"
+                app:layout_collapseMode="pin">
+
+                <ImageButton
+                    android:id="@+id/back_button"
+                    android:layout_width="48dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/ripple_background"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_marginEnd="18dp"
+                    android:src="@drawable/arrow_back"
+                    app:tint="@color/text3"
+                    tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="28dp"
+                    android:text="Schedule"
+                    android:textColor="@color/text3"
+                    style="@style/HeaderText"/>
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/background"
+            app:tabGravity="center"
+            app:tabIndicator="@drawable/tab_indicator"
+            app:tabIndicatorColor="@color/main"
+            app:tabMode="scrollable"
+            app:tabSelectedTextColor="@color/main"
+            app:tabTextColor="@color/text2"
+            app:tabRippleColor="@color/tab_ripple_selector"
+            app:tabSelectedTextAppearance="@style/CustomTabTextAppearance"
+            app:tabTextAppearance="@style/CustomTabTextAppearance"
+            android:paddingHorizontal="16dp"
+            android:clipToPadding="false"
+            tools:ignore="SpeakableTextPresentCheck" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- ViewPager2 for content -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

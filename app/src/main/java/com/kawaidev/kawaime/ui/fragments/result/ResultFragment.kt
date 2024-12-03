@@ -1,7 +1,6 @@
 package com.kawaidev.kawaime.ui.fragments.result
 
 import android.content.Context
-import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,24 +8,19 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.appbar.AppBarLayout
-import com.grzegorzojdana.spacingitemdecoration.Spacing
-import com.grzegorzojdana.spacingitemdecoration.SpacingItemDecoration
 import com.kawaidev.kawaime.R
-import com.kawaidev.kawaime.network.dao.anime.SearchResponse
+import com.kawaidev.kawaime.network.dao.anime.BasicRelease
 import com.kawaidev.kawaime.network.dao.api_utils.SearchParams
 import com.kawaidev.kawaime.network.interfaces.AnimeService
 import com.kawaidev.kawaime.ui.activity.MainActivity
 import com.kawaidev.kawaime.ui.adapters.anime.AnimeAdapter
-import com.kawaidev.kawaime.ui.adapters.anime.helpers.AnimeViewType
 import com.kawaidev.kawaime.ui.adapters.anime.helpers.AnimeParams
 import com.kawaidev.kawaime.ui.adapters.helpers.GridRecycler
-import com.kawaidev.kawaime.utils.Converts
 import icepick.Icepick
 import icepick.State
 import kotlinx.coroutines.launch
@@ -44,7 +38,7 @@ class ResultFragment : Fragment() {
     @State private var hasNextPage = false
     @State private var error: Exception? = null
     @State private var isAppBarHidden: Boolean = false
-    @State private var anime: List<SearchResponse> = emptyList()
+    @State private var anime: List<BasicRelease> = emptyList()
     @State private var page: Int = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -108,9 +102,7 @@ class ResultFragment : Fragment() {
 
     fun searchAnime(searchParams: SearchParams, page: Int = 1) {
         isLoading = true
-
-        adapter.setLoading(true)
-        adapter.setError(false)
+        adapter.setLoading()
 
         searchParams.page = page
 
@@ -125,18 +117,10 @@ class ResultFragment : Fragment() {
 
                 this@ResultFragment.anime = animeList
 
-                if (animeList.isEmpty()) {
-                    isEmpty = true
-                    adapter.setEmpty(true)
-                } else {
-                    isEmpty = false
-                    adapter.setEmpty(false)
-                }
             } catch (e: Exception) {
-                adapter.setError(true)
+                adapter.setError()
                 error = e
             } finally {
-                adapter.setLoading(false)
                 isLoading = false
             }
         }

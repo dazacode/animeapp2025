@@ -6,9 +6,10 @@ import kotlinx.serialization.Serializable
 data class Release(
     val anime: Anime? = null,
     val mostPopularAnimes: List<PopularAnime>? = null,
-    val recommendedAnimes: List<SearchResponse>? = null,
-    val relatedAnimes: List<SearchResponse>? = null,
+    val recommendedAnimes: List<BasicRelease>? = null,
+    val relatedAnimes: List<BasicRelease>? = null,
     val seasons: List<Season>? = null,
+    val screenshots: List<Screenshot>? = null
 )
 
 @Serializable
@@ -103,4 +104,10 @@ data class Season(
     val title: String? = null,
     val poster: String? = null,
     val isCurrent: Boolean? = null
+)
+
+@Serializable
+data class Screenshot(
+    val original: String,
+    val preview: String
 )

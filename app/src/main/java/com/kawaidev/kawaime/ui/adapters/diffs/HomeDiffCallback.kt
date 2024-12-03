@@ -2,7 +2,6 @@ package com.kawaidev.kawaime.ui.adapters.diffs
 
 import androidx.recyclerview.widget.DiffUtil
 import com.kawaidev.kawaime.network.dao.anime.Home
-import com.kawaidev.kawaime.network.dao.anime.SearchResponse
 
 class HomeDiffCallback(
     private val oldHome: Home,

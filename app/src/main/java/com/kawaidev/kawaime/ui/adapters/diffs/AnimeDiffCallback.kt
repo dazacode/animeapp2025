@@ -1,11 +1,11 @@
 package com.kawaidev.kawaime.ui.adapters.diffs
 
 import androidx.recyclerview.widget.DiffUtil
-import com.kawaidev.kawaime.network.dao.anime.SearchResponse
+import com.kawaidev.kawaime.network.dao.anime.BasicRelease
 
 class AnimeDiffCallback(
-    private val oldList: List<SearchResponse>,
-    private val newList: List<SearchResponse>
+    private val oldList: List<BasicRelease>,
+    private val newList: List<BasicRelease>
 ) : DiffUtil.Callback() {
 
     override fun getOldListSize() = oldList.size

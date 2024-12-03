@@ -1,5 +1,6 @@
 package com.kawaidev.kawaime.ui.activity.player.helpers
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.net.Uri
@@ -62,12 +63,14 @@ object PlayerHelper {
                     activity.playerViewModel.player?.setMediaItem(mediaItem)
                     activity.playerViewModel.player?.prepare()
 
-                    val wasPlaying = activity.playerViewModel.player?.playWhenReady ?: true
+                    val wasPlaying = activity.playerViewModel.playWhenReady
                     activity.playerViewModel.player?.setHandleAudioBecomingNoisy(true)
 
                     activity.playerViewModel.player?.addListener(object : Player.Listener {
                         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
                             if (playbackState == Player.STATE_READY) {
+                                setTint(activity.playerView.findViewById(R.id.skip), true)
+
                                 val watched = activity.prefs.findByEpisodeId(activity.id)
                                 if (watched != null) {
                                     activity.playerViewModel.player?.seekTo(watched.watchedTo)
@@ -80,6 +83,8 @@ object PlayerHelper {
                                 } else {
                                     activity.playerViewModel.player?.playWhenReady = playWhenReady
                                 }
+                            } else {
+                                setTint(activity.playerView.findViewById(R.id.skip), false)
                             }
                         }
                     })
@@ -123,6 +128,14 @@ object PlayerHelper {
         activity.playerView.findViewById<ImageButton>(R.id.button_back).apply {
             setOnClickListener {
                 activity.finish()
+            }
+        }
+
+        activity.playerView.findViewById<ImageButton>(R.id.skip).apply {
+            setOnClickListener {
+                val currentPosition = activity.playerViewModel.player?.currentPosition ?: 0L
+                val seekForwardPosition = currentPosition + 85000
+                activity.playerViewModel.player?.seekTo(seekForwardPosition)
             }
         }
 
@@ -308,7 +321,10 @@ object PlayerHelper {
         return activity.episodes.episodes?.indexOfFirst { it.episodeId == activity.id } ?: -1
     }
 
+    @SuppressLint("PrivateResource")
     private fun setTint(button: ImageButton, isEnabled: Boolean) {
+        button.isEnabled = isEnabled
+
         val color = if (isEnabled) {
             ContextCompat.getColor(button.context, androidx.media3.ui.R.color.exo_white)
         } else {

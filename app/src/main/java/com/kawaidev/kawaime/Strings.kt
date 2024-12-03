@@ -1,6 +1,6 @@
 package com.kawaidev.kawaime
 
-class Strings {
+object Strings {
     val genres = arrayOf(
         "Action",
         "Adventure",
@@ -44,4 +44,6 @@ class Strings {
         "Thriller",
         "Vampire"
     )
+
+    const val PADDING = 8f
 }

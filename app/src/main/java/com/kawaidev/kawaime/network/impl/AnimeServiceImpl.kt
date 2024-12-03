@@ -1,9 +1,9 @@
 package com.kawaidev.kawaime.network.impl
 
-import com.kawaidev.kawaime.network.callbacks.ReleaseCallback
 import com.kawaidev.kawaime.network.dao.anime.Home
 import com.kawaidev.kawaime.network.dao.anime.Release
-import com.kawaidev.kawaime.network.dao.anime.SearchResponse
+import com.kawaidev.kawaime.network.dao.anime.BasicRelease
+import com.kawaidev.kawaime.network.dao.anime.Schedule
 import com.kawaidev.kawaime.network.dao.api_utils.SearchParams
 import com.kawaidev.kawaime.network.interfaces.AnimeService
 import com.kawaidev.kawaime.network.routes.AnimeRoutes
@@ -18,6 +18,8 @@ import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class AnimeServiceImpl(
     private val client: OkHttpClient
@@ -52,7 +54,7 @@ class AnimeServiceImpl(
         }
     }
 
-    override suspend fun searchAnime(searchParams: SearchParams): Pair<List<SearchResponse>, Boolean> = withContext(Dispatchers.IO) {
+    override suspend fun searchAnime(searchParams: SearchParams): Pair<List<BasicRelease>, Boolean> = withContext(Dispatchers.IO) {
         val url = buildSearchUrl(searchParams)
         val request = Request.Builder().url(url).build()
         val response: Response = client.newCall(request).execute()
@@ -69,7 +71,7 @@ class AnimeServiceImpl(
                     ?.get("hasNextPage")
                     ?.jsonPrimitive
                     ?.booleanOrNull ?: false
-                val release = json.decodeFromJsonElement<List<SearchResponse>>(animeElement ?: jsonResponse)
+                val release = json.decodeFromJsonElement<List<BasicRelease>>(animeElement ?: jsonResponse)
                 return@withContext Pair(release, hasNextPage)
             } else {
                 throw Exception("Failed to fetch info: Empty response")
@@ -100,8 +102,8 @@ class AnimeServiceImpl(
         }
     }
 
-    override suspend fun getCategory(category: String, callback: ReleaseCallback) {
-        val url = "${routes.category}$category"
+    override suspend fun getCategory(category: String, page: Int): Pair<List<BasicRelease>, Boolean> = withContext(Dispatchers.IO) {
+        val url = "${routes.category}$category?page=$page"
         val request = Request.Builder().url(url).build()
         val response: Response = client.newCall(request).execute()
 
@@ -109,21 +111,42 @@ class AnimeServiceImpl(
             val responseBody: String? = response.body?.string()
             if (responseBody != null) {
                 val jsonResponse = json.parseToJsonElement(responseBody)
-                val animeElement = jsonResponse.jsonObject["data"]?.jsonObject?.get("animes")?.jsonObject
+                val animeElement = jsonResponse.jsonObject["data"]?.jsonObject?.get("animes")
                 val hasNextPage = jsonResponse.jsonObject["data"]
                     ?.jsonObject
                     ?.get("hasNextPage")
                     ?.jsonPrimitive
                     ?.booleanOrNull ?: false
-                val release = json.decodeFromJsonElement<List<SearchResponse>>(animeElement ?: jsonResponse)
-                callback.onDataLoaded(release, hasNextPage)
+                val release = json.decodeFromJsonElement<List<BasicRelease>>(animeElement ?: jsonResponse)
+                return@withContext Pair(release, hasNextPage)
             } else {
-                println("Failed to fetch info: Empty response")
-                callback.onError(Exception("Failed to fetch release: Empty response"))
+                throw Exception("Failed to fetch info: Empty response")
             }
         } else {
-            println("Failed to fetch release: ${response.message}")
-            callback.onError(Exception("Failed to fetch release: ${response.message}"))
+            throw Exception("Failed to fetch info: ${response.message}")
+        }
+    }
+
+    override suspend fun getSchedule(date: LocalDate): List<Schedule> = withContext(Dispatchers.IO) {
+        val formattedDate = date.format(DateTimeFormatter.ISO_LOCAL_DATE)
+        val url = "${routes.schedule}$formattedDate"
+        val request = Request.Builder().url(url).build()
+        val response: Response = client.newCall(request).execute()
+
+        println(url)
+
+        if (response.isSuccessful) {
+            val responseBody: String? = response.body?.string()
+            if (responseBody != null) {
+                val jsonResponse = json.parseToJsonElement(responseBody)
+                val element = jsonResponse.jsonObject["data"]?.jsonObject?.get("scheduledAnimes")
+                val schedule = json.decodeFromJsonElement<List<Schedule>>(element ?: jsonResponse)
+                return@withContext schedule
+            } else {
+                throw Exception("Failed to fetch schedule: Empty response")
+            }
+        } else {
+            throw Exception("Failed to fetch schedule: ${response.message}")
         }
     }
 

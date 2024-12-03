@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SearchResponse(
+data class BasicRelease(
     val rank: Int? = null,
     val id: String? = null,
     val name: String? = null,

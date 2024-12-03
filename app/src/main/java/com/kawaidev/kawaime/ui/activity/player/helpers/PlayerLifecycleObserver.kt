@@ -2,7 +2,6 @@ package com.kawaidev.kawaime.ui.activity.player.helpers
 
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import com.kawaidev.kawaime.network.dao.helpers.WatchedRelease
 import com.kawaidev.kawaime.ui.activity.player.PlayerActivity
 
 class PlayerLifecycleObserver(

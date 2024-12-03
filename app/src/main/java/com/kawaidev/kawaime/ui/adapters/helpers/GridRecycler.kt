@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.grzegorzojdana.spacingitemdecoration.Spacing
 import com.grzegorzojdana.spacingitemdecoration.SpacingItemDecoration
 import com.kawaidev.kawaime.R
+import com.kawaidev.kawaime.Strings
 import com.kawaidev.kawaime.ui.adapters.anime.AnimeAdapter
 import com.kawaidev.kawaime.ui.adapters.anime.helpers.AnimeViewType
 import com.kawaidev.kawaime.utils.Converts
@@ -15,6 +16,7 @@ object GridRecycler {
     fun setup(context: Context, adapter: AnimeAdapter, recycler: RecyclerView) {
         val spanCount = calculateSpanCount(context)
         val space = Converts.dpToPx(6f, context).toInt()
+        val edgesSpace = Converts.dpToPx(Strings.PADDING, context).toInt()
 
         val gridLayoutManager = GridLayoutManager(context, spanCount)
         gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {

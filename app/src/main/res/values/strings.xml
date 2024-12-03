@@ -72,4 +72,12 @@
     <string name="episode">Episode %1$s</string>
     <string name="added_to_favorites">Added to favorites</string>
     <string name="removed_from_favorites">Removed from favorites</string>
+    <string name="screenshots">Screenshots</string>
+    <string name="recent">Recent</string>
+    <string name="news">News</string>
+    <string name="filter">Filter</string>
+    <string name="schedule">Schedule</string>
+    <string name="popular">Popular</string>
+    <string name="latest_news">Latest news</string>
+    <string name="spotlight">Spotlight №%1$s</string>
 </resources>

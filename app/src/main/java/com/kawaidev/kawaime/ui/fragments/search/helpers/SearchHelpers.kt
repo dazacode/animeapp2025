@@ -91,8 +91,6 @@ object SearchHelpers {
             searchRunnable = Runnable {
                 if (!isEmpty) {
                     searchFragment.searchViewModel.searchAnime(s.toString())
-                } else {
-                    searchFragment.searchViewModel.clearAnimeList()
                 }
             }
             handler.postDelayed(searchRunnable!!, 300)
@@ -166,7 +164,7 @@ object SearchHelpers {
         updateVisibility(searchFragment.initSearch.isNullOrEmpty(), searchFragment)
     }
 
-    fun scrollListener(searchFragment: SearchFragment) = object : RecyclerView.OnScrollListener() {
+    private fun scrollListener(searchFragment: SearchFragment) = object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             val layoutManager = recyclerView.layoutManager ?: return
             val totalItemCount = layoutManager.itemCount

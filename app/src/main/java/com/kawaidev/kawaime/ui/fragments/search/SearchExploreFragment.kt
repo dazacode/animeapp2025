@@ -35,7 +35,7 @@ class SearchExploreFragment : Fragment() {
         }
         Icepick.restoreInstanceState(this, savedInstanceState)
 
-        strings = Strings()
+        strings = Strings
         adapter = GenreAdapter(this, strings.genres.toList())
     }
 

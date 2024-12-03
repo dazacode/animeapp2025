@@ -88,7 +88,7 @@ class FavoriteFragment : Fragment(), FavoriteListener {
         }
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            adapter.setLoading(isLoading)
+            if (isLoading) adapter.setLoading()
         }
 
         viewModel.isRefreshing.observe(viewLifecycleOwner) { isRefreshing ->
@@ -100,7 +100,7 @@ class FavoriteFragment : Fragment(), FavoriteListener {
         }
 
         viewModel.error.observe(viewLifecycleOwner) { error ->
-            adapter.setError(error.isNullOrEmpty().not())
+            if (error != null) adapter.setError()
         }
     }
 
@@ -122,7 +122,6 @@ class FavoriteFragment : Fragment(), FavoriteListener {
     }
 
     private fun getAnime(isRefresh: Boolean = false, isReload: Boolean = false) {
-        adapter.setEmpty(false)
         viewModel.getAnime(isRefresh, isReload)
     }
 

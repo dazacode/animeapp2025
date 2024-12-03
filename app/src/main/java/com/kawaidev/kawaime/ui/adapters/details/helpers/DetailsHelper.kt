@@ -9,7 +9,6 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.View
 import android.widget.Button
-import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -17,9 +16,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.network.dao.anime.Release
-import com.kawaidev.kawaime.network.dao.anime.SearchResponse
 import com.kawaidev.kawaime.ui.activity.MainActivity
-import com.kawaidev.kawaime.ui.adapters.helpers.HorizontalRecycler
 import com.kawaidev.kawaime.ui.custom.VerticalGradientImage
 import com.kawaidev.kawaime.ui.fragments.details.DetailsFragment
 import com.kawaidev.kawaime.ui.fragments.search.SearchFragment

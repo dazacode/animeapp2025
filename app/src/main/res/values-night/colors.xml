@@ -6,6 +6,7 @@
     <color name="main">#e0e0e0</color>
     <color name="mainAccent">#26e0e0e0</color>
     <color name="mainAccent1">#40E0E0E0</color>
+    <color name="mainAccent2">#33E0E0E0</color>
     <color name="mainDisabled">#797979</color>
 
     <color name="surface">#a8c8fb</color>
@@ -25,9 +26,10 @@
 
     <color name="bottom_nav_unselected_icon_color">#c1c1c1</color>
 
-    <color name="rippleColor">#33FFFFFF</color>
+    <color name="rippleColor">#1FFFFFFF</color>
     <color name="rippleColor1">#33000000</color>
     <color name="rippleColor2">#515151</color>
+    <color name="rippleColor3">#14FFFFFF</color>
 
     <color name="buttonCloseColor">#424242</color>
 
@@ -61,9 +63,7 @@
     <color name="button">#80252525</color>
     <color name="button1">#26000000</color>
     <color name="statusCard">#B1B1B1</color>
-    <color name="seasonCard">#80000000</color>
-
-    <color name="buttonColor">#252525</color>
+    <color name="seasonCard">#80313131</color>
 
     <color name="inactiveColor">#313131</color>
     <color name="activeColor">#777777</color>
@@ -74,4 +74,11 @@
     <color name="snackBarText">#313133</color>
 
     <color name="showMore">#26000000</color>
+
+    <color name="buttonColor">#252525</color>
+    <color name="buttonColor1">#252525</color>
+    <color name="buttonColor2">#252525</color>
+    <color name="buttonColor3">#252525</color>
+    <color name="buttonColor4">#252525</color>
+    <color name="buttonColor5">#252525</color>
 </resources>

@@ -4,20 +4,20 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Home(
-    val latestEpisodeAnimes: List<SearchResponse> = emptyList(),
-    var spotlightAnimes: List<SearchResponse> = emptyList(),
-    val topAiringAnimes: List<SearchResponse> = emptyList(),
-    val topUpcomingAnimes: List<SearchResponse> = emptyList(),
-    val trendingAnimes: List<SearchResponse> = emptyList(),
-    val mostPopularAnimes: List<SearchResponse> = emptyList(),
-    val mostFavoriteAnimes: List<SearchResponse> = emptyList(),
-    val latestCompletedAnimes: List<SearchResponse> = emptyList(),
+    val latestEpisodeAnimes: List<BasicRelease> = emptyList(),
+    var spotlightAnimes: List<BasicRelease> = emptyList(),
+    val topAiringAnimes: List<BasicRelease> = emptyList(),
+    val topUpcomingAnimes: List<BasicRelease> = emptyList(),
+    val trendingAnimes: List<BasicRelease> = emptyList(),
+    val mostPopularAnimes: List<BasicRelease> = emptyList(),
+    val mostFavoriteAnimes: List<BasicRelease> = emptyList(),
+    val latestCompletedAnimes: List<BasicRelease> = emptyList(),
     val top10Animes: Top10Animes = Top10Animes()
 )
 
 @Serializable
 data class Top10Animes(
-    val today: List<SearchResponse> = emptyList(),
-    val month: List<SearchResponse> = emptyList(),
-    val week: List<SearchResponse> = emptyList()
+    val today: List<BasicRelease> = emptyList(),
+    val month: List<BasicRelease> = emptyList(),
+    val week: List<BasicRelease> = emptyList()
 )

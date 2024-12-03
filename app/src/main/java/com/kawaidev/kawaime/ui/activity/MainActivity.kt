@@ -40,6 +40,8 @@ class MainActivity : AppCompatActivity(), FragNavController.TransactionListener,
     val dialogs: Dialogs by lazy { Dialogs(this) }
     val bottomSheets: BottomSheets by lazy { BottomSheets(this) }
 
+    private var backPressedOnce = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -111,8 +113,14 @@ class MainActivity : AppCompatActivity(), FragNavController.TransactionListener,
     }
 
     override fun onBackPressed() {
-        if (!fragNavController.popFragment()) {
-            super.onBackPressed()
+        if (fragNavController.isRootFragment) {
+            if (backPressedOnce) {
+                super.onBackPressed()
+            } else {
+                backPressedOnce = true
+            }
+        } else if (fragNavController.popFragment()) {
+            backPressedOnce = false
         }
     }
 

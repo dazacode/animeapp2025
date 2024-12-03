@@ -77,7 +77,7 @@
                         android:layout_width="48dp"
                         android:layout_height="56dp"
                         android:layout_gravity="center"
-                        android:background="@drawable/icon_ripple"
+                        android:background="@drawable/ripple_background"
                         android:src="@drawable/close"
                         android:visibility="gone"
                         app:tint="@color/icon"
@@ -110,8 +110,6 @@
             android:id="@+id/searchRecycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:paddingVertical="4dp"
             android:visibility="gone"/>
         <ProgressBar
             android:id="@+id/progress_bar"

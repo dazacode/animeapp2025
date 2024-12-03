@@ -3,21 +3,20 @@ package com.kawaidev.kawaime.ui.fragments.search
 import android.app.Activity
 import android.os.Bundle
 import android.speech.RecognizerIntent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.textfield.TextInputEditText
 import com.kawaidev.kawaime.App
 import com.kawaidev.kawaime.Prefs
 import com.kawaidev.kawaime.R
-import com.kawaidev.kawaime.network.dao.anime.SearchResponse
+import com.kawaidev.kawaime.network.dao.anime.BasicRelease
 import com.kawaidev.kawaime.ui.activity.MainActivity
 import com.kawaidev.kawaime.ui.adapters.anime.AnimeAdapter
 import com.kawaidev.kawaime.ui.adapters.SearchHistoryAdapter
@@ -53,7 +52,7 @@ class SearchFragment : Fragment(), SearchListener {
     var error: Exception? = null
     @State private var isAppBarHidden: Boolean = false
     @State private var isInit: Boolean = false
-    @State private var anime: List<SearchResponse> = emptyList()
+    @State private var anime: List<BasicRelease> = emptyList()
 
     var initSearch: String? = null
 
@@ -109,7 +108,7 @@ class SearchFragment : Fragment(), SearchListener {
         }
 
         searchViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            animeAdapter.setLoading(isLoading)
+            if (isLoading) animeAdapter.setLoading()
             this@SearchFragment.isLoading = isLoading
         }
 
@@ -119,20 +118,10 @@ class SearchFragment : Fragment(), SearchListener {
         }
 
         searchViewModel.error.observe(viewLifecycleOwner) {
+            Log.e("Search fragment", it?.message ?: "")
             error = it
-            animeAdapter.setError(error != null)
-        }
 
-        searchViewModel.isEmpty.observe(viewLifecycleOwner) {
-            if (textField.text.isNullOrEmpty().not()) {
-                isEmpty = it
-                animeAdapter.setEmpty(it)
-
-                if (it) {
-                    animeAdapter.setLoading(false)
-                    animeAdapter.clearData()
-                }
-            }
+            if (error != null) animeAdapter.setError()
         }
     }
 

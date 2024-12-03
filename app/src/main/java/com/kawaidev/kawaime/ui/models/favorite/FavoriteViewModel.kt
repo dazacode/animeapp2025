@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kawaidev.kawaime.Prefs
 import com.kawaidev.kawaime.network.dao.anime.Release
-import com.kawaidev.kawaime.network.dao.anime.SearchResponse
+import com.kawaidev.kawaime.network.dao.anime.BasicRelease
 import com.kawaidev.kawaime.network.interfaces.AnimeService
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class FavoriteViewModel(private val service: AnimeService, private val prefs: Prefs) : ViewModel() {
 
-    val anime = MutableLiveData<List<SearchResponse>>()
+    val anime = MutableLiveData<List<BasicRelease>>()
     val isLoading = MutableLiveData<Boolean>()
     val isRefreshing = MutableLiveData<Boolean>()
     val hasNextPage = MutableLiveData<Boolean>()
@@ -75,9 +75,9 @@ class FavoriteViewModel(private val service: AnimeService, private val prefs: Pr
         }
     }
 
-    private fun convertReleaseToSearchResponse(release: Release): SearchResponse {
-        val animeInfo = release.anime?.info ?: return SearchResponse()
-        return SearchResponse(
+    private fun convertReleaseToSearchResponse(release: Release): BasicRelease {
+        val animeInfo = release.anime?.info ?: return BasicRelease()
+        return BasicRelease(
             id = animeInfo.id,
             name = animeInfo.name,
             description = animeInfo.description,

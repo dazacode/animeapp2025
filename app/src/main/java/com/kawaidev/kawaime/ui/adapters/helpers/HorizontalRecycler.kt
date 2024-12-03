@@ -9,7 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.grzegorzojdana.spacingitemdecoration.Spacing
 import com.grzegorzojdana.spacingitemdecoration.SpacingItemDecoration
 import com.kawaidev.kawaime.R
-import com.kawaidev.kawaime.network.dao.anime.SearchResponse
+import com.kawaidev.kawaime.Strings
+import com.kawaidev.kawaime.network.dao.anime.BasicRelease
 import com.kawaidev.kawaime.ui.adapters.anime.AnimeAdapter
 import com.kawaidev.kawaime.ui.adapters.anime.helpers.AnimeParams
 import com.kawaidev.kawaime.utils.Converts
@@ -17,11 +18,12 @@ import com.kawaidev.kawaime.utils.Converts
 object HorizontalRecycler {
     fun setup(
         fragment: Fragment,
-        data: List<SearchResponse>,
+        data: List<BasicRelease>,
         itemView: View,
         snap: Boolean = false
     ) {
         val space = Converts.dpToPx(8f, fragment.requireContext()).toInt()
+        val edgesSpace = Converts.dpToPx(Strings.PADDING, fragment.requireContext()).toInt()
         val recycler = itemView.findViewById<RecyclerView>(R.id.recycler)
         val adapter = AnimeAdapter(AnimeParams(fragment, data))
 
@@ -41,7 +43,7 @@ object HorizontalRecycler {
                     Spacing(
                         horizontal = space,
                         vertical = space,
-                        edges = Rect(space, space, space, space)
+                        edges = Rect(edgesSpace, edgesSpace, edgesSpace, edgesSpace)
                     )
                 )
             )

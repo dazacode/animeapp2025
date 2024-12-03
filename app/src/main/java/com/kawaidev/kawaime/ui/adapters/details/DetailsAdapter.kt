@@ -8,7 +8,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.network.dao.anime.Release
-import com.kawaidev.kawaime.network.dao.anime.SearchResponse
+import com.kawaidev.kawaime.network.dao.anime.Screenshot
+import com.kawaidev.kawaime.network.dao.anime.BasicRelease
 import com.kawaidev.kawaime.network.dao.anime.Season
 import com.kawaidev.kawaime.ui.activity.MainActivity
 import com.kawaidev.kawaime.ui.adapters.details.helpers.DetailsHelper
@@ -35,6 +36,7 @@ class DetailsAdapter(
             DetailsViewType.VIEW_TYPE_ERROR -> ErrorViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.error_view, parent, false))
             DetailsViewType.VIEW_TYPE_HEADER -> HeaderViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_header, parent, false))
             DetailsViewType.VIEW_TYPE_DESCRIPTION -> DescriptionViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_description, parent, false))
+            DetailsViewType.VIEW_TYPE_SCREENSHOTS -> ScreenshotsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.anime_view, parent, false))
             DetailsViewType.VIEW_TYPE_SEASONS -> SeasonsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.anime_view, parent, false))
             DetailsViewType.VIEW_TYPE_RELATED -> RelatedViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.anime_view, parent, false))
             DetailsViewType.VIEW_TYPE_RECOMMENDATIONS -> RecommendationsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.anime_view, parent, false))
@@ -48,6 +50,7 @@ class DetailsAdapter(
             DetailsViewType.VIEW_TYPE_ERROR -> (holder as ErrorViewHolder).bind()
             DetailsViewType.VIEW_TYPE_HEADER -> (holder as HeaderViewHolder).bind(release)
             DetailsViewType.VIEW_TYPE_DESCRIPTION -> (holder as DescriptionViewHolder).bind(release.anime?.info?.description ?: "")
+            DetailsViewType.VIEW_TYPE_SCREENSHOTS -> release.screenshots?.let { (holder as ScreenshotsViewHolder).bind(it) }
             DetailsViewType.VIEW_TYPE_SEASONS -> release.seasons?.let { (holder as SeasonsViewHolder).bind(it) }
             DetailsViewType.VIEW_TYPE_RELATED -> release.relatedAnimes?.let { (holder as RelatedViewHolder).bind(it) }
             DetailsViewType.VIEW_TYPE_RECOMMENDATIONS -> release.recommendedAnimes?.let {
@@ -97,6 +100,12 @@ class DetailsAdapter(
         }
     }
 
+    inner class ScreenshotsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind(screenshots: List<Screenshot>) {
+            DetailsRecycler.screenBind(itemView, fragment, screenshots, itemView.context.getString(R.string.screenshots))
+        }
+    }
+
     inner class SeasonsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(seasonItems: List<Season>) {
             DetailsRecycler.seasonBind(itemView, fragment, seasonItems, itemView.context.getString(R.string.seasons))
@@ -104,13 +113,13 @@ class DetailsAdapter(
     }
 
     inner class RelatedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(relatedItems: List<SearchResponse>) {
+        fun bind(relatedItems: List<BasicRelease>) {
             DetailsRecycler.animeBind(itemView, fragment, relatedItems, itemView.context.getString(R.string.related))
         }
     }
 
     inner class RecommendationsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(recommendationItems: List<SearchResponse>) {
+        fun bind(recommendationItems: List<BasicRelease>) {
             DetailsRecycler.animeBind(itemView, fragment, recommendationItems, itemView.context.getString(R.string.recommendations))
         }
     }

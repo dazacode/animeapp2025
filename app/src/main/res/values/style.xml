@@ -27,6 +27,12 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="ActionButtonText" parent="@android:style/TextAppearance">
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:layout_marginHorizontal">16dp</item>
+    </style>
+
     <style name="Widget.Material3.BottomNavigationView.ActiveIndicator" parent="">
         <item name="android:width">64dp</item>
         <item name="android:height">32dp</item>
@@ -69,6 +75,10 @@
 
     <style name="CustomButtonShape" parent="ShapeAppearance.MaterialComponents.SmallComponent">
         <item name="cornerSize">6dp</item>
+    </style>
+
+    <style name="DetailsButtonShape" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerSize">4dp</item>
     </style>
 
     <style name="WatchButtonStyle" parent="Widget.Material3.Button">
@@ -148,5 +158,37 @@
     <!--this color inside this child is the background color of the snackbar-->
     <style name="ThemeOverlay.App.Snackbar" parent="">
         <item name="colorOnSurface">@color/snackBarBackground</item>
+    </style>
+
+    <style name="ExoStyledControls.Button">
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:scaleType">fitXY</item>
+        <item name="android:layout_marginLeft">@dimen/exo_icon_horizontal_margin</item>
+        <item name="android:layout_marginRight">@dimen/exo_icon_horizontal_margin</item>
+    </style>
+    <style name="ExoStyledControls.Button.Bottom">
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:layout_width">@dimen/exo_small_icon_width</item>
+        <item name="android:layout_height">@dimen/exo_small_icon_height</item>
+        <item name="android:layout_marginLeft">@dimen/exo_small_icon_horizontal_margin</item>
+        <item name="android:layout_marginRight">@dimen/exo_small_icon_horizontal_margin</item>
+        <item name="android:paddingLeft">@dimen/exo_small_icon_padding_horizontal</item>
+        <item name="android:paddingRight">@dimen/exo_small_icon_padding_horizontal</item>
+        <item name="android:paddingTop">@dimen/exo_small_icon_padding_vertical</item>
+        <item name="android:paddingBottom">@dimen/exo_small_icon_padding_vertical</item>
+    </style>
+
+    <style name="ExoStyledControls.Button.Bottom.Skip">
+        <item name="android:src">@drawable/skip</item>
+        <item name="android:scaleType">center</item>
+        <item name="android:contentDescription">@string/exo_controls_fullscreen_enter_description</item>
+    </style>
+
+    <style name="CustomTabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">13.5sp</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="fontFamily">@font/inter_semibold</item>
+        <item name="android:letterSpacing">0.00</item>
     </style>
 </resources>

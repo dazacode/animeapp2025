@@ -79,9 +79,10 @@ class PlayerActivity : AppCompatActivity() {
         lifecycle.addObserver(PlayerLifecycleObserver(this))
     }
 
+    @OptIn(UnstableApi::class)
     private fun initialize(savedInstanceState: Bundle?) {
         if (!download) {
-            if (savedInstanceState == null) {
+            if (savedInstanceState == null || playerViewModel.player?.isReleased == true) {
                 PlayerHelper.initializePlayer(this)
             } else {
                 isPlayerReady = true

@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:paddingHorizontal="4dp"
-                android:background="@color/background"> <!-- Added padding for better spacing -->
+                android:background="@color/background"> <!-- Added PADDING for better spacing -->
 
                 <ImageButton
                     android:id="@+id/back_button"
@@ -39,10 +39,11 @@
                     android:visibility="visible"
                     android:background="@drawable/icon_ripple"
                     android:src="@drawable/arrow_back"
-                    app:tint="@color/icon"
+                    app:tint="@color/text3"
                     tools:ignore="TouchTargetSizeCheck" />
 
                 <TextView
+                    android:id="@+id/title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

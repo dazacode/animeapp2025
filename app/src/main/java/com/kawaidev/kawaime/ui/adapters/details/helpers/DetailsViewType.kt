@@ -10,6 +10,7 @@ object DetailsViewType {
     const val VIEW_TYPE_SEASONS = 4
     const val VIEW_TYPE_RELATED = 5
     const val VIEW_TYPE_RECOMMENDATIONS = 6
+    const val VIEW_TYPE_SCREENSHOTS = 7
 
     fun getItemViewType(isLoading: Boolean, isError: Boolean, position: Int, release: Release): Int {
         return if (isLoading && !isError) {
@@ -23,6 +24,10 @@ object DetailsViewType {
 
             if (release.anime?.info?.description.isNullOrEmpty().not()) {
                 if (currentPos == position) return VIEW_TYPE_DESCRIPTION
+                currentPos++
+            }
+            if (release.screenshots.isNullOrEmpty().not()) {
+                if (currentPos == position) return VIEW_TYPE_SCREENSHOTS
                 currentPos++
             }
             if (release.seasons.isNullOrEmpty().not()) {
@@ -48,6 +53,7 @@ object DetailsViewType {
         if (release.anime != null) count++
         if (release.anime?.info?.description.isNullOrEmpty().not()) count++
         if (release.seasons.isNullOrEmpty().not()) count++
+        if (release.screenshots.isNullOrEmpty().not()) count++ // Increment if screenshots exist
         if (release.relatedAnimes.isNullOrEmpty().not()) count++
         if (release.recommendedAnimes.isNullOrEmpty().not()) count++
 

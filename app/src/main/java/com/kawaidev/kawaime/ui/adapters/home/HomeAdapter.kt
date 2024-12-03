@@ -1,6 +1,7 @@
 package com.kawaidev.kawaime.ui.adapters.home
 
-import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,16 +9,15 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.kawaidev.kawaime.R
+import com.kawaidev.kawaime.network.dao.anime.BasicRelease
 import com.kawaidev.kawaime.network.dao.anime.Home
-import com.kawaidev.kawaime.network.dao.anime.SearchResponse
 import com.kawaidev.kawaime.ui.activity.MainActivity
 import com.kawaidev.kawaime.ui.adapters.diffs.HomeDiffCallback
 import com.kawaidev.kawaime.ui.adapters.helpers.HorizontalRecycler
 import com.kawaidev.kawaime.ui.adapters.home.helpers.ViewTypes
-import com.kawaidev.kawaime.ui.fragments.details.DetailsFragment
 import com.kawaidev.kawaime.ui.fragments.home.HomeFragment
-import com.kawaidev.kawaime.utils.LoadImage
 
 class HomeAdapter(
     private var fragment: HomeFragment,
@@ -83,34 +83,53 @@ class HomeAdapter(
     }
 
     inner class SpotlightViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        fun bind(spotlightData: List<SearchResponse>) {
-            val anime = spotlightData.first()
-
-            val titleTextView: TextView = itemView.findViewById(R.id.title)
-            titleTextView.text = anime.name
-
-            val descTextView: TextView = itemView.findViewById(R.id.desc)
-            descTextView.text = anime.description
-
-            itemView.findViewById<Button>(R.id.details_button).setOnClickListener {
-                val bundle = Bundle().apply {
-                    putString("id", anime.id)
-                }
-                val detailsFragment = DetailsFragment().apply {
-                    arguments = bundle
-                }
-
-                (fragment.requireActivity() as MainActivity).pushFragment(detailsFragment)
+        private val viewPager: ViewPager2 = itemView.findViewById(R.id.view_pager)
+        private val handler = Handler(Looper.getMainLooper())
+        private var currentPage = 0
+        private val pageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                resetTimer()
+                currentPage = position
             }
+        }
 
-            LoadImage().loadImage(itemView.context, anime.poster, itemView.findViewById(R.id.image))
+        fun bind(spotlightData: List<BasicRelease>) {
+            val adapter = SpotlightPagerAdapter(fragment, spotlightData)
+            viewPager.adapter = adapter
+
+            viewPager.registerOnPageChangeCallback(pageChangeCallback)
+            startAutoScroll(spotlightData.size)
+        }
+
+        private fun startAutoScroll(totalPages: Int) {
+            handler.removeCallbacksAndMessages(null)
+            handler.postDelayed(object : Runnable {
+                override fun run() {
+                    if (currentPage >= totalPages) {
+                        currentPage = 0
+                    }
+                    viewPager.setCurrentItem(currentPage++, true)
+                    handler.postDelayed(this, 15000)
+                }
+            }, 15000)
+        }
+
+        private fun resetTimer() {
+            handler.removeCallbacksAndMessages(null)
+            startAutoScroll(viewPager.adapter?.itemCount ?: 0)
+        }
+
+        fun cleanup() {
+            handler.removeCallbacksAndMessages(null)
+            viewPager.unregisterOnPageChangeCallback(pageChangeCallback)
         }
     }
 
     inner class AnimeViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private lateinit var currentData: List<SearchResponse>
+        private lateinit var currentData: List<BasicRelease>
 
-        fun bind(newData: List<SearchResponse>, title: String) {
+        fun bind(newData: List<BasicRelease>, title: String) {
             val titleTextView: TextView = itemView.findViewById(R.id.title)
             titleTextView.text = title
 
@@ -125,10 +144,6 @@ class HomeAdapter(
         val diffResult = DiffUtil.calculateDiff(HomeDiffCallback(this.home, newHome))
         this.home = newHome
         diffResult.dispatchUpdatesTo(this)
-
-        this.home.spotlightAnimes = this.home.spotlightAnimes.shuffled()
-
-        if (this.home == newHome) notifyItemChanged(0)
     }
 
     fun setLoading(loading: Boolean) {
@@ -143,5 +158,12 @@ class HomeAdapter(
             isError = error
             notifyDataSetChanged()
         }
+    }
+
+    override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
+        if (holder is SpotlightViewHolder) {
+            holder.cleanup()
+        }
+        super.onViewDetachedFromWindow(holder)
     }
 }
