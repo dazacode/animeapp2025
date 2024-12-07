@@ -12,8 +12,11 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.annotation.OptIn
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.media3.common.util.Log
+import androidx.media3.common.util.UnstableApi
 import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.network.dao.anime.Release
 import com.kawaidev.kawaime.ui.activity.MainActivity
@@ -25,12 +28,15 @@ import com.kawaidev.kawaime.utils.LoadImage
 import java.util.Locale
 
 object DetailsHelper {
+    @OptIn(UnstableApi::class)
     fun headerBind(fragment: DetailsFragment, itemView: View, release: Release) {
         val image = itemView.findViewById<VerticalGradientImage>(R.id.image)
         val rating = release.anime?.info?.stats?.rating
         val animeId = release.anime?.info?.id ?: ""
 
-        LoadImage().loadImage(itemView.context, release.anime?.info?.poster, image)
+        LoadImage().loadImage(itemView.context, release.shikimori?.poster?.originalUrl ?: release.anime?.info?.poster, image)
+
+        Log.d("Details", release.shikimori?.poster?.originalUrl.toString())
 
         itemView.findViewById<TextView>(R.id.title).apply {
             text = release.anime?.info?.name
@@ -48,8 +54,8 @@ object DetailsHelper {
             if (release.anime?.moreInfo?.duration == "?m") visibility = View.GONE
         }
         itemView.findViewById<TextView>(R.id.score).apply {
-            text = release.anime?.moreInfo?.malscore
-            if (release.anime?.moreInfo?.malscore == "?")
+            text = (release.shikimori?.score ?: release.anime?.moreInfo?.malscore).toString()
+            if (release.anime?.moreInfo?.malscore == "?" && release.shikimori?.score == null)
                 itemView.findViewById<LinearLayout>(R.id.scoreLayout).visibility = View.GONE
         }
 

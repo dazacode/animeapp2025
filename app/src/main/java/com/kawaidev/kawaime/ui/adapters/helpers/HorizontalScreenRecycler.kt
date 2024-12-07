@@ -10,7 +10,7 @@ import com.grzegorzojdana.spacingitemdecoration.Spacing
 import com.grzegorzojdana.spacingitemdecoration.SpacingItemDecoration
 import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.Strings
-import com.kawaidev.kawaime.network.dao.anime.Screenshot
+import com.kawaidev.kawaime.network.dao.shikimori.Screenshot
 import com.kawaidev.kawaime.ui.adapters.details.ScreenAdapter
 import com.kawaidev.kawaime.utils.Converts
 

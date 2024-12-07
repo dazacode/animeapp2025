@@ -129,7 +129,7 @@ object SearchHelpers {
 
         searchFragment.searchRecycler.apply {
             post {
-                GridRecycler.setup(context, searchFragment.animeAdapter, searchFragment.searchRecycler)
+                GridRecycler.setup(context, searchFragment.animeAdapter, searchFragment.searchRecycler, searchFragment.searchViewModel.searchResults.value ?: emptyList())
             }
 
             adapter = searchFragment.animeAdapter

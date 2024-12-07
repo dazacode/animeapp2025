@@ -26,7 +26,7 @@ object DetailsViewType {
                 if (currentPos == position) return VIEW_TYPE_DESCRIPTION
                 currentPos++
             }
-            if (release.screenshots.isNullOrEmpty().not()) {
+            if (release.shikimori?.screenshots.isNullOrEmpty().not()) {
                 if (currentPos == position) return VIEW_TYPE_SCREENSHOTS
                 currentPos++
             }
@@ -53,7 +53,7 @@ object DetailsViewType {
         if (release.anime != null) count++
         if (release.anime?.info?.description.isNullOrEmpty().not()) count++
         if (release.seasons.isNullOrEmpty().not()) count++
-        if (release.screenshots.isNullOrEmpty().not()) count++ // Increment if screenshots exist
+        if (release.shikimori?.screenshots.isNullOrEmpty().not()) count++ // Increment if screenshots exist
         if (release.relatedAnimes.isNullOrEmpty().not()) count++
         if (release.recommendedAnimes.isNullOrEmpty().not()) count++
 

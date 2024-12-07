@@ -8,8 +8,8 @@ data class Release(
     val mostPopularAnimes: List<PopularAnime>? = null,
     val recommendedAnimes: List<BasicRelease>? = null,
     val relatedAnimes: List<BasicRelease>? = null,
+    val shikimori: com.kawaidev.kawaime.network.dao.shikimori.Anime? = null,
     val seasons: List<Season>? = null,
-    val screenshots: List<Screenshot>? = null
 )
 
 @Serializable

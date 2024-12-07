@@ -76,7 +76,7 @@ class CategoryFragment : Fragment() {
 
         recycler.apply {
             post {
-                GridRecycler.setup(requireContext(), this@CategoryFragment.adapter, recycler)
+                GridRecycler.setup(requireContext(), this@CategoryFragment.adapter, recycler, anime)
             }
             adapter = this@CategoryFragment.adapter
             addOnScrollListener(scrollListener())

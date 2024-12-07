@@ -50,7 +50,7 @@ class DetailsAdapter(
             DetailsViewType.VIEW_TYPE_ERROR -> (holder as ErrorViewHolder).bind()
             DetailsViewType.VIEW_TYPE_HEADER -> (holder as HeaderViewHolder).bind(release)
             DetailsViewType.VIEW_TYPE_DESCRIPTION -> (holder as DescriptionViewHolder).bind(release.anime?.info?.description ?: "")
-            DetailsViewType.VIEW_TYPE_SCREENSHOTS -> release.screenshots?.let { (holder as ScreenshotsViewHolder).bind(it) }
+            DetailsViewType.VIEW_TYPE_SCREENSHOTS -> release.shikimori?.screenshots?.let { (holder as ScreenshotsViewHolder).bind(it) }
             DetailsViewType.VIEW_TYPE_SEASONS -> release.seasons?.let { (holder as SeasonsViewHolder).bind(it) }
             DetailsViewType.VIEW_TYPE_RELATED -> release.relatedAnimes?.let { (holder as RelatedViewHolder).bind(it) }
             DetailsViewType.VIEW_TYPE_RECOMMENDATIONS -> release.recommendedAnimes?.let {
@@ -101,7 +101,7 @@ class DetailsAdapter(
     }
 
     inner class ScreenshotsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(screenshots: List<Screenshot>) {
+        fun bind(screenshots: List<com.kawaidev.kawaime.network.dao.shikimori.Screenshot>) {
             DetailsRecycler.screenBind(itemView, fragment, screenshots, itemView.context.getString(R.string.screenshots))
         }
     }

@@ -26,7 +26,7 @@ object DetailsRecycler {
         HorizontalSeasonRecycler.setup(fragment, items, itemView)
     }
 
-    fun screenBind(itemView: View, fragment: DetailsFragment, items: List<Screenshot>, title: String) {
+    fun screenBind(itemView: View, fragment: DetailsFragment, items: List<com.kawaidev.kawaime.network.dao.shikimori.Screenshot>, title: String) {
         val titleTextView: TextView = itemView.findViewById(R.id.title)
         titleTextView.text = title
 

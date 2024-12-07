@@ -72,7 +72,7 @@ class ResultFragment : Fragment() {
 
         recycler.apply {
             post {
-                GridRecycler.setup(requireContext(), this@ResultFragment.adapter, recycler)
+                GridRecycler.setup(requireContext(), this@ResultFragment.adapter, recycler, anime)
             }
             adapter = this@ResultFragment.adapter
             addOnScrollListener(scrollListener())

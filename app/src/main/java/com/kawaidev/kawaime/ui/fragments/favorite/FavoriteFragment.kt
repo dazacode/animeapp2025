@@ -64,7 +64,7 @@ class FavoriteFragment : Fragment(), FavoriteListener {
 
         recycler.apply {
             post {
-                GridRecycler.setup(requireContext(), this@FavoriteFragment.adapter, recycler)
+                GridRecycler.setup(requireContext(), this@FavoriteFragment.adapter, recycler, viewModel.anime.value ?: emptyList())
             }
             adapter = this@FavoriteFragment.adapter
             addOnScrollListener(scrollListener())

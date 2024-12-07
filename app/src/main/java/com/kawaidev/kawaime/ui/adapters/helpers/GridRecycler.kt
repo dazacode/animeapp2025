@@ -2,18 +2,20 @@ package com.kawaidev.kawaime.ui.adapters.helpers
 
 import android.content.Context
 import android.graphics.Rect
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.grzegorzojdana.spacingitemdecoration.Spacing
 import com.grzegorzojdana.spacingitemdecoration.SpacingItemDecoration
 import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.Strings
+import com.kawaidev.kawaime.network.dao.anime.BasicRelease
 import com.kawaidev.kawaime.ui.adapters.anime.AnimeAdapter
 import com.kawaidev.kawaime.ui.adapters.anime.helpers.AnimeViewType
 import com.kawaidev.kawaime.utils.Converts
 
 object GridRecycler {
-    fun setup(context: Context, adapter: AnimeAdapter, recycler: RecyclerView) {
+    fun setup(context: Context, adapter: AnimeAdapter, recycler: RecyclerView, data: List<BasicRelease>) {
         val spanCount = calculateSpanCount(context)
         val space = Converts.dpToPx(6f, context).toInt()
         val edgesSpace = Converts.dpToPx(Strings.PADDING, context).toInt()
@@ -30,6 +32,15 @@ object GridRecycler {
                 }
             }
         }
+
+        val itemAnimator = DefaultItemAnimator().apply {
+            supportsChangeAnimations = false
+        }
+
+        recycler.itemAnimator = itemAnimator
+
+        recycler.setItemViewCacheSize(data.size)
+        recycler.setHasFixedSize(true)
 
         recycler.layoutManager = gridLayoutManager
 

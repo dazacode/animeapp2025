@@ -1,5 +1,6 @@
 package com.kawaidev.kawaime.ui.models.details
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -31,6 +32,7 @@ class DetailsViewModel : ViewModel() {
                 val release = service.getAnime(id)
                 _release.value = release
             } catch (e: Exception) {
+                Log.e("Details Fragment", e.message.toString())
                 _error.value = e.message
             } finally {
                 if (isRefresh) _isRefresh.value = false else _isLoading.value = false

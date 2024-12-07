@@ -13,7 +13,7 @@ import com.kawaidev.kawaime.network.routes.AnimeRoutes
 import com.kawaidev.kawaime.utils.LoadImage
 import com.stfalcon.imageviewer.StfalconImageViewer
 
-class ScreenAdapter(private val fragment: Fragment, private var screenshots: List<Screenshot>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ScreenAdapter(private val fragment: Fragment, private var screenshots: List<com.kawaidev.kawaime.network.dao.shikimori.Screenshot>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         const val VIEW_TYPE_SCREENSHOT = 1
@@ -46,10 +46,10 @@ class ScreenAdapter(private val fragment: Fragment, private var screenshots: Lis
     inner class SeasonViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val image: ImageView = itemView.findViewById(R.id.image)
 
-        fun bind(screenshot: Screenshot) {
+        fun bind(screenshot: com.kawaidev.kawaime.network.dao.shikimori.Screenshot) {
             var isImageViewerOpen = false
 
-            val shikimoriUrl = AnimeRoutes.SHIKIMORI + screenshot.original
+            val shikimoriUrl = screenshot.originalUrl
 
             LoadImage().loadImage(itemView.context, shikimoriUrl, image)
 
@@ -57,7 +57,7 @@ class ScreenAdapter(private val fragment: Fragment, private var screenshots: Lis
                 if (!isImageViewerOpen) {
                     isImageViewerOpen = true
 
-                    val imageUrls = screenshots.map { AnimeRoutes.SHIKIMORI + it.original }
+                    val imageUrls = screenshots.map { it.originalUrl }
 
                     imageUrls.let { urls ->
                         StfalconImageViewer.Builder(itemView.context, urls) { imageView, imageUrl ->

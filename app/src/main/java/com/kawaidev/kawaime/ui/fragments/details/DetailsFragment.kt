@@ -107,7 +107,7 @@ class DetailsFragment : Fragment(), FavoriteListener {
         if (!isFetched) {
             viewModel.fetchAnime(id)
         } else {
-            if (isLandscape) LoadImage().loadImage(requireContext(), viewModel.release.value?.anime?.info?.poster, image)
+            if (isLandscape) LoadImage().loadImage(requireContext(), viewModel.release.value?.shikimori?.poster?.originalUrl ?: viewModel.release.value?.anime?.info?.poster, image)
         }
     }
 
@@ -125,7 +125,7 @@ class DetailsFragment : Fragment(), FavoriteListener {
             isFetched = true
 
             if (isLandscape) {
-                LoadImage().loadImage(requireContext(), release.anime?.info?.poster, image)
+                LoadImage().loadImage(requireContext(), release.shikimori?.poster?.originalUrl ?: release.anime?.info?.poster, image)
             }
         }
 
