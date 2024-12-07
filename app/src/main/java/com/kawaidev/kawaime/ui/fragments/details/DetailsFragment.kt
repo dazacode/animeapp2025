@@ -1,26 +1,21 @@
 package com.kawaidev.kawaime.ui.fragments.details
 
-import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
-import androidx.constraintlayout.widget.ConstraintSet
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.kawaidev.kawaime.App
 import com.kawaidev.kawaime.Prefs
 import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.network.dao.anime.Release
-import com.kawaidev.kawaime.network.interfaces.AnimeService
 import com.kawaidev.kawaime.ui.activity.MainActivity
 import com.kawaidev.kawaime.ui.adapters.details.DetailsAdapter
 import com.kawaidev.kawaime.ui.fragments.details.helpers.DetailsHelper
@@ -29,9 +24,6 @@ import com.kawaidev.kawaime.ui.models.details.DetailsViewModel
 import com.kawaidev.kawaime.utils.LoadImage
 import icepick.Icepick
 import icepick.State
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class DetailsFragment : Fragment(), FavoriteListener {
     private lateinit var adapter: DetailsAdapter
@@ -82,8 +74,9 @@ class DetailsFragment : Fragment(), FavoriteListener {
         val manager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
 
         recycler.apply {
-            recycler.layoutManager = manager
-            recycler.adapter = this@DetailsFragment.adapter
+            layoutManager = manager
+            adapter = this@DetailsFragment.adapter
+            (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         }
 
         refresh = view.findViewById(R.id.refresh)
@@ -155,6 +148,6 @@ class DetailsFragment : Fragment(), FavoriteListener {
     }
 
     override fun onChange() {
-        adapter.notifyDataSetChanged()
+        adapter.notifyItemChanged(0)
     }
 }

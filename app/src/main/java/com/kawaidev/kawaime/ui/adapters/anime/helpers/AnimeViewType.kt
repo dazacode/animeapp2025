@@ -9,26 +9,24 @@ object AnimeViewType {
     const val VIEW_TYPE_EMPTY = 3
     const val VIEW_TYPE_BOTTOM_LOADING = 4
 
-    fun getItemCount(animeList: List<BasicRelease>, state: AnimeAdapterState): Int {
+    fun getItemCount(animeList: List<BasicRelease>, state: AnimeAdapterState, hasNextPage: Boolean): Int {
         return when (state) {
-            AnimeAdapterState.LOADING -> 1
-            AnimeAdapterState.ERROR -> 1
-            AnimeAdapterState.EMPTY -> 1
-            AnimeAdapterState.BOTTOM_LOADING -> animeList.size + 1
-            AnimeAdapterState.DATA -> animeList.size
+            AnimeAdapterState.ERROR, AnimeAdapterState.EMPTY -> 1
+            AnimeAdapterState.LOADING -> if (animeList.isEmpty()) 1 else animeList.size + 1
+            AnimeAdapterState.DATA -> if (hasNextPage) animeList.size + 1 else animeList.size
         }
     }
 
-    fun getItemViewType(position: Int, animeList: List<BasicRelease>, state: AnimeAdapterState): Int {
+    fun getItemViewType(position: Int, animeList: List<BasicRelease>, state: AnimeAdapterState, hasNextPage: Boolean): Int {
         return when (state) {
             AnimeAdapterState.ERROR -> VIEW_TYPE_ERROR
             AnimeAdapterState.LOADING -> VIEW_TYPE_LOADING
             AnimeAdapterState.EMPTY -> VIEW_TYPE_EMPTY
-            AnimeAdapterState.BOTTOM_LOADING -> {
+            AnimeAdapterState.DATA -> {
                 if (position < animeList.size) VIEW_TYPE_ITEM
-                else VIEW_TYPE_BOTTOM_LOADING
+                else if (hasNextPage) VIEW_TYPE_BOTTOM_LOADING
+                else VIEW_TYPE_ITEM
             }
-            AnimeAdapterState.DATA -> VIEW_TYPE_ITEM
         }
     }
 }

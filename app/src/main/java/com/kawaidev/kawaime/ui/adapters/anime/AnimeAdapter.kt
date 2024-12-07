@@ -40,11 +40,11 @@ class AnimeAdapter(
     private var state: AnimeAdapterState = AnimeAdapterState.DATA
 
     override fun getItemCount(): Int {
-        return AnimeViewType.getItemCount(animeParams.animeList, state)
+        return AnimeViewType.getItemCount(animeParams.animeList, state, animeParams.nextPage)
     }
 
     override fun getItemViewType(position: Int): Int {
-        return AnimeViewType.getItemViewType(position, animeParams.animeList, state)
+        return AnimeViewType.getItemViewType(position, animeParams.animeList, state, animeParams.nextPage)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -121,8 +121,6 @@ class AnimeAdapter(
         val diffCallback = AnimeDiffCallback(animeParams.animeList, cleanNewAnimeList)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
 
-        if (state == AnimeAdapterState.LOADING || (cleanNewAnimeList.isNotEmpty() && animeParams.nextPage)) setBottomLoading()
-
         state = if (cleanNewAnimeList.isEmpty()) {
             AnimeAdapterState.EMPTY
         } else {
@@ -139,10 +137,7 @@ class AnimeAdapter(
     }
 
     fun setLoading() {
-        if (state == AnimeAdapterState.LOADING || (animeParams.animeList.isNotEmpty() && animeParams.nextPage)) {
-            setBottomLoading()
-            return
-        }
+        if (state == AnimeAdapterState.LOADING || animeParams.animeList.isNotEmpty()) return
 
         clearSpecialStateItem()
 
@@ -171,18 +166,6 @@ class AnimeAdapter(
         }
     }
 
-    fun setBottomLoading() {
-        if (state == AnimeAdapterState.BOTTOM_LOADING) return
-
-        clearSpecialStateItem()
-
-        val previousState = state
-        state = AnimeAdapterState.BOTTOM_LOADING
-        if (previousState != AnimeAdapterState.BOTTOM_LOADING) {
-            notifyItemInserted(animeParams.animeList.size)
-        }
-    }
-
     private fun clearSpecialStateItem() {
         when (state) {
             AnimeAdapterState.LOADING, AnimeAdapterState.ERROR, AnimeAdapterState.EMPTY -> {
@@ -190,16 +173,23 @@ class AnimeAdapter(
                     notifyItemRemoved(0)
                 }
             }
-            AnimeAdapterState.BOTTOM_LOADING -> {
-                if (animeParams.animeList.isNotEmpty() && itemCount > animeParams.animeList.size) {
-                    notifyItemRemoved(animeParams.animeList.size)
-                }
-            }
             else -> Unit
         }
     }
 
     fun setNextPage(nextPage: Boolean) {
-        animeParams.nextPage = nextPage
+        if (animeParams.nextPage != nextPage) {
+            animeParams.nextPage = nextPage
+
+            if (nextPage) {
+                if (animeParams.animeList.size > 0) {
+                    notifyItemInserted(animeParams.animeList.size)
+                }
+            } else {
+                if (animeParams.animeList.size > 0) {
+                    notifyItemRemoved(animeParams.animeList.size)
+                }
+            }
+        }
     }
 }

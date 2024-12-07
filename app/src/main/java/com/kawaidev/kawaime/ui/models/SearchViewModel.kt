@@ -10,6 +10,7 @@ import com.kawaidev.kawaime.network.dao.api_utils.SearchParams
 import com.kawaidev.kawaime.network.interfaces.AnimeService
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlin.coroutines.cancellation.CancellationException
 
 class SearchViewModel : ViewModel() {
     private val animeService = AnimeService.create()
@@ -43,12 +44,12 @@ class SearchViewModel : ViewModel() {
 
         _isLoading.postValue(true)
         _nextPage.postValue(true)
-        searchJob?.cancel()
+        searchJob?.cancel() // Cancel the previous search job
         _query.postValue(query)
         _currentPage.postValue(1)
         _error.postValue(null)
 
-        viewModelScope.launch {
+        searchJob = viewModelScope.launch {
             try {
                 val queryGenres = query.split(",")
                     .map { it.trim().lowercase().replace(" ", "-") }
@@ -72,7 +73,9 @@ class SearchViewModel : ViewModel() {
                 if (animeList.isEmpty()) updateCategoryEmptyState(true)
 
             } catch (e: Exception) {
-                _error.postValue(e)
+                if (e !is CancellationException) {
+                    _error.postValue(e)
+                }
             } finally {
                 _isLoading.postValue(false)
             }
@@ -92,7 +95,7 @@ class SearchViewModel : ViewModel() {
         val currentQuery = _query.value ?: return
         _error.postValue(null)
 
-        viewModelScope.launch {
+        searchJob = viewModelScope.launch {
             try {
                 val queryGenres = currentQuery.split(",")
                     .map { it.trim().lowercase() }
@@ -125,8 +128,9 @@ class SearchViewModel : ViewModel() {
                 _searchResults.postValue(updatedResults)
                 _nextPage.postValue(hasNextPage)
             } catch (e: Exception) {
-                _isLoading.postValue(false)
-                _error.postValue(e)
+                if (e !is CancellationException) {
+                    _error.postValue(e)
+                }
             } finally {
                 _isLoading.postValue(false)
             }

@@ -128,7 +128,7 @@ object DetailsHelper {
         }
     }
 
-    private fun updateFavoriteIcon(isFavorite: Boolean, favoriteButton: ImageButton, fragment: DetailsFragment) {
+    fun updateFavoriteIcon(isFavorite: Boolean, favoriteButton: ImageButton, fragment: DetailsFragment) {
         if (isFavorite) {
             favoriteButton.setImageResource(R.drawable.favorite)
             favoriteButton.setColorFilter(ContextCompat.getColor(fragment.requireContext(), R.color.red))

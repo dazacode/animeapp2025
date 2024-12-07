@@ -88,7 +88,13 @@ class DetailsAdapter(
 
     inner class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(release: Release) {
-            DetailsHelper.headerBind(fragment, itemView, release)
+            if (itemView.tag != release) {
+                itemView.tag = release
+                DetailsHelper.headerBind(fragment, itemView, release)
+            } else {
+                val isFavorite = fragment.prefs.isFavorite(release.anime?.info?.id ?: "")
+                DetailsHelper.updateFavoriteIcon(isFavorite, itemView.findViewById(R.id.favoriteButton), fragment)
+            }
         }
     }
 
