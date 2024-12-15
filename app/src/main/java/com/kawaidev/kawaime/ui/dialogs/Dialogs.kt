@@ -48,28 +48,25 @@ class Dialogs(private val activity: MainActivity) {
         val descMessage = dialogView.findViewById<TextView>(R.id.detailsDesc)
         val descCard = dialogView.findViewById<CardView>(R.id.detailsCard)
         val descCardText = dialogView.findViewById<TextView>(R.id.descCardText)
+        val upperDescCardText = dialogView.findViewById<TextView>(R.id.upperDescCardText)
 
-        // If description is empty, hide the card and message
         if (description.isEmpty()) {
             descCard.visibility = View.GONE
             descMessage.visibility = View.GONE
         } else {
             descCard.visibility = View.VISIBLE
 
-            // Otherwise, set the description text
             descMessage.text = description
-            // Set the initial text for descCardText
             descCardText.text = "Click to show details"
 
-            // Handle the click on descCard to toggle the visibility of descMessage
             descCard.setOnClickListener {
                 if (descMessage.visibility == View.GONE) {
-                    // Show the description and change the text of descCardText
                     descMessage.visibility = View.VISIBLE
+                    upperDescCardText.visibility = View.GONE
                     descCardText.text = "Click to hide details"
                 } else {
-                    // Hide the description and change the text of descCardText
                     descMessage.visibility = View.GONE
+                    upperDescCardText.visibility = View.VISIBLE
                     descCardText.text = "Click to show details"
                 }
             }

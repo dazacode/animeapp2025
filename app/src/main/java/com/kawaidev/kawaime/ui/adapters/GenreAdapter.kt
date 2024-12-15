@@ -64,7 +64,7 @@ class GenreAdapter(
 
             itemView.findViewById<MaterialCardView>(R.id.genreCard).setOnClickListener {
                 val bundle = Bundle().apply {
-                    putString("search", genre)
+                    putString("SEARCH", genre)
                 }
                 val searchFragment = SearchFragment().apply {
                     arguments = bundle

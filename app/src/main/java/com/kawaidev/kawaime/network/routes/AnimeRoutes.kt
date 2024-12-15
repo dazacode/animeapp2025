@@ -1,13 +1,12 @@
 package com.kawaidev.kawaime.network.routes
 
 object AnimeRoutes {
-    private const val BASE = "https://aniwatch-api-ochre.vercel.app/api/v2/"
+    const val BASE = "https://aniwatch-api-git.vercel.app/api/v2/"
     private const val BASE_JAVA = "http://api.veanime.cc:8080/api/v1/"
-    const val SHIKIMORI = "https://shikimori.one"
 
-    const val info = "${BASE_JAVA}anime/"
-    const val search = "${BASE}hianime/search"
-    const val spotlight = "${BASE}hianime/home"
-    const val category = "${BASE}hianime/category/"
-    const val schedule = "${BASE}hianime/schedule?date="
+    const val INFO = "${BASE_JAVA}anime/"
+    const val SEARCH = "${BASE}hianime/search"
+    const val SPOTLIGHT = "${BASE}hianime/home"
+    const val CATEGORY = "${BASE}hianime/category/"
+    const val SCHEDULE = "${BASE}hianime/schedule?date="
 }

@@ -104,7 +104,7 @@ class SearchFragment : Fragment(), SearchListener {
 
     private fun handleObserve() {
         searchViewModel.searchResults.observe(viewLifecycleOwner) { searchResults ->
-            AnimeHelper.updateData(animeAdapter, searchResults, searchRecycler)
+            AnimeHelper.updateGridData(animeAdapter, searchResults, searchRecycler)
         }
 
         searchViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
@@ -189,6 +189,6 @@ class SearchFragment : Fragment(), SearchListener {
     }
 
     companion object {
-        private const val INIT_SEARCH = "search"
+        private const val INIT_SEARCH = "SEARCH"
     }
 }

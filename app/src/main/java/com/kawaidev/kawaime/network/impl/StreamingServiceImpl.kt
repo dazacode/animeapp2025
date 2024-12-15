@@ -29,7 +29,7 @@ class StreamingServiceImpl(
     private val routes = StreamingRoutes
 
     override suspend fun getEpisodes(id: String): Episodes = withContext(Dispatchers.IO) {
-        val url = "${routes.episodes}$id/episodes"
+        val url = "${routes.EPISODES}$id/episodes"
         println(url)
 
         val request = Request.Builder().url(url).build()
@@ -68,7 +68,7 @@ class StreamingServiceImpl(
     }
 
     override suspend fun getServers(id: String): EpisodeServers = withContext(Dispatchers.IO) {
-        val url = "${routes.servers}$id"
+        val url = "${routes.SERVERS}$id"
 
         val request = Request.Builder().url(url).build()
         val response: Response = client.newCall(request).execute()
@@ -80,8 +80,7 @@ class StreamingServiceImpl(
                 val animeElement = jsonResponse.jsonObject["data"]?.jsonObject
                 return@withContext json.decodeFromJsonElement<EpisodeServers>(animeElement ?: jsonResponse)
             } else {
-                println("Failed to fetch servers: Empty response")
-                return@withContext EpisodeServers()
+                throw Exception("Failed to fetch info: Empty response")
             }
         } else {
             val errorBody = response.body?.string()
@@ -106,7 +105,7 @@ class StreamingServiceImpl(
     }
 
     override suspend fun getStreaming(params: StreamingParams): Streaming = withContext(Dispatchers.IO) {
-        val url = "${routes.streaming}?${params.toQueryString()}"
+        val url = "${routes.STREAMING}?${params.toQueryString()}"
 
         val request = Request.Builder().url(url).build()
         val response: Response = client.newCall(request).execute()

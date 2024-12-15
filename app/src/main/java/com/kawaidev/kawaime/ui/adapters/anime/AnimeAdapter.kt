@@ -76,6 +76,8 @@ class AnimeAdapter(
             val adultRatings = listOf("R", "R+", "Rx", "18+")
             itemView.findViewById<CardView>(R.id.ratingCard).visibility = if (rating != null && rating in adultRatings) View.VISIBLE else View.GONE
 
+            itemView.findViewById<TextView>(R.id.title).text = anime.name
+
             itemView.findViewById<FrameLayout>(R.id.imageButton).setOnClickListener {
                 val bundle = Bundle().apply { putString("id", anime.id) }
                 val detailsFragment = DetailsFragment().apply { arguments = bundle }
@@ -169,9 +171,7 @@ class AnimeAdapter(
     private fun clearSpecialStateItem() {
         when (state) {
             AnimeAdapterState.LOADING, AnimeAdapterState.ERROR, AnimeAdapterState.EMPTY -> {
-                if (animeParams.animeList.isEmpty() && itemCount > 0) {
-                    notifyItemRemoved(0)
-                }
+                notifyItemRemoved(0)
             }
             else -> Unit
         }

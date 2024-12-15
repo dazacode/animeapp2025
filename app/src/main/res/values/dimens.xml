@@ -5,8 +5,11 @@
     <dimen name="borderWidth">0dp</dimen>
     <dimen name="borderWidth1">0.5dp</dimen>
     <dimen name="padding">8dp</dimen>
+    <dimen name="paddingVertical">8dp</dimen>
     <dimen name="strokeWidth">1dp</dimen>
     <dimen name="dividerHeight">0.6dp</dimen>
     <dimen name="dividerHeight1">0.75dp</dimen>
     <dimen name="player_top_padding">32dp</dimen>
+    <dimen name="icon_size_small">20dp</dimen>
+    <dimen name="icon_size_large">26dp</dimen>
 </resources>

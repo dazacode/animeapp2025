@@ -43,8 +43,7 @@ class SearchViewModel : ViewModel() {
         updateCategoryEmptyState(false)
 
         _isLoading.postValue(true)
-        _nextPage.postValue(true)
-        searchJob?.cancel() // Cancel the previous search job
+        searchJob?.cancel()
         _query.postValue(query)
         _currentPage.postValue(1)
         _error.postValue(null)

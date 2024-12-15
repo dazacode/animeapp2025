@@ -24,24 +24,16 @@ class EpisodesCalls(private val fragment: EpisodesFragment) {
 
     fun getStreaming(playerParams: PlayerParams) {
         fragment.viewModel.fetchStreaming(playerParams, onResult = { streaming ->
-            val intent = Intent(fragment.requireContext(), PlayerActivity::class.java)
-            if (playerParams.download) {
-                (fragment.requireActivity() as? MainActivity)?.dialogs?.onQuality {
-                    intent.putExtra("streaming", Json.encodeToString(streaming))
-                    intent.putExtra("id", playerParams.animeEpisodeId)
-                    intent.putExtra("quality", it)
-                    fragment.startActivity(intent)
-                }
-            } else {
-                intent.putExtra("streaming", Json.encodeToString(streaming))
-                intent.putExtra("episodes", Json.encodeToString(playerParams.episodes))
-                intent.putExtra("id", playerParams.animeEpisodeId)
-                intent.putExtra("name", playerParams.title)
-                intent.putExtra("episode", playerParams.episode)
-                intent.putExtra("server", playerParams.server)
-                intent.putExtra("category", playerParams.category)
-                fragment.startActivity(intent)
+
+            if (streaming.sources.isNullOrEmpty()) {
+                (fragment.requireActivity() as? MainActivity)?.dialogs?.onError("Failed to load", "No sources found for episode")
+                return@fetchStreaming
             }
+
+            val intent = Intent(fragment.requireContext(), PlayerActivity::class.java)
+            intent.putExtra("STREAMING", Json.encodeToString(streaming))
+            intent.putExtra("params", Json.encodeToString(playerParams))
+            fragment.startActivity(intent)
         }, onError = {
             (fragment.requireActivity() as? MainActivity)?.dialogs?.onError(Errors.getErrorReasonByStatus(it.status ?: 0), it.message ?: "")
         }, onLoading = { loading ->

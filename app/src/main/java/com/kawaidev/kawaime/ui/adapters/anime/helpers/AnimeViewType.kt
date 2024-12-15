@@ -12,7 +12,7 @@ object AnimeViewType {
     fun getItemCount(animeList: List<BasicRelease>, state: AnimeAdapterState, hasNextPage: Boolean): Int {
         return when (state) {
             AnimeAdapterState.ERROR, AnimeAdapterState.EMPTY -> 1
-            AnimeAdapterState.LOADING -> if (animeList.isEmpty()) 1 else animeList.size + 1
+            AnimeAdapterState.LOADING -> 1
             AnimeAdapterState.DATA -> if (hasNextPage) animeList.size + 1 else animeList.size
         }
     }

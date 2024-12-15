@@ -33,7 +33,7 @@ class AnimeServiceImpl(
     private val routes = AnimeRoutes
 
     override suspend fun getAnime(id: String): Release = withContext(Dispatchers.IO) {
-        val url = "${routes.info}$id"
+        val url = "${routes.INFO}$id"
 
         val request = Request.Builder().url(url).build()
         val response: Response = client.newCall(request).execute()
@@ -45,12 +45,10 @@ class AnimeServiceImpl(
                 val animeElement = jsonResponse.jsonObject["data"]?.jsonObject
                 return@withContext json.decodeFromJsonElement<Release>(animeElement ?: jsonResponse)
             } else {
-                println("Failed to fetch info: Empty response")
-                return@withContext Release()
+                throw Exception("Failed to fetch info: Empty response")
             }
         } else {
-            println("Failed to fetch info: ${response.message}")
-            return@withContext Release()
+            throw Exception("Failed to fetch info: ${response.message}")
         }
     }
 
@@ -74,15 +72,15 @@ class AnimeServiceImpl(
                 val release = json.decodeFromJsonElement<List<BasicRelease>>(animeElement ?: jsonResponse)
                 return@withContext Pair(release, hasNextPage)
             } else {
-                throw Exception("Failed to fetch info: Empty response")
+                throw Exception("Failed to fetch INFO: Empty response")
             }
         } else {
-            throw Exception("Failed to fetch info: ${response.message}")
+            throw Exception("Failed to fetch INFO: ${response.message}")
         }
     }
 
     override suspend fun getHome(): Home = withContext(Dispatchers.IO) {
-        val url = routes.spotlight
+        val url = routes.SPOTLIGHT
         val request = Request.Builder().url(url).build()
         val response: Response = client.newCall(request).execute()
 
@@ -93,17 +91,15 @@ class AnimeServiceImpl(
                 val animeElement = jsonResponse.jsonObject["data"]?.jsonObject
                 return@withContext json.decodeFromJsonElement<Home>(animeElement ?: jsonResponse)
             } else {
-                println("Failed to fetch info: Empty response")
-                return@withContext Home()
+                throw Exception("Failed to fetch info: Empty response")
             }
         } else {
-            println("Failed to fetch info: ${response.message}")
-            return@withContext Home()
+            throw Exception("Failed to fetch info: ${response.message}")
         }
     }
 
     override suspend fun getCategory(category: String, page: Int): Pair<List<BasicRelease>, Boolean> = withContext(Dispatchers.IO) {
-        val url = "${routes.category}$category?page=$page"
+        val url = "${routes.CATEGORY}$category?page=$page"
         val request = Request.Builder().url(url).build()
         val response: Response = client.newCall(request).execute()
 
@@ -129,7 +125,7 @@ class AnimeServiceImpl(
 
     override suspend fun getSchedule(date: LocalDate): List<Schedule> = withContext(Dispatchers.IO) {
         val formattedDate = date.format(DateTimeFormatter.ISO_LOCAL_DATE)
-        val url = "${routes.schedule}$formattedDate"
+        val url = "${routes.SCHEDULE}$formattedDate"
         val request = Request.Builder().url(url).build()
         val response: Response = client.newCall(request).execute()
 
@@ -151,7 +147,7 @@ class AnimeServiceImpl(
     }
 
     private fun buildSearchUrl(searchParams: SearchParams): String {
-        val urlBuilder = routes.search.toHttpUrlOrNull()?.newBuilder() ?: return ""
+        val urlBuilder = routes.SEARCH.toHttpUrlOrNull()?.newBuilder() ?: return ""
 
         urlBuilder.addQueryParameter("q", searchParams.q.takeIf { it.isNotBlank() } ?: "\"\"")
         if (searchParams.page != 1) urlBuilder.addQueryParameter("page", searchParams.page.toString())

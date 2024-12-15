@@ -1,4 +1,4 @@
-package com.kawaidev.kawaime.ui.activity.player.helpers
+package com.kawaidev.kawaime.ui.activity.player.other
 
 import android.content.BroadcastReceiver
 import android.content.Context

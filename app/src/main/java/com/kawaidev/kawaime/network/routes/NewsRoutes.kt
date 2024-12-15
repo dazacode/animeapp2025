@@ -4,5 +4,5 @@ object NewsRoutes {
     private const val BASE = "https://anime-api-eight-tawny.vercel.app/news/ann/"
 
     const val RECENT_NEWS = "${BASE}recent-feeds"
-    const val NEW_INFO = "${BASE}info?id="
+    const val NEW_INFO = "${BASE}INFO?id="
 }

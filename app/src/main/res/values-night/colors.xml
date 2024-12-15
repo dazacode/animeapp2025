@@ -61,7 +61,7 @@
     <color name="searchField">#252525</color>
 
     <color name="button">#80252525</color>
-    <color name="button1">#26000000</color>
+    <color name="button1">#40121212</color>
     <color name="statusCard">#B1B1B1</color>
     <color name="seasonCard">#80313131</color>
 
@@ -73,7 +73,7 @@
     <color name="snackBarBackground">@color/main</color>
     <color name="snackBarText">#313133</color>
 
-    <color name="showMore">#26000000</color>
+    <color name="showMore">@color/button1</color>
 
     <color name="buttonColor">#252525</color>
     <color name="buttonColor1">#252525</color>

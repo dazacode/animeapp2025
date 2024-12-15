@@ -86,7 +86,7 @@ class ExploreAdapter(
         fun bind() {
             popularButton.setOnClickListener {
                 val bundle = Bundle().apply {
-                    putString("category", "top-airing")
+                    putString("CATEGORY", "top-airing")
                     putString("title", "Popular")
                 }
 
@@ -99,7 +99,7 @@ class ExploreAdapter(
 
             recentButton.setOnClickListener {
                 val bundle = Bundle().apply {
-                    putString("category", "recently-updated")
+                    putString("CATEGORY", "recently-updated")
                     putString("title", "Recently updated")
                 }
 

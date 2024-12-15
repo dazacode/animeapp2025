@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.kawaidev.kawaime.R
+import com.kawaidev.kawaime.Strings
 import com.kawaidev.kawaime.network.dao.anime.BasicRelease
 import com.kawaidev.kawaime.network.dao.anime.Home
 import com.kawaidev.kawaime.ui.activity.MainActivity
@@ -54,6 +55,7 @@ class HomeAdapter(
                     ViewTypes.VIEW_TYPE_LATEST -> holder.bind(home.latestEpisodeAnimes, fragment.requireContext().getString(R.string.latest))
                     ViewTypes.VIEW_TYPE_TRENDING -> holder.bind(home.trendingAnimes, fragment.requireContext().getString(R.string.trending))
                     ViewTypes.VIEW_TYPE_TOP_AIRING -> holder.bind(home.topAiringAnimes, fragment.requireContext().getString(R.string.top_airing))
+                    ViewTypes.VIEW_TYPE_TOP_UPCOMING -> holder.bind(home.topUpcomingAnimes, fragment.requireContext().getString(R.string.top_upcoming))
                     ViewTypes.VIEW_TYPE_POPULAR -> holder.bind(home.mostPopularAnimes, fragment.requireContext().getString(R.string.most_popular))
                     ViewTypes.VIEW_TYPE_MOST_FAVORITE -> holder.bind(home.mostFavoriteAnimes, fragment.requireContext().getString(R.string.most_favorite))
                     ViewTypes.VIEW_TYPE_LATEST_COMPLETED -> holder.bind(home.latestCompletedAnimes, fragment.requireContext().getString(R.string.latest_completed))
@@ -83,6 +85,7 @@ class HomeAdapter(
     }
 
     inner class SpotlightViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private lateinit var currentData: List<BasicRelease>
         private val viewPager: ViewPager2 = itemView.findViewById(R.id.view_pager)
         private val handler = Handler(Looper.getMainLooper())
         private var currentPage = 0
@@ -95,11 +98,15 @@ class HomeAdapter(
         }
 
         fun bind(spotlightData: List<BasicRelease>) {
-            val adapter = SpotlightPagerAdapter(fragment, spotlightData)
-            viewPager.adapter = adapter
+            if (!::currentData.isInitialized || currentData != spotlightData) {
+                currentData = spotlightData
 
-            viewPager.registerOnPageChangeCallback(pageChangeCallback)
-            startAutoScroll(spotlightData.size)
+                val adapter = SpotlightPagerAdapter(fragment, currentData)
+                viewPager.adapter = adapter
+
+                viewPager.registerOnPageChangeCallback(pageChangeCallback)
+                startAutoScroll(spotlightData.size)
+            }
         }
 
         private fun startAutoScroll(totalPages: Int) {
@@ -110,9 +117,9 @@ class HomeAdapter(
                         currentPage = 0
                     }
                     viewPager.setCurrentItem(currentPage++, true)
-                    handler.postDelayed(this, 15000)
+                    handler.postDelayed(this, Strings.SPOTLIGHT_SWITCH)
                 }
-            }, 15000)
+            }, Strings.SPOTLIGHT_SWITCH)
         }
 
         private fun resetTimer() {

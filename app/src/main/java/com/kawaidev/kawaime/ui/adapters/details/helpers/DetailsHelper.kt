@@ -1,6 +1,7 @@
 package com.kawaidev.kawaime.ui.adapters.details.helpers
 
 import android.animation.ValueAnimator
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
@@ -17,6 +18,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.media3.common.util.Log
 import androidx.media3.common.util.UnstableApi
+import com.google.android.material.button.MaterialButton
 import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.network.dao.anime.Release
 import com.kawaidev.kawaime.ui.activity.MainActivity
@@ -30,62 +32,71 @@ import java.util.Locale
 object DetailsHelper {
     @OptIn(UnstableApi::class)
     fun headerBind(fragment: DetailsFragment, itemView: View, release: Release) {
+        setupImage(itemView, release)
+        setupTitle(fragment, itemView, release)
+        setupInfoTextViews(itemView, release)
+        setupRatingCard(itemView, release)
+        setupGenres(fragment, itemView, release)
+        setupWatchButton(fragment, itemView, release)
+        setupFavoriteButton(fragment, itemView, release)
+    }
+
+    private fun setupImage(itemView: View, release: Release) {
         val image = itemView.findViewById<VerticalGradientImage>(R.id.image)
-        val rating = release.anime?.info?.stats?.rating
-        val animeId = release.anime?.info?.id ?: ""
+        LoadImage().loadImage(
+            itemView.context,
+            release.shikimori?.poster?.originalUrl ?: release.anime?.info?.poster,
+            image
+        )
+    }
 
-        LoadImage().loadImage(itemView.context, release.shikimori?.poster?.originalUrl ?: release.anime?.info?.poster, image)
-
-        Log.d("Details", release.shikimori?.poster?.originalUrl.toString())
-
-        itemView.findViewById<TextView>(R.id.title).apply {
-            text = release.anime?.info?.name
-            setOnClickListener {
-                (fragment.requireActivity() as MainActivity).bottomSheets.onTitleSheet(release)
-            }
+    private fun setupTitle(fragment: DetailsFragment, itemView: View, release: Release) {
+        val titleTextView = itemView.findViewById<TextView>(R.id.title)
+        titleTextView.text = release.anime?.info?.name
+        titleTextView.setOnClickListener {
+            (fragment.requireActivity() as MainActivity).bottomSheets.onTitleSheet(release)
         }
+    }
 
+    private fun setupInfoTextViews(itemView: View, release: Release) {
         itemView.findViewById<TextView>(R.id.type).text = release.anime?.info?.stats?.type
-        itemView.findViewById<TextView>(R.id.rating).text = rating
+        itemView.findViewById<TextView>(R.id.rating).text = release.anime?.info?.stats?.rating
         itemView.findViewById<TextView>(R.id.season).text = release.anime?.moreInfo?.premiered
         itemView.findViewById<TextView>(R.id.status).text = release.anime?.moreInfo?.status
-        itemView.findViewById<TextView>(R.id.duration).apply {
-            text = release.anime?.moreInfo?.duration
-            if (release.anime?.moreInfo?.duration == "?m") visibility = View.GONE
-        }
+
+        val durationTextView = itemView.findViewById<TextView>(R.id.duration)
+        durationTextView.text = release.anime?.moreInfo?.duration
+        if (release.anime?.moreInfo?.duration == "?m") durationTextView.visibility = View.GONE
+
+        val score = release.shikimori?.score ?: release.anime?.moreInfo?.malscore
         itemView.findViewById<TextView>(R.id.score).apply {
-            text = (release.shikimori?.score ?: release.anime?.moreInfo?.malscore).toString()
-            if (release.anime?.moreInfo?.malscore == "?" && release.shikimori?.score == null)
+            text = score.toString()
+            if (release.anime?.moreInfo?.malscore == "?" && release.shikimori?.score == null) {
                 itemView.findViewById<LinearLayout>(R.id.scoreLayout).visibility = View.GONE
+            }
         }
+    }
 
+    private fun setupRatingCard(itemView: View, release: Release) {
+        val rating = release.anime?.info?.stats?.rating
         val adultRatings = listOf("R", "R+", "Rx", "18+")
+        val ratingCard = itemView.findViewById<CardView>(R.id.ratingCard)
+        ratingCard.visibility = if (rating in adultRatings) View.VISIBLE else View.GONE
+    }
 
-        if (rating != null && rating in adultRatings) {
-            itemView.findViewById<CardView>(R.id.ratingCard).visibility = View.VISIBLE
-        } else {
-            itemView.findViewById<CardView>(R.id.ratingCard).visibility = View.GONE
-        }
-
-
-        val textGenres: TextView = itemView.findViewById(R.id.genres)
+    private fun setupGenres(fragment: DetailsFragment, itemView: View, release: Release) {
+        val textGenres = itemView.findViewById<TextView>(R.id.genres)
         val genresText = SpannableStringBuilder()
         release.anime?.moreInfo?.genres?.forEachIndexed { index, genre ->
             if (index != 0) genresText.append(" • ")
+            val formattedGenre = genre.lowercase(Locale.getDefault()).replaceFirstChar { it.uppercaseChar() }
             val start = genresText.length
 
-            val formattedGenre = genre.lowercase(Locale.getDefault()).replaceFirstChar { it.uppercaseChar() }
             genresText.append(formattedGenre)
-
             genresText.setSpan(object : ClickableSpan() {
                 override fun onClick(widget: View) {
-                    val bundle = Bundle().apply {
-                        putString("search", formattedGenre)
-                    }
-                    val searchFragment = SearchFragment().apply {
-                        arguments = bundle
-                    }
-
+                    val bundle = Bundle().apply { putString("SEARCH", formattedGenre) }
+                    val searchFragment = SearchFragment().apply { arguments = bundle }
                     (fragment.requireActivity() as MainActivity).pushFragment(searchFragment)
                 }
 
@@ -96,26 +107,57 @@ object DetailsHelper {
         }
         textGenres.text = genresText
         textGenres.movementMethod = LinkMovementMethod.getInstance()
+    }
 
-        itemView.findViewById<Button>(R.id.watch_button).setOnClickListener {
-            val bundle = Bundle().apply {
-                putString("id", animeId)
-                putString("title", release.anime?.info?.name)
-            }
-            val episodesFragment = EpisodesFragment().apply {
-                arguments = bundle
-            }
+    private fun setupWatchButton(fragment: DetailsFragment, itemView: View, release: Release) {
+        val watchButton = itemView.findViewById<MaterialButton>(R.id.watch_button)
+        val animeId = release.anime?.info?.id ?: ""
 
-            (fragment.requireActivity() as MainActivity).pushFragment(episodesFragment)
+        val isNotYetAired = release.anime?.moreInfo?.status == "Not yet aired"
+        watchButton.text = if (isNotYetAired) {
+            itemView.context.getString(R.string.unavailable)
+        } else {
+            itemView.context.getString(R.string.watch)
+        }
+        watchButton.isEnabled = !isNotYetAired
+
+        watchButton.icon = ContextCompat.getDrawable(
+            itemView.context,
+            if (isNotYetAired) R.drawable.block else R.drawable.play
+        )
+
+        watchButton.iconSize = if (isNotYetAired) {
+            itemView.context.resources.getDimensionPixelSize(R.dimen.icon_size_small)
+        } else {
+            itemView.context.resources.getDimensionPixelSize(R.dimen.icon_size_large)
         }
 
+        watchButton.backgroundTintList = ContextCompat.getColorStateList(
+            itemView.context,
+            if (isNotYetAired) R.color.mainDisabled else R.color.main
+        )
+
+        watchButton.backgroundTintMode = PorterDuff.Mode.SRC_IN
+
+        watchButton.setOnClickListener {
+            if (!isNotYetAired) {
+                val bundle = Bundle().apply {
+                    putString("id", animeId)
+                    putString("title", release.anime?.info?.name)
+                }
+                val episodesFragment = EpisodesFragment().apply { arguments = bundle }
+                (fragment.requireActivity() as MainActivity).pushFragment(episodesFragment)
+            }
+        }
+    }
+
+    private fun setupFavoriteButton(fragment: DetailsFragment, itemView: View, release: Release) {
+        val animeId = release.anime?.info?.id ?: ""
         var isFavorite = fragment.prefs.isFavorite(animeId)
+        val favoriteButton = itemView.findViewById<ImageButton>(R.id.favoriteButton)
+        updateFavoriteIcon(isFavorite, favoriteButton, fragment)
 
-        val favorite: ImageButton = itemView.findViewById(R.id.favoriteButton)
-
-        updateFavoriteIcon(isFavorite, favorite, fragment)
-
-        favorite.setOnClickListener {
+        favoriteButton.setOnClickListener {
             isFavorite = if (isFavorite) {
                 fragment.prefs.removeFavorite(animeId)
                 (fragment.requireActivity() as MainActivity).showSnackbar(itemView.context.getString(R.string.removed_from_favorites))
@@ -125,6 +167,7 @@ object DetailsHelper {
                 (fragment.requireActivity() as MainActivity).showSnackbar(itemView.context.getString(R.string.added_to_favorites))
                 true
             }
+            updateFavoriteIcon(isFavorite, favoriteButton, fragment)
         }
     }
 

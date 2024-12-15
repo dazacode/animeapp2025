@@ -9,12 +9,13 @@ object ViewTypes {
     const val VIEW_TYPE_LATEST = 3
     const val VIEW_TYPE_TRENDING = 4
     const val VIEW_TYPE_TOP_AIRING = 5
-    const val VIEW_TYPE_POPULAR = 6
-    const val VIEW_TYPE_MOST_FAVORITE = 7
-    const val VIEW_TYPE_LATEST_COMPLETED = 8
-    const val VIEW_TYPE_TOP_10_TODAY = 9
-    const val VIEW_TYPE_TOP_10_WEEK = 10
-    const val VIEW_TYPE_TOP_10_MONTH = 11
+    const val VIEW_TYPE_TOP_UPCOMING = 6
+    const val VIEW_TYPE_POPULAR = 7
+    const val VIEW_TYPE_MOST_FAVORITE = 8
+    const val VIEW_TYPE_LATEST_COMPLETED = 9
+    const val VIEW_TYPE_TOP_10_TODAY = 10
+    const val VIEW_TYPE_TOP_10_WEEK = 11
+    const val VIEW_TYPE_TOP_10_MONTH = 12
 
     fun getViewType(position: Int, isLoading: Boolean, isError: Boolean, home: Home): Int {
         if (isLoading) return VIEW_TYPE_LOADING
@@ -25,6 +26,7 @@ object ViewTypes {
             home.latestEpisodeAnimes to VIEW_TYPE_LATEST,
             home.trendingAnimes to VIEW_TYPE_TRENDING,
             home.topAiringAnimes to VIEW_TYPE_TOP_AIRING,
+            home.topUpcomingAnimes to VIEW_TYPE_TOP_UPCOMING,
             home.mostPopularAnimes to VIEW_TYPE_POPULAR,
             home.mostFavoriteAnimes to VIEW_TYPE_MOST_FAVORITE,
             home.latestCompletedAnimes to VIEW_TYPE_LATEST_COMPLETED,
@@ -53,6 +55,7 @@ object ViewTypes {
                 if (home.latestEpisodeAnimes.isNotEmpty()) count++
                 if (home.trendingAnimes.isNotEmpty()) count++
                 if (home.topAiringAnimes.isNotEmpty()) count++
+                if (home.topUpcomingAnimes.isNotEmpty()) count++
                 if (home.mostPopularAnimes.isNotEmpty()) count++
                 if (home.mostFavoriteAnimes.isNotEmpty()) count++
                 if (home.latestCompletedAnimes.isNotEmpty()) count++

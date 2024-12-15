@@ -1,15 +1,12 @@
 package com.kawaidev.kawaime.ui.bottomSheets
 
-import android.annotation.SuppressLint
 import android.graphics.Rect
-import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.ImageButton
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -21,7 +18,10 @@ import com.kawaidev.kawaime.network.dao.anime.Release
 import com.kawaidev.kawaime.network.dao.streaming.EpisodeServers
 import com.kawaidev.kawaime.network.dao.streaming.Episodes
 import com.kawaidev.kawaime.ui.activity.MainActivity
+import com.kawaidev.kawaime.ui.adapters.bottom.TitlesAdapter
+import com.kawaidev.kawaime.ui.adapters.decoration.DividerDecoration
 import com.kawaidev.kawaime.ui.adapters.streaming.ServerAdapter
+import com.kawaidev.kawaime.ui.bottomSheets.helpers.TitleItem
 import com.kawaidev.kawaime.ui.fragments.streaming.episodes.EpisodesFragment
 import com.kawaidev.kawaime.utils.Converts
 
@@ -96,65 +96,45 @@ class BottomSheets(private val activity: MainActivity) {
         })
     }
 
-    @SuppressLint("SetTextI18n")
     fun onTitleSheet(release: Release) {
         val view = activity.layoutInflater.inflate(R.layout.bottom_sheet_layout_title, null)
+        val recycler: RecyclerView = view.findViewById(R.id.recycler)
 
-        // English Title
-        val titleTextView = view.findViewById<TextView>(R.id.title)
-        val titleContainer = view.findViewById<LinearLayout>(R.id.titleContainer)
-        setTitleVisibility(titleContainer, titleTextView, release.anime?.info?.name)
+        val titles = listOf(
+            TitleItem(activity.getString(R.string.title), release.anime?.info?.name),
+            TitleItem(activity.getString(R.string.orig_title), release.anime?.moreInfo?.japanese),
+            TitleItem(
+                activity.getString(R.string.other_titles),
+                release.anime?.moreInfo?.synonyms?.split(", ")?.joinToString("\n")
+            )
+        ).filterNot { it.content.isNullOrEmpty() }
 
-        // Original (Romaji) Title
-        val originalTitleTextView = view.findViewById<TextView>(R.id.originalTitle)
-        val origTitleContainer = view.findViewById<LinearLayout>(R.id.origTitleContainer)
-        setTitleVisibility(origTitleContainer, originalTitleTextView, release.anime?.moreInfo?.japanese)
+        val adapter = TitlesAdapter(titles) { content ->
+            activity.copyToClipboard("Copied Title", content)
+        }
 
-        // Other Synonym Titles
-        val otherTitleTextView = view.findViewById<TextView>(R.id.otherTitle)
-        val otherTitleContainer = view.findViewById<LinearLayout>(R.id.otherTitleContainer)
-        setTitleVisibility(otherTitleContainer, otherTitleTextView, release.anime?.moreInfo?.synonyms?.split(", ")?.joinToString(separator = "\n"))
+        recycler.adapter = adapter
+        recycler.layoutManager = LinearLayoutManager(activity)
 
-        // Bottom sheet setup
+        recycler.addItemDecoration(DividerDecoration(
+            context = activity,
+            size = activity.resources.getDimensionPixelSize(R.dimen.dividerHeight),
+            color = activity.getColor(R.color.dividerColor),
+            includeLast = false
+        ))
+
         val bottomSheetDialog = BottomSheetDialog(activity, R.style.CustomSheetStyle)
         bottomSheetDialog.setContentView(view)
         bottomSheetDialog.show()
+
+        view.findViewById<FrameLayout>(R.id.closeButton).setOnClickListener {
+            bottomSheetDialog.dismiss()
+        }
 
         val bottomSheet = bottomSheetDialog.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
         val behavior = BottomSheetBehavior.from(bottomSheet!!)
         behavior.state = BottomSheetBehavior.STATE_EXPANDED
         behavior.skipCollapsed = true
         behavior.peekHeight = 0
-
-        val layoutParams = bottomSheet.layoutParams as CoordinatorLayout.LayoutParams
-        layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-        bottomSheet.layoutParams = layoutParams
-
-        // Close button
-        view.findViewById<FrameLayout>(R.id.closeButton).setOnClickListener {
-            bottomSheetDialog.dismiss()
-        }
-
-        // Copy buttons
-        view.findViewById<ImageButton>(R.id.copyTitle).setOnClickListener {
-            activity.copyToClipboard("Title", titleTextView.text.toString())
-        }
-
-        view.findViewById<ImageButton>(R.id.copyOrigTitle).setOnClickListener {
-            activity.copyToClipboard("Original Title", originalTitleTextView.text.toString())
-        }
-
-        view.findViewById<ImageButton>(R.id.copyOtherTitle).setOnClickListener {
-            activity.copyToClipboard("Other Titles", otherTitleTextView.text.toString())
-        }
-    }
-
-    private fun setTitleVisibility(container: LinearLayout, textView: TextView, titleText: String?) {
-        if (titleText.isNullOrEmpty()) {
-            container.visibility = View.GONE
-        } else {
-            container.visibility = View.VISIBLE
-            textView.text = titleText
-        }
     }
 }

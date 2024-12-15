@@ -1,6 +1,7 @@
 package com.kawaidev.kawaime.ui.activity.player.helpers
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.net.Uri
@@ -8,10 +9,13 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.ProgressBar
+import android.widget.RelativeLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.OptIn
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -71,7 +75,7 @@ object PlayerHelper {
                             if (playbackState == Player.STATE_READY) {
                                 setTint(activity.playerView.findViewById(R.id.skip), true)
 
-                                val watched = activity.prefs.findByEpisodeId(activity.id)
+                                val watched = activity.prefs.findByEpisodeId(activity.params.animeEpisodeId)
                                 if (watched != null) {
                                     activity.playerViewModel.player?.seekTo(watched.watchedTo)
                                 }
@@ -105,10 +109,9 @@ object PlayerHelper {
             }
         })
 
-        ViewCompat.setOnApplyWindowInsetsListener(activity.playerView) { v, windowInsets ->
+        ViewCompat.setOnApplyWindowInsetsListener(activity.playerView.findViewById<FrameLayout>(androidx.media3.ui.R.id.exo_bottom_bar)) { v, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
             val horizontalMargin = max(insets.left, insets.right)
-            val verticalMargin = insets.top
 
             v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 leftMargin = horizontalMargin
@@ -116,7 +119,18 @@ object PlayerHelper {
                 bottomMargin = insets.bottom
             }
 
-            activity.playerView.findViewById<LinearLayout>(R.id.top_appbar).setPaddingRelative(8, verticalMargin, 8, verticalMargin)
+            WindowInsetsCompat.CONSUMED
+        }
+
+        ViewCompat.setOnApplyWindowInsetsListener(activity.playerView.findViewById<RelativeLayout>(R.id.top_appbar)) { v, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val horizontalMargin = max(insets.left, insets.right)
+
+            v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                leftMargin = horizontalMargin
+                rightMargin = horizontalMargin
+                topMargin = insets.top
+            }
 
             WindowInsetsCompat.CONSUMED
         }
@@ -139,6 +153,33 @@ object PlayerHelper {
             }
         }
 
+        activity.playerView.findViewById<ImageButton>(R.id.button_download).apply {
+            setOnClickListener {
+                val qualities = mapOf(
+                    "360p" to activity.url.replace("master", "index-f3-v1-a1"),
+                    "720p" to activity.url.replace("master", "index-f2-v1-a1"),
+                    "1080p" to activity.url.replace("master", "index-f1-v1-a1"),
+                )
+
+                val qualityKeys = qualities.keys.toTypedArray()
+
+                AlertDialog.Builder(activity)
+                    .setTitle("Choose Quality")
+                    .setItems(qualityKeys) { _, which ->
+                        val selectedQuality = qualityKeys[which]
+                        val selectedUrl = qualities[selectedQuality]
+
+                        if (selectedUrl != null) {
+                            DownloadHelper.startDownload(activity, selectedUrl)
+                        } else {
+                            Toast.makeText(activity, "Error selecting quality", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    .setNegativeButton("Cancel", null)
+                    .show()
+            }
+        }
+
         val currentIndex = getCurrentEpisodeIndex(activity)
 
         activity.playerView.findViewById<ImageButton>(R.id.next).apply {
@@ -146,7 +187,7 @@ object PlayerHelper {
                 PlayerPlayingHelper.playNextEpisode(activity)
             }
 
-            isEnabled = currentIndex < (activity.episodes.episodes?.size ?: 0) - 1
+            isEnabled = currentIndex < (activity.params.episodes.episodes?.size ?: 0) - 1
 
             setTint(activity.playerView.findViewById(R.id.next), isEnabled)
         }
@@ -162,8 +203,8 @@ object PlayerHelper {
         }
 
 
-        activity.playerView.findViewById<TextView>(R.id.title).text = activity.name
-        activity.playerView.findViewById<TextView>(R.id.episode).text = activity.getString(R.string.episode, activity.episode)
+        activity.playerView.findViewById<TextView>(R.id.title).text = activity.params.title
+        activity.playerView.findViewById<TextView>(R.id.episode).text = activity.getString(R.string.episode, activity.params.episode)
 
         activity.playerView.subtitleView?.apply {
             setPadding(0, 0, 0, 48)
@@ -260,65 +301,8 @@ object PlayerHelper {
                 )
     }
 
-    @OptIn(UnstableApi::class)
-    fun startDownload(activity: PlayerActivity) {
-        val qualityMap = mapOf(
-            "1080p" to "index-f1-v1-a1.m3u8",
-            "720p" to "index-f2-v1-a1.m3u8",
-            "360p" to "index-f3-v1-a1.m3u8"
-        )
-
-        var uri: Uri = Uri.EMPTY
-        val sourceUrl = activity.streaming.sources?.firstOrNull()?.url
-        if (sourceUrl != null) {
-            val updatedUrl = sourceUrl.replace("master.m3u8", qualityMap[activity.quality] ?: "master.m3u8")
-            uri = Uri.parse(updatedUrl)
-        }
-
-        val subtitleTrack = activity.streaming.tracks?.find { it.default }
-        val subtitleUri = subtitleTrack?.file?.let { Uri.parse(it) }
-
-        Log.d("DownloadRequest", "URL: $uri")
-        Log.d("DownloadRequest", "Quality: ${activity.quality}")
-
-        val downloadRequestBuilder = DownloadRequest.Builder(activity.id, uri)
-            .setMimeType(MimeTypes.APPLICATION_M3U8)
-
-        subtitleUri?.let {
-            val subtitleStreamKey = StreamKey(C.TRACK_TYPE_TEXT, 0, 0)
-            downloadRequestBuilder.setStreamKeys(listOf(subtitleStreamKey))
-        }
-
-        val downloadRequest = downloadRequestBuilder.build()
-
-        val downloadManager = com.kawaidev.kawaime.ui.activity.player.helpers.DownloadManager.getInstance(activity)
-
-        downloadManager.addListener(object : androidx.media3.exoplayer.offline.DownloadManager.Listener {
-            override fun onDownloadChanged(
-                downloadManager: androidx.media3.exoplayer.offline.DownloadManager,
-                download: Download,
-                finalException: Exception?
-            ) {
-                when (download.state) {
-                    Download.STATE_DOWNLOADING -> {
-                        activity.finish()
-                    }
-                }
-            }
-        })
-
-        downloadManager.addDownload(downloadRequest)
-
-        DownloadService.sendAddDownload(
-            activity,
-            VideoDownloadService::class.java,
-            downloadRequest,
-            true
-        )
-    }
-
     private fun getCurrentEpisodeIndex(activity: PlayerActivity): Int {
-        return activity.episodes.episodes?.indexOfFirst { it.episodeId == activity.id } ?: -1
+        return activity.params.episodes.episodes?.indexOfFirst { it.episodeId == activity.params.animeEpisodeId } ?: -1
     }
 
     @SuppressLint("PrivateResource")

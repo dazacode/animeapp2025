@@ -80,4 +80,6 @@
     <string name="popular">Popular</string>
     <string name="latest_news">Latest news</string>
     <string name="spotlight">Spotlight №%1$s</string>
+    <string name="top_upcoming">Top Upcoming</string>
+    <string name="unavailable">Unavailable</string>
 </resources>

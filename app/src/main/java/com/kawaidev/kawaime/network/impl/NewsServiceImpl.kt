@@ -34,12 +34,10 @@ class NewsServiceImpl (
                 val jsonResponse = json.parseToJsonElement(responseBody)
                 return@withContext json.decodeFromJsonElement<List<News>>(jsonResponse)
             } else {
-                println("Failed to fetch news: Empty response")
-                return@withContext emptyList()
+                throw Exception("Failed to fetch info: Empty response")
             }
         } else {
-            println("Failed to fetch news: ${response.message}")
-            return@withContext emptyList()
+            throw Exception("Failed to fetch info: ${response.message}")
         }
     }
 
@@ -55,12 +53,10 @@ class NewsServiceImpl (
                 val jsonResponse = json.parseToJsonElement(responseBody)
                 return@withContext json.decodeFromJsonElement<News>(jsonResponse)
             } else {
-                println("Failed to fetch news: Empty response")
-                return@withContext News()
+                throw Exception("Failed to fetch info: Empty response")
             }
         } else {
-            println("Failed to fetch news: ${response.message}")
-            return@withContext News()
+            throw Exception("Failed to fetch info: ${response.message}")
         }
     }
 }

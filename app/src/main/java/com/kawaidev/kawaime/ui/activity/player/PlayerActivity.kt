@@ -12,6 +12,8 @@ import androidx.media3.ui.PlayerView
 import com.kawaidev.kawaime.App
 import com.kawaidev.kawaime.Prefs
 import com.kawaidev.kawaime.R
+import com.kawaidev.kawaime.network.dao.api_utils.StreamingParams
+import com.kawaidev.kawaime.network.dao.helpers.PlayerParams
 import com.kawaidev.kawaime.network.dao.helpers.WatchedRelease
 import com.kawaidev.kawaime.network.dao.streaming.EpisodeDetail
 import com.kawaidev.kawaime.network.dao.streaming.Episodes
@@ -31,13 +33,7 @@ class PlayerActivity : AppCompatActivity() {
     lateinit var prefs: Prefs
 
     var streaming: Streaming = Streaming()
-    var id: String = ""
-    var name: String = ""
-    var episode: String = ""
-    var episodes: Episodes = Episodes()
-    var quality: String = ""
-    var server: String = ""
-    var category: String = ""
+    var params: PlayerParams = PlayerParams()
     private var download: Boolean = false
 
     lateinit var service: StreamingService
@@ -61,16 +57,8 @@ class PlayerActivity : AppCompatActivity() {
         playerViewModel = ViewModelProvider(this).get(PlayerViewModel::class.java)
         prefs = App.prefs
 
-        streaming = Json.decodeFromString(intent.getStringExtra("streaming") ?: "")
-        episodes = Json.decodeFromString(intent.getStringExtra("episodes") ?: "")
-        id = intent.getStringExtra("id") ?: ""
-        name = intent.getStringExtra("name") ?: ""
-        episode = intent.getStringExtra("episode") ?: ""
-        quality = intent.getStringExtra("quality") ?: ""
-        server = intent.getStringExtra("server") ?: ""
-        category = intent.getStringExtra("category") ?: ""
-
-        download = quality.isNotEmpty()
+        streaming = Json.decodeFromString(intent.getStringExtra("STREAMING") ?: "")
+        params = Json.decodeFromString(intent.getStringExtra("params") ?: "")
 
         playerView = findViewById(R.id.player)
 
@@ -81,23 +69,19 @@ class PlayerActivity : AppCompatActivity() {
 
     @OptIn(UnstableApi::class)
     private fun initialize(savedInstanceState: Bundle?) {
-        if (!download) {
-            if (savedInstanceState == null || playerViewModel.player?.isReleased == true) {
-                PlayerHelper.initializePlayer(this)
-            } else {
-                isPlayerReady = true
-            }
-
-            PlayerHelper.initializePlayerUI(this)
+        if (savedInstanceState == null || playerViewModel.player?.isReleased == true) {
+            PlayerHelper.initializePlayer(this)
         } else {
-            PlayerHelper.startDownload(this)
+            isPlayerReady = true
         }
+
+        PlayerHelper.initializePlayerUI(this)
     }
 
     fun save() {
         val currentPosition = playerViewModel.player?.currentPosition ?: 0L
         if (currentPosition > 0L) {
-            prefs.saveWatchedRelease(WatchedRelease(episodeId = id, watchedTo = currentPosition))
+            prefs.saveWatchedRelease(WatchedRelease(episodeId = params.animeEpisodeId, watchedTo = currentPosition))
             playerViewModel.playWhenReady = playerViewModel.player?.playWhenReady ?: false
         }
     }

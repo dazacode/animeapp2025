@@ -1,6 +1,5 @@
 package com.kawaidev.kawaime.ui.adapters.helpers
 
-import android.graphics.Rect
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -9,9 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.grzegorzojdana.spacingitemdecoration.Spacing
 import com.grzegorzojdana.spacingitemdecoration.SpacingItemDecoration
 import com.kawaidev.kawaime.R
-import com.kawaidev.kawaime.network.dao.anime.Season
 import com.kawaidev.kawaime.network.dao.news.News
-import com.kawaidev.kawaime.ui.adapters.details.SeasonAdapter
 import com.kawaidev.kawaime.ui.adapters.explore.NewsAdapter
 import com.kawaidev.kawaime.utils.Converts
 

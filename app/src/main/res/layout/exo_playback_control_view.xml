@@ -147,7 +147,8 @@
 
     </LinearLayout>
 
-    <LinearLayout android:id="@+id/top_appbar"
+    <RelativeLayout
+        android:id="@+id/top_appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
@@ -158,20 +159,23 @@
         android:clipChildren="false"
         android:layoutDirection="ltr">
 
-        <ImageButton android:id="@+id/button_back"
-            style="@style/ExoStyledControls.Button.Center.Back"/>
+        <ImageButton
+            android:id="@+id/button_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            style="@style/ExoStyledControls.Button.Center.Back" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/button_back"
+            android:layout_toStartOf="@id/button_download"
+            android:layout_centerVertical="true"
             android:orientation="vertical"
-            android:paddingHorizontal="18dp"
-            android:layout_gravity="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/switch_button"
-            app:layout_constraintStart_toEndOf="@id/back_button"
-            app:layout_constraintTop_toTopOf="parent">
+            android:paddingHorizontal="18dp">
 
             <TextView
                 android:id="@+id/title"
@@ -193,6 +197,16 @@
                 android:textSize="14sp" />
         </LinearLayout>
 
-    </LinearLayout>
+        <ImageButton
+            android:id="@+id/button_download"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:focusable="true"
+            style="@style/ExoStyledControls.Button.Center.Download" />
+
+    </RelativeLayout>
 
 </FrameLayout>

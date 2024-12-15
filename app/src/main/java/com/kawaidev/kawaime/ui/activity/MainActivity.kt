@@ -142,6 +142,7 @@ class MainActivity : AppCompatActivity(), FragNavController.TransactionListener,
         snackbar.setBackgroundTint(ContextCompat.getColor(this, R.color.snackBarBackground))
 
         val textView = snackbar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
+        textView.includeFontPadding = false
         textView.setTextColor(ContextCompat.getColor(this, R.color.snackBarText))
 
         snackbar.show()

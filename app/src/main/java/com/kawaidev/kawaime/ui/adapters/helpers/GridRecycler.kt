@@ -1,24 +1,19 @@
 package com.kawaidev.kawaime.ui.adapters.helpers
 
 import android.content.Context
-import android.graphics.Rect
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.grzegorzojdana.spacingitemdecoration.Spacing
-import com.grzegorzojdana.spacingitemdecoration.SpacingItemDecoration
 import com.kawaidev.kawaime.R
-import com.kawaidev.kawaime.Strings
 import com.kawaidev.kawaime.network.dao.anime.BasicRelease
 import com.kawaidev.kawaime.ui.adapters.anime.AnimeAdapter
 import com.kawaidev.kawaime.ui.adapters.anime.helpers.AnimeViewType
+import com.kawaidev.kawaime.ui.adapters.decoration.GridDecoration
 import com.kawaidev.kawaime.utils.Converts
 
 object GridRecycler {
     fun setup(context: Context, adapter: AnimeAdapter, recycler: RecyclerView, data: List<BasicRelease>) {
         val spanCount = calculateSpanCount(context)
-        val space = Converts.dpToPx(6f, context).toInt()
-        val edgesSpace = Converts.dpToPx(Strings.PADDING, context).toInt()
 
         val gridLayoutManager = GridLayoutManager(context, spanCount)
         gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
@@ -44,17 +39,7 @@ object GridRecycler {
 
         recycler.layoutManager = gridLayoutManager
 
-        if (recycler.itemDecorationCount == 0) {
-            recycler.addItemDecoration(
-                SpacingItemDecoration(
-                    Spacing(
-                        horizontal = space,
-                        vertical = space,
-                        edges = Rect(space, space, space, space)
-                    )
-                )
-            )
-        }
+        addDecoration(recycler)
 
         recycler.setHasFixedSize(true)
     }
@@ -64,5 +49,23 @@ object GridRecycler {
         val screenWidth = displayMetrics.widthPixels
         val itemWidth = context.resources.getDimensionPixelSize(R.dimen.anime_item_width)
         return maxOf(1, screenWidth / itemWidth)
+    }
+
+    private fun addDecoration(recycler: RecyclerView) {
+        val space = Converts.dpToPx(6f, recycler.context).toInt()
+
+        recycler.post {
+            recycler.apply {
+                while (itemDecorationCount > 0) {
+                    removeItemDecorationAt(0)
+                }
+
+                addItemDecoration(GridDecoration(
+                    horizontal = space,
+                    vertical = space,
+                    edges = space
+                ))
+            }
+        }
     }
 }

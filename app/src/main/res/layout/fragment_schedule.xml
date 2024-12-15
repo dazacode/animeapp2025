@@ -38,11 +38,11 @@
                     tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
                 <TextView
+                    style="@style/HeaderText"
                     android:layout_width="wrap_content"
-                    android:layout_height="28dp"
+                    android:layout_height="wrap_content"
                     android:text="Schedule"
-                    android:textColor="@color/text3"
-                    style="@style/HeaderText"/>
+                    android:textColor="@color/text3" />
             </androidx.appcompat.widget.Toolbar>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>

@@ -23,8 +23,27 @@
     </style>
 
     <style name="HeaderText" parent="@android:style/TextAppearance">
-        <item name="android:textSize">19sp</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18.5sp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:fontFamily">@font/lato_black</item>
+    </style>
+
+    <style name="AnimeItemTitleText" parent="@android:style/TextAppearance">
+        <item name="android:textSize">14sp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/text3</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="AnimeTitleText" parent="@android:style/TextAppearance">
+        <item name="android:textSize">24sp</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textColor">@color/text3</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:fontFamily">@font/lato_black</item>
     </style>
 
     <style name="ActionButtonText" parent="@android:style/TextAppearance">
@@ -73,6 +92,16 @@
         <item name="android:layout_gravity">center</item>
     </style>
 
+    <style name="ExoStyledControls.Button.Center.Download">
+        <item name="android:layout_width">42dp</item>
+        <item name="android:layout_height">42dp</item>
+        <item name="android:src">@drawable/download</item>
+        <item name="android:contentDescription">Back</item>
+        <item name="tint">@android:color/white</item>
+        <item name="android:scaleType">center</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
     <style name="CustomButtonShape" parent="ShapeAppearance.MaterialComponents.SmallComponent">
         <item name="cornerSize">6dp</item>
     </style>
@@ -89,13 +118,46 @@
         <item name="icon">@drawable/play</item>
         <item name="iconTint">@color/text</item>
         <item name="iconGravity">textStart</item>
-        <item name="iconSize">24dp</item>
+        <item name="iconSize">26dp</item>
         <item name="android:text">@string/watch</item>
         <item name="android:textColor">@color/text</item>
         <item name="android:textSize">14.5sp</item>
         <item name="android:includeFontPadding">false</item>
         <item name="android:backgroundTint">@color/main</item>
+        <item name="android:backgroundTintMode">src_in</item>
         <item name="rippleColor">@color/rippleColor1</item>
+    </style>
+
+    <style name="WatchButtonStyle.Outlined" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="icon">@drawable/play</item>
+        <item name="iconTint">@color/text3</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconSize">26dp</item>
+        <item name="android:text">@string/watch</item>
+        <item name="android:textColor">@color/text3</item>
+        <item name="android:textSize">14.5sp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="rippleColor">@color/rippleColor</item>
+        <item name="shapeAppearance">@style/CustomButtonShape</item>
+        <item name="strokeColor">@color/text3</item>
+        <item name="strokeWidth">2dp</item>
+    </style>
+
+    <style name="FavoriteButton" parent="Widget.Material3.Button.OutlinedButton.Icon">
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="icon">@drawable/favorite_outlined</item>
+        <item name="iconTint">@color/icon</item>
+        <item name="iconGravity">textEnd</item>
+        <item name="iconSize">26dp</item>
+        <item name="rippleColor">@color/rippleColor</item>
+        <item name="shapeAppearance">@style/CustomButtonShape</item>
+        <item name="strokeColor">@color/icon</item>
+        <item name="strokeWidth">2dp</item>
     </style>
 
     <style name="OutlinedButton" parent="Widget.Material3.Button.OutlinedButton">

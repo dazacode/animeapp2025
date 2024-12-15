@@ -33,7 +33,7 @@ object HelpMessages {
 
     const val SERVER_ISSUES = """
         <b>4. Check for Server Issues</b><br>
-        - It's possible that the app's servers are temporarily down or undergoing maintenance.<br>
+        - It's possible that the app's SERVERS are temporarily down or undergoing maintenance.<br>
         - You can check social media or the app's official support channels for any service status updates.<br>
     """
 
@@ -42,7 +42,7 @@ object HelpMessages {
         - If you're using an older version of the app, it might have bugs or compatibility issues that could prevent data from loading.<br>
         - <b>How to update:</b><br>
           - <b>iOS:</b> Open the **App Store**, go to **Updates**, and update the app.<br>
-          - <b>Android:</b> Open the **Google Play Store**, search for the app, and tap **Update** if available.<br>
+          - <b>Android:</b> Open the **Google Play Store**, SEARCH for the app, and tap **Update** if available.<br>
     """
 
     const val CONTACT_SUPPORT = """

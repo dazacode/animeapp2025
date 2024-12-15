@@ -19,6 +19,7 @@ import com.kawaidev.kawaime.network.dao.anime.BasicRelease
 import com.kawaidev.kawaime.network.interfaces.AnimeService
 import com.kawaidev.kawaime.ui.activity.MainActivity
 import com.kawaidev.kawaime.ui.adapters.anime.AnimeAdapter
+import com.kawaidev.kawaime.ui.adapters.anime.helpers.AnimeHelper
 import com.kawaidev.kawaime.ui.adapters.anime.helpers.AnimeParams
 import com.kawaidev.kawaime.ui.adapters.helpers.GridRecycler
 import icepick.Icepick
@@ -41,6 +42,7 @@ class CategoryFragment : Fragment() {
     @State private var isAppBarHidden: Boolean = false
     @State private var anime: List<BasicRelease> = emptyList()
     @State private var page: Int = 1
+    @State private var isFetched: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,7 +86,7 @@ class CategoryFragment : Fragment() {
             (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         }
 
-        searchAnime()
+        if (!isFetched) searchAnime(page)
 
         val appBarLayout = view.findViewById<AppBarLayout>(R.id.appBarLayout)
 
@@ -105,8 +107,6 @@ class CategoryFragment : Fragment() {
     }
 
     fun searchAnime(page: Int = 1) {
-        Log.d("Category fragment", "Page: $page")
-
         isLoading = true
         adapter.setLoading()
 
@@ -116,7 +116,7 @@ class CategoryFragment : Fragment() {
             try {
                 val (animeList, hasNextPage) = service.getCategory(category, page)
 
-                adapter.updateData(this@CategoryFragment.anime + animeList)
+                AnimeHelper.updateGridData(adapter, this@CategoryFragment.anime + animeList, recycler)
                 adapter.setNextPage(hasNextPage)
 
                 this@CategoryFragment.hasNextPage = hasNextPage
@@ -128,6 +128,7 @@ class CategoryFragment : Fragment() {
                 adapter.setError()
             } finally {
                 isLoading = false
+                isFetched = true
             }
         }
     }
@@ -159,7 +160,7 @@ class CategoryFragment : Fragment() {
     }
 
     companion object {
-        const val CATEGORY = "category"
+        const val CATEGORY = "CATEGORY"
         const val TITLE = "title"
     }
 }

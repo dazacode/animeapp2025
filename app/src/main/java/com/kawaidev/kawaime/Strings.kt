@@ -46,4 +46,6 @@ object Strings {
     )
 
     const val PADDING = 8f
+    const val PADDING_BETWEEN = 8f
+    const val SPOTLIGHT_SWITCH: Long = 7000
 }
