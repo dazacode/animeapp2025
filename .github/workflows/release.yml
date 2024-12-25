@@ -52,8 +52,9 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           skip-version-file: false
-          debug: true
           skip-on-empty: false
+          version-file: ./package.json
+          version-path: version
 
       - name: Debug changelog output
         run: |
