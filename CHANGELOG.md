@@ -1,3 +1,12 @@
+# [0.5.0](https://github.com/daffineq/Kawaime/compare/v0.4.0...v0.5.0) (2024-12-25)
+
+
+### Features
+
+* update release.yml, path adjusted [#2](https://github.com/daffineq/Kawaime/issues/2) ([01e16c0](https://github.com/daffineq/Kawaime/commit/01e16c0cc271f5246afd1a69a4401f8c640591bf))
+
+
+
 # [0.4.0](https://github.com/daffineq/Kawaime/compare/v0.3.0...v0.4.0) (2024-12-25)
 
 
@@ -26,15 +35,6 @@
 
 
 ## [0.1.1](https://github.com/daffineq/Kawaime/compare/v0.1.0...v0.1.1) (2024-12-25)
-
-
-
-# [0.1.0](https://github.com/daffineq/Kawaime/compare/d491cdc91f14639cb35bccc4c2c61cad2f44473c...v0.1.0) (2024-12-25)
-
-
-### Features
-
-* filter added ([d491cdc](https://github.com/daffineq/Kawaime/commit/d491cdc91f14639cb35bccc4c2c61cad2f44473c))
 
 
 
