@@ -105,7 +105,9 @@ class BottomSheets(private val activity: MainActivity) {
             TitleItem(activity.getString(R.string.orig_title), release.anime?.moreInfo?.japanese),
             TitleItem(
                 activity.getString(R.string.other_titles),
-                release.anime?.moreInfo?.synonyms?.split(", ")?.joinToString("\n")
+                release.anime?.moreInfo?.synonyms
+                    ?.split(Regex(", (?=[A-Z0-9])"))
+                    ?.joinToString("\n")
             )
         ).filterNot { it.content.isNullOrEmpty() }
 

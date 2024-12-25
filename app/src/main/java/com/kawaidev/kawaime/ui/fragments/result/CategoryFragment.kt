@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -76,6 +77,9 @@ class CategoryFragment : Fragment() {
             (activity as? MainActivity)?.popFragment()
         }
 
+        val edit: Button = view.findViewById(R.id.edit_button)
+        edit.visibility = View.GONE
+
         recycler.apply {
             post {
                 GridRecycler.setup(requireContext(), this@CategoryFragment.adapter, recycler, anime)
@@ -146,8 +150,6 @@ class CategoryFragment : Fragment() {
                 if (totalItemCount <= lastVisibleItem + 5) {
                     searchAnime(page = page + 1)
                 }
-            } else {
-                Log.d("Category fragment", "Couldnt load next page, Loading: $isLoading, HasNextPage: $hasNextPage")
             }
         }
     }

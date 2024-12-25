@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.bumptech.glide.Glide
 import com.kawaidev.kawaime.App
 import com.kawaidev.kawaime.Prefs
 import com.kawaidev.kawaime.R
@@ -22,6 +23,7 @@ import com.kawaidev.kawaime.ui.fragments.details.helpers.DetailsHelper
 import com.kawaidev.kawaime.ui.listeners.FavoriteListener
 import com.kawaidev.kawaime.ui.models.details.DetailsViewModel
 import com.kawaidev.kawaime.utils.LoadImage
+import com.stfalcon.imageviewer.StfalconImageViewer
 import icepick.Icepick
 import icepick.State
 

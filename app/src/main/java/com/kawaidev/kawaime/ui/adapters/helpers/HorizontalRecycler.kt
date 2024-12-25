@@ -37,18 +37,12 @@ object HorizontalRecycler {
     }
 
     fun addDecoration(recycler: RecyclerView) {
-        recycler.post {
-            recycler.apply {
-                while (itemDecorationCount > 0) {
-                    removeItemDecorationAt(0)
-                }
-
-                addItemDecoration(LinearDecoration(
-                    horizontal = Converts.dpToPx(Strings.PADDING_BETWEEN, recycler.context).toInt(),
-                    vertical = Converts.dpToPx(Strings.PADDING_BETWEEN, recycler.context).toInt(),
-                    edges = Converts.dpToPx(Strings.PADDING, recycler.context).toInt(),
-                ))
-            }
+        if (recycler.itemDecorationCount == 0) {
+            recycler.addItemDecoration(LinearDecoration(
+                horizontal = Converts.dpToPx(Strings.PADDING_BETWEEN, recycler.context).toInt(),
+                vertical = Converts.dpToPx(Strings.PADDING_BETWEEN, recycler.context).toInt(),
+                edges = Converts.dpToPx(Strings.PADDING, recycler.context).toInt(),
+            ))
         }
     }
 }

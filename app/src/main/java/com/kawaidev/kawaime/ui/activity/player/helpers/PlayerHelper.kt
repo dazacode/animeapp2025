@@ -38,6 +38,7 @@ import androidx.media3.ui.PlayerView
 import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.network.dao.streaming.Streaming
 import com.kawaidev.kawaime.ui.activity.player.PlayerActivity
+import com.kawaidev.kawaime.utils.Converts
 import kotlinx.coroutines.launch
 import kotlin.math.max
 
@@ -109,28 +110,16 @@ object PlayerHelper {
             }
         })
 
-        ViewCompat.setOnApplyWindowInsetsListener(activity.playerView.findViewById<FrameLayout>(androidx.media3.ui.R.id.exo_bottom_bar)) { v, windowInsets ->
+        ViewCompat.setOnApplyWindowInsetsListener(activity.playerView) { v, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            val horizontalMargin = max(insets.left, insets.right)
+            val horizontalPadding = max(insets.left, insets.right)
+            val verticalPadding = insets.top
+            val padding = Converts.dpToPx(8f, activity).toInt()
 
-            v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                leftMargin = horizontalMargin
-                rightMargin = horizontalMargin
-                bottomMargin = insets.bottom
-            }
+            v.setPadding(horizontalPadding, 0, horizontalPadding, insets.bottom)
 
-            WindowInsetsCompat.CONSUMED
-        }
-
-        ViewCompat.setOnApplyWindowInsetsListener(activity.playerView.findViewById<RelativeLayout>(R.id.top_appbar)) { v, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            val horizontalMargin = max(insets.left, insets.right)
-
-            v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                leftMargin = horizontalMargin
-                rightMargin = horizontalMargin
-                topMargin = insets.top
-            }
+            activity.playerView.findViewById<RelativeLayout>(R.id.top_appbar)
+                .setPaddingRelative(padding, verticalPadding, padding, verticalPadding)
 
             WindowInsetsCompat.CONSUMED
         }

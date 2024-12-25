@@ -31,9 +31,7 @@
 
                     <ImageButton
                         android:id="@+id/back_button"
-                        android:layout_width="48dp"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/ripple_background"
+                        style="@style/AppBarButton"
                         android:clickable="true"
                         android:focusable="true"
                         android:src="@drawable/arrow_back"

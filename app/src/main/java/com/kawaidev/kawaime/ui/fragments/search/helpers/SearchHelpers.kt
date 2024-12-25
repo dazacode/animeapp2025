@@ -21,7 +21,9 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.textfield.TextInputEditText
 import com.kawaidev.kawaime.R
+import com.kawaidev.kawaime.ui.activity.MainActivity
 import com.kawaidev.kawaime.ui.adapters.helpers.GridRecycler
+import com.kawaidev.kawaime.ui.fragments.filter.FilterFragment
 import com.kawaidev.kawaime.ui.fragments.search.SearchFragment
 import java.util.Locale
 
@@ -49,41 +51,26 @@ object SearchHelpers {
         }
 
         textField.post {
-            textField.addTextChangedListener(textWatcher(searchFragment, textField.text.toString()))
-            updateVisibility(
-                textField.text.isNullOrEmpty(),
-                searchFragment
-            )
+            textField.addTextChangedListener(textWatcher(searchFragment))
+
+            updateVisibility(textField.text.isNullOrEmpty(), searchFragment)
+            searchFragment.handleInitSearch()
         }
 
-        searchFragment.micButton.setOnClickListener {
-            hideSoftKeyboard(view)
-            startVoiceSearch(searchFragment.result)
+        tuneButton.setOnClickListener {
+            val filterFragment = FilterFragment()
+            (searchFragment.requireActivity() as MainActivity).pushFragment(filterFragment)
         }
-
-        searchFragment.clearButton.setOnClickListener {
-            searchFragment.clearText()
-            updateVisibility(true, searchFragment)
-        }
-
-        tuneButton.setOnClickListener {}
     }
 
-    private fun textWatcher(searchFragment: SearchFragment, text: String) = object : TextWatcher {
+    private fun textWatcher(searchFragment: SearchFragment) = object : TextWatcher {
         private val handler = Handler(Looper.getMainLooper())
         private var searchRunnable: Runnable? = null
-        private var previousText: String? = text
 
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            if (s.toString() == previousText) return
-
-            previousText = s.toString()
-
             val isEmpty = s.isNullOrEmpty()
-
-            Log.d("Search", "Text changed")
 
             updateVisibility(isEmpty, searchFragment)
 
@@ -99,16 +86,26 @@ object SearchHelpers {
         override fun afterTextChanged(s: Editable?) {}
     }
 
-    private fun updateVisibility(isEmpty: Boolean, searchFragment: SearchFragment) {
+    fun updateVisibility(isEmpty: Boolean, searchFragment: SearchFragment) {
+        updateVisibilityBut(isEmpty, searchFragment)
+        updateVisibilityRec(isEmpty, searchFragment)
+    }
+
+    fun updateVisibilityBut(isEmpty: Boolean, searchFragment: SearchFragment) {
         with(searchFragment) {
             clearButton.visibility = if (isEmpty) View.GONE else View.VISIBLE
             micButton.visibility = if (isEmpty) View.VISIBLE else View.GONE
+        }
+    }
+
+    fun updateVisibilityRec(isEmpty: Boolean, searchFragment: SearchFragment) {
+        with(searchFragment) {
             searchRecycler.visibility = if (isEmpty) View.GONE else View.VISIBLE
             historyRecycler.visibility = if (isEmpty) View.VISIBLE else View.GONE
         }
     }
 
-    private fun startVoiceSearch(result: ActivityResultLauncher<Intent>) {
+    fun startVoiceSearch(result: ActivityResultLauncher<Intent>) {
         try {
             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
                 putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
@@ -149,19 +146,6 @@ object SearchHelpers {
     fun hideSoftKeyboard(view: View) {
         (view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?)
             ?.hideSoftInputFromWindow(view.windowToken, 0)
-    }
-
-    fun handleInitSearch(view: View, searchFragment: SearchFragment) {
-        val textField: TextInputEditText = view.findViewById(R.id.textField)
-        val init = searchFragment.initSearch
-
-        if (init.isNullOrEmpty().not()) {
-            textField.setText(init)
-            searchFragment.searchViewModel.searchAnime(init!!)
-            updateVisibility(false, searchFragment)
-        } else textField.requestFocus()
-
-        updateVisibility(searchFragment.initSearch.isNullOrEmpty(), searchFragment)
     }
 
     private fun scrollListener(searchFragment: SearchFragment) = object : RecyclerView.OnScrollListener() {

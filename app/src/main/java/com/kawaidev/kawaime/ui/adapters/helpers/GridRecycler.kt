@@ -54,18 +54,14 @@ object GridRecycler {
     private fun addDecoration(recycler: RecyclerView) {
         val space = Converts.dpToPx(6f, recycler.context).toInt()
 
-        recycler.post {
-            recycler.apply {
-                while (itemDecorationCount > 0) {
-                    removeItemDecorationAt(0)
-                }
-
-                addItemDecoration(GridDecoration(
+        if (recycler.itemDecorationCount == 0) {
+            recycler.addItemDecoration(
+                GridDecoration(
                     horizontal = space,
                     vertical = space,
                     edges = space
-                ))
-            }
+                )
+            )
         }
     }
 }

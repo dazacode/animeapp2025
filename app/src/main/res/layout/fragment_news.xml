@@ -28,13 +28,11 @@
 
                 <ImageView
                     android:id="@+id/back_button"
-                    android:layout_width="48dp"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/ripple_background"
+                    style="@style/AppBarButton"
                     android:clickable="true"
                     android:focusable="true"
                     android:padding="12dp"
-                    android:layout_marginEnd="18dp"
+                    android:layout_marginEnd="16dp"
                     android:src="@drawable/arrow_back"
                     app:tint="@color/text3"
                     tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />

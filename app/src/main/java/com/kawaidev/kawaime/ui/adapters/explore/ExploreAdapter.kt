@@ -5,23 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.FrameLayout
-import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.grzegorzojdana.spacingitemdecoration.Spacing
+import com.grzegorzojdana.spacingitemdecoration.SpacingItemDecoration
 import com.kawaidev.kawaime.R
-import com.kawaidev.kawaime.network.dao.api_utils.SearchParams
 import com.kawaidev.kawaime.network.dao.news.News
 import com.kawaidev.kawaime.ui.activity.MainActivity
+import com.kawaidev.kawaime.ui.adapters.explore.helpers.ActionItem
 import com.kawaidev.kawaime.ui.adapters.explore.helpers.ExploreViewType
 import com.kawaidev.kawaime.ui.adapters.helpers.VerticalNewsRecycler
-import com.kawaidev.kawaime.ui.fragments.details.DetailsFragment
 import com.kawaidev.kawaime.ui.fragments.explore.ExploreFragment
 import com.kawaidev.kawaime.ui.fragments.explore.schedule.ScheduleFragment
+import com.kawaidev.kawaime.ui.fragments.filter.FilterFragment
 import com.kawaidev.kawaime.ui.fragments.result.CategoryFragment
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
+import com.kawaidev.kawaime.utils.Converts
 
 class ExploreAdapter(
     private val fragment: ExploreFragment,
@@ -77,43 +76,77 @@ class ExploreAdapter(
     }
 
     inner class ActionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val popularButton: LinearLayout = itemView.findViewById(R.id.popularButtonClickable)
-        private val scheduleButton: LinearLayout = itemView.findViewById(R.id.scheduleButtonClickable)
-        private val collectionsButton: LinearLayout = itemView.findViewById(R.id.collectionsButtonClickable)
-        private val filterButton: LinearLayout = itemView.findViewById(R.id.filterButtonClickable)
-        private val recentButton: LinearLayout = itemView.findViewById(R.id.recentButtonClickable)
-
         fun bind() {
-            popularButton.setOnClickListener {
-                val bundle = Bundle().apply {
-                    putString("CATEGORY", "top-airing")
-                    putString("title", "Popular")
+            val actions = listOf(
+                ActionItem(
+                    label = "Popular",
+                    iconResId = R.drawable.fire,
+                    backgroundColorResId = R.color.buttonColor1,
+                    tintColorResId = R.color.iconColorButton1
+                ) {
+                    val bundle = Bundle().apply {
+                        putString("CATEGORY", "top-airing")
+                        putString("title", "Popular")
+                    }
+                    val categoryFragment = CategoryFragment().apply { arguments = bundle }
+                    (fragment.requireActivity() as MainActivity).pushFragment(categoryFragment)
+                },
+                ActionItem(
+                    label = "Schedule",
+                    iconResId = R.drawable.event_note,
+                    backgroundColorResId = R.color.buttonColor2,
+                    tintColorResId = R.color.iconColorButton2
+                ) {
+                    val scheduleFragment = ScheduleFragment()
+                    (fragment.requireActivity() as MainActivity).pushFragment(scheduleFragment)
+                },
+                ActionItem(
+                    label = "Collections",
+                    iconResId = R.drawable.view_day,
+                    backgroundColorResId = R.color.buttonColor3,
+                    tintColorResId = R.color.iconColorButton3
+                ) {
+
+                },
+                ActionItem(
+                    label = "Filter",
+                    iconResId = R.drawable.tune,
+                    backgroundColorResId = R.color.buttonColor4,
+                    tintColorResId = R.color.iconColorButton4
+                ) {
+                    val filterFragment = FilterFragment()
+                    (fragment.requireActivity() as MainActivity).pushFragment(filterFragment)
+                },
+                ActionItem(
+                    label = "Recently Updated",
+                    iconResId = R.drawable.update,
+                    backgroundColorResId = R.color.buttonColor5,
+                    tintColorResId = R.color.iconColorButton5
+                ) {
+                    val bundle = Bundle().apply {
+                        putString("CATEGORY", "recently-updated")
+                        putString("title", "Recently updated")
+                    }
+                    val categoryFragment = CategoryFragment().apply { arguments = bundle }
+                    (fragment.requireActivity() as MainActivity).pushFragment(categoryFragment)
                 }
+            )
 
-                val categoryFragment = CategoryFragment().apply {
-                    arguments = bundle
+            val recycler: RecyclerView = itemView.findViewById(R.id.recyclerView)
+            recycler.layoutManager = GridLayoutManager(itemView.context, 2)
+            recycler.adapter = ActionAdapter(actions)
+
+            recycler.apply {
+                if (itemDecorationCount == 0) {
+                    addItemDecoration(
+                        SpacingItemDecoration(
+                            Spacing(
+                                horizontal = Converts.dpToPx(8f, itemView.context).toInt(),
+                                vertical = Converts.dpToPx(8f, itemView.context).toInt()
+                            )
+                        )
+                    )
                 }
-
-                (fragment.requireActivity() as MainActivity).pushFragment(categoryFragment)
-            }
-
-            recentButton.setOnClickListener {
-                val bundle = Bundle().apply {
-                    putString("CATEGORY", "recently-updated")
-                    putString("title", "Recently updated")
-                }
-
-                val categoryFragment = CategoryFragment().apply {
-                    arguments = bundle
-                }
-
-                (fragment.requireActivity() as MainActivity).pushFragment(categoryFragment)
-            }
-
-            scheduleButton.setOnClickListener {
-                val scheduleFragment = ScheduleFragment()
-
-                (fragment.requireActivity() as MainActivity).pushFragment(scheduleFragment)
             }
         }
     }

@@ -35,6 +35,8 @@ class AnimeServiceImpl(
     override suspend fun getAnime(id: String): Release = withContext(Dispatchers.IO) {
         val url = "${routes.INFO}$id"
 
+        println(url)
+
         val request = Request.Builder().url(url).build()
         val response: Response = client.newCall(request).execute()
 

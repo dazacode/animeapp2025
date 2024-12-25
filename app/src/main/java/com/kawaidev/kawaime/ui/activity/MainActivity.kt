@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
+import android.net.Uri
 import android.os.Bundle
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
@@ -21,6 +22,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.ui.bottomSheets.BottomSheets
 import com.kawaidev.kawaime.ui.dialogs.Dialogs
+import com.kawaidev.kawaime.ui.fragments.details.DetailsFragment
 import com.kawaidev.kawaime.ui.fragments.favorite.FavoriteFragment
 import com.kawaidev.kawaime.ui.fragments.explore.ExploreFragment
 import com.kawaidev.kawaime.ui.fragments.home.HomeFragment
@@ -94,6 +96,30 @@ class MainActivity : AppCompatActivity(), FragNavController.TransactionListener,
                 bottomFrame.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
         })
+
+        handleDeepLink(intent)
+    }
+
+    private fun handleDeepLink(intent: Intent?) {
+        val data: Uri? = intent?.data
+        if (data != null) {
+            val id = data.lastPathSegment
+            if (id != null) {
+                navigateToDetailsFragment(id)
+            }
+        }
+    }
+
+    private fun navigateToDetailsFragment(id: String) {
+        val bundle = Bundle().apply {
+            putString("id", id)
+        }
+
+        val detailsFragment = DetailsFragment().apply {
+            arguments = bundle
+        }
+
+        pushFragment(detailsFragment)
     }
 
     fun pushFragment(fragment: Fragment) {

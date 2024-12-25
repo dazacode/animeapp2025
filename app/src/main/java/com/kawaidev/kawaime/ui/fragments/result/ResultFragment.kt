@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +21,7 @@ import com.kawaidev.kawaime.network.dao.api_utils.SearchParams
 import com.kawaidev.kawaime.network.interfaces.AnimeService
 import com.kawaidev.kawaime.ui.activity.MainActivity
 import com.kawaidev.kawaime.ui.adapters.anime.AnimeAdapter
+import com.kawaidev.kawaime.ui.adapters.anime.helpers.AnimeHelper
 import com.kawaidev.kawaime.ui.adapters.anime.helpers.AnimeParams
 import com.kawaidev.kawaime.ui.adapters.helpers.GridRecycler
 import icepick.Icepick
@@ -40,6 +43,7 @@ class ResultFragment : Fragment() {
     @State private var isAppBarHidden: Boolean = false
     @State private var anime: List<BasicRelease> = emptyList()
     @State private var page: Int = 1
+    @State private var isFetched: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,6 +74,12 @@ class ResultFragment : Fragment() {
             (activity as? MainActivity)?.popFragment()
         }
 
+        val edit: Button = view.findViewById(R.id.edit_button)
+
+        edit.setOnClickListener {
+            (activity as? MainActivity)?.popFragment()
+        }
+
         recycler.apply {
             post {
                 GridRecycler.setup(requireContext(), this@ResultFragment.adapter, recycler, anime)
@@ -80,7 +90,7 @@ class ResultFragment : Fragment() {
             (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         }
 
-        searchAnime(searchParams)
+        if (!isFetched) searchAnime(searchParams, page)
 
         val appBarLayout = view.findViewById<AppBarLayout>(R.id.appBarLayout)
 
@@ -104,24 +114,25 @@ class ResultFragment : Fragment() {
         isLoading = true
         adapter.setLoading()
 
-        searchParams.page = page
-
         this@ResultFragment.page = page
+
+        searchParams.page = page
 
         viewLifecycleOwner.lifecycleScope.launch {
             try {
                 val (animeList, hasNextPage) = service.searchAnime(searchParams)
 
-                adapter.updateData(animeList)
+                AnimeHelper.updateGridData(adapter, this@ResultFragment.anime + animeList, recycler)
                 adapter.setNextPage(hasNextPage)
 
-                this@ResultFragment.anime = animeList
+                this@ResultFragment.hasNextPage = hasNextPage
 
+                this@ResultFragment.anime += animeList
             } catch (e: Exception) {
                 adapter.setError()
-                error = e
             } finally {
                 isLoading = false
+                isFetched = true
             }
         }
     }
@@ -135,7 +146,7 @@ class ResultFragment : Fragment() {
                 is StaggeredGridLayoutManager -> layoutManager.findLastVisibleItemPositions(null).maxOrNull() ?: 0
                 else -> 0
             }
-            if (!isLoading && hasNextPage && error == null) {
+            if (!isLoading && hasNextPage) {
                 if (totalItemCount <= lastVisibleItem + 5) {
                     searchAnime(searchParams, page = page + 1)
                 }
@@ -148,13 +159,6 @@ class ResultFragment : Fragment() {
             val isCollapsed = Math.abs(verticalOffset) == appBarLayout.totalScrollRange
             isAppBarHidden = isCollapsed
         })
-    }
-
-    private fun calculateSpanCount(context: Context): Int {
-        val displayMetrics = context.resources.displayMetrics
-        val screenWidth = displayMetrics.widthPixels
-        val itemWidth = context.resources.getDimensionPixelSize(R.dimen.anime_item_width)
-        return maxOf(1, screenWidth / itemWidth)
     }
 
     companion object {

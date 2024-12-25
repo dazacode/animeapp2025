@@ -1,5 +1,8 @@
 package com.kawaidev.kawaime.network.dao.api_utils
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class SearchParams(
     val q: String = "",           // The SEARCH query (title of the item)
     var page: Int = 1,            // The page number of the result, default is 1

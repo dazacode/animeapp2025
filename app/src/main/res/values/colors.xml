@@ -100,4 +100,11 @@
     <color name="buttonColor3">#f3e5f6</color>
     <color name="buttonColor4">#e0f2f2</color>
     <color name="buttonColor5">#e8f6e9</color>
+
+    <color name="strokeColor">#b6b6b6</color>
+
+    <color name="uncheckedColor">#1a1c1b</color>
+    <color name="uncheckedColor1">#a0a2a1</color>
+
+    <color name="hint">#b6b6b6</color>
 </resources>

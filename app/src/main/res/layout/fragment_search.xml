@@ -35,11 +35,8 @@
 
                 <ImageButton
                     android:id="@+id/back_button"
-                    android:layout_width="48dp"
-                    android:layout_height="56dp"
+                    style="@style/AppBarButton"
                     android:layout_gravity="center"
-                    android:visibility="visible"
-                    android:background="@drawable/ripple_background"
                     android:src="@drawable/arrow_back"
                     app:tint="@color/icon"
                     tools:ignore="TouchTargetSizeCheck" />
@@ -48,7 +45,7 @@
                     android:id="@+id/textField"
                     android:layout_width="0dp"
                     android:layout_height="56dp"
-                    android:layout_marginHorizontal="18dp"
+                    android:layout_marginHorizontal="16dp"
                     android:layout_weight="1"
                     android:hint="@string/search_anime"
                     android:singleLine="true"
@@ -64,10 +61,8 @@
                     android:layout_height="wrap_content">
                     <ImageButton
                         android:id="@+id/mic_button"
-                        android:layout_width="48dp"
-                        android:layout_height="56dp"
+                        style="@style/AppBarButton"
                         android:layout_gravity="center"
-                        android:background="@drawable/ripple_background"
                         android:src="@drawable/voice"
                         app:tint="@color/icon"
                         tools:ignore="TouchTargetSizeCheck" />
@@ -86,10 +81,8 @@
 
                 <ImageButton
                     android:id="@+id/tune_button"
-                    android:layout_width="48dp"
-                    android:layout_height="56dp"
+                    style="@style/AppBarButton"
                     android:layout_gravity="center"
-                    android:background="@drawable/ripple_background"
                     android:src="@drawable/tune"
                     app:tint="@color/icon" />
             </LinearLayout>

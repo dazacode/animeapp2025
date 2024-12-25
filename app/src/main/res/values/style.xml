@@ -90,6 +90,8 @@
         <item name="tint">@android:color/white</item>
         <item name="android:scaleType">center</item>
         <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginLeft">0dp</item>
+        <item name="android:layout_marginRight">0dp</item>
     </style>
 
     <style name="ExoStyledControls.Button.Center.Download">
@@ -100,6 +102,8 @@
         <item name="tint">@android:color/white</item>
         <item name="android:scaleType">center</item>
         <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginLeft">0dp</item>
+        <item name="android:layout_marginRight">0dp</item>
     </style>
 
     <style name="CustomButtonShape" parent="ShapeAppearance.MaterialComponents.SmallComponent">
@@ -252,5 +256,40 @@
         <item name="android:textAllCaps">false</item>
         <item name="fontFamily">@font/inter_semibold</item>
         <item name="android:letterSpacing">0.00</item>
+    </style>
+
+    <style name="CustomTextInputStyle" parent="Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
+        <item name="boxStrokeColor">@color/stroke_color</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxStrokeWidthFocused">2dp</item>
+        <item name="endIconTint">@color/stroke_color</item>
+        <item name="hintTextColor">@color/main</item>
+        <item name="android:textColorHint">@color/hint</item>
+        <item name="helperTextTextColor">@color/text2</item>
+        <item name="boxBackgroundMode">outline</item>
+    </style>
+
+    <style name="NoRippleListItem">
+        <item name="android:background">@null</item>
+        <item name="android:selectableItemBackground">@null</item>
+        <item name="android:selectableItemBackgroundBorderless">@null</item>
+        <item name="colorControlHighlight">@null</item>
+    </style>
+
+    <style name="HintAppearance">
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="HelperAppearance">
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_marginStart">0dp</item>
+        <item name="android:paddingStart">0dp</item>
+        <item name="android:gravity">start</item>
+    </style>
+
+    <style name="AppBarButton">
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:background">@drawable/ripple_background</item>
     </style>
 </resources>

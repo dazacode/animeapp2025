@@ -1,6 +1,8 @@
 package com.kawaidev.kawaime.ui.adapters.details.helpers
 
 import android.animation.ValueAnimator
+import android.content.Context
+import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.text.Spannable
@@ -11,21 +13,27 @@ import android.text.style.ClickableSpan
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.OptIn
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
-import androidx.media3.common.util.Log
 import androidx.media3.common.util.UnstableApi
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
+import com.grzegorzojdana.spacingitemdecoration.Spacing
+import com.grzegorzojdana.spacingitemdecoration.SpacingItemDecoration
 import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.network.dao.anime.Release
 import com.kawaidev.kawaime.ui.activity.MainActivity
+import com.kawaidev.kawaime.ui.adapters.decoration.LinearDecoration
+import com.kawaidev.kawaime.ui.adapters.details.CardAdapter
+import com.kawaidev.kawaime.ui.adapters.details.TextAdapter
 import com.kawaidev.kawaime.ui.custom.VerticalGradientImage
 import com.kawaidev.kawaime.ui.fragments.details.DetailsFragment
 import com.kawaidev.kawaime.ui.fragments.search.SearchFragment
 import com.kawaidev.kawaime.ui.fragments.streaming.episodes.EpisodesFragment
+import com.kawaidev.kawaime.utils.Converts
 import com.kawaidev.kawaime.utils.LoadImage
 import java.util.Locale
 
@@ -35,9 +43,9 @@ object DetailsHelper {
         setupImage(itemView, release)
         setupTitle(fragment, itemView, release)
         setupInfoTextViews(itemView, release)
-        setupRatingCard(itemView, release)
         setupGenres(fragment, itemView, release)
         setupWatchButton(fragment, itemView, release)
+        setupShareButton(itemView, release)
         setupFavoriteButton(fragment, itemView, release)
     }
 
@@ -59,29 +67,57 @@ object DetailsHelper {
     }
 
     private fun setupInfoTextViews(itemView: View, release: Release) {
-        itemView.findViewById<TextView>(R.id.type).text = release.anime?.info?.stats?.type
-        itemView.findViewById<TextView>(R.id.rating).text = release.anime?.info?.stats?.rating
-        itemView.findViewById<TextView>(R.id.season).text = release.anime?.moreInfo?.premiered
-        itemView.findViewById<TextView>(R.id.status).text = release.anime?.moreInfo?.status
+        val cardRecycler = itemView.findViewById<RecyclerView>(R.id.cardsRecycler)
+        val detailsRecycler = itemView.findViewById<RecyclerView>(R.id.detailsRecycler)
 
-        val durationTextView = itemView.findViewById<TextView>(R.id.duration)
-        durationTextView.text = release.anime?.moreInfo?.duration
-        if (release.anime?.moreInfo?.duration == "?m") durationTextView.visibility = View.GONE
-
-        val score = release.shikimori?.score ?: release.anime?.moreInfo?.malscore
-        itemView.findViewById<TextView>(R.id.score).apply {
-            text = score.toString()
-            if (release.anime?.moreInfo?.malscore == "?" && release.shikimori?.score == null) {
-                itemView.findViewById<LinearLayout>(R.id.scoreLayout).visibility = View.GONE
-            }
-        }
-    }
-
-    private fun setupRatingCard(itemView: View, release: Release) {
-        val rating = release.anime?.info?.stats?.rating
         val adultRatings = listOf("R", "R+", "Rx", "18+")
-        val ratingCard = itemView.findViewById<CardView>(R.id.ratingCard)
-        ratingCard.visibility = if (rating in adultRatings) View.VISIBLE else View.GONE
+        val cardItems = mutableListOf<CardItem>()
+
+        release.anime?.info?.stats?.type?.let {
+            cardItems.add(CardItem(it, R.color.statusCard, R.color.text))
+        }
+
+        if (release.anime?.info?.stats?.rating in adultRatings)
+            cardItems.add(CardItem("18+", R.color.red, R.color.white))
+
+        release.anime?.info?.stats?.rating?.let {
+            cardItems.add(CardItem(it, R.color.statusCard, R.color.text))
+        }
+
+        cardRecycler.layoutManager = LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
+        cardRecycler.adapter = CardAdapter(cardItems)
+
+        val textItems = listOf(
+            TextItem(release.anime?.moreInfo?.premiered),
+            TextItem(release.anime?.moreInfo?.status),
+            TextItem(release.anime?.info?.stats?.duration),
+            TextItem(
+                (release.shikimori?.score ?: release.anime?.moreInfo?.malscore).toString(),
+                R.drawable.star,
+                Converts.dpToPx(13f, itemView.context).toInt()
+            )
+        ).filter { (it.text == null || it.text == "?m" || it.text == "?").not() }
+
+        detailsRecycler.layoutManager = LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
+        detailsRecycler.adapter = TextAdapter(textItems)
+
+        val padding = Converts.dpToPx(8f, itemView.context).toInt()
+
+        detailsRecycler.apply {
+            while (itemDecorationCount > 0) {
+                removeItemDecorationAt(0)
+            }
+
+            addItemDecoration(LinearDecoration(horizontal = padding))
+        }
+
+        cardRecycler.apply {
+            while (itemDecorationCount > 0) {
+                removeItemDecorationAt(0)
+            }
+
+            addItemDecoration(LinearDecoration(horizontal = padding))
+        }
     }
 
     private fun setupGenres(fragment: DetailsFragment, itemView: View, release: Release) {
@@ -150,6 +186,24 @@ object DetailsHelper {
             }
         }
     }
+
+    private fun setupShareButton(itemView: View, release: Release) {
+        val shareButton = itemView.findViewById<ImageButton>(R.id.shareButton)
+
+        shareButton.setOnClickListener {
+            share(itemView.context, "https://www.kawaime.com/details/${release.anime?.info?.id}")
+        }
+    }
+
+    fun share(context: Context, link: String) {
+        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, link)
+        }
+
+        context.startActivity(Intent.createChooser(shareIntent, "Share Link via"))
+    }
+
 
     private fun setupFavoriteButton(fragment: DetailsFragment, itemView: View, release: Release) {
         val animeId = release.anime?.info?.id ?: ""

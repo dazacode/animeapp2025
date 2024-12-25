@@ -16,6 +16,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_scrollFlags="scroll|snap|enterAlways"
+            android:paddingStart="4dp"
+            android:paddingEnd="16dp"
             app:contentScrim="@color/background">
 
             <androidx.appcompat.widget.Toolbar
@@ -23,18 +25,15 @@
                 android:layout_height="56dp"
                 app:layout_collapseMode="pin" />
 
-            <!-- Container for the ImageView and TextInputEditText -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingHorizontal="4dp"
-                android:background="@color/background"> <!-- Added PADDING for better spacing -->
+                android:background="@color/background">
 
                 <ImageButton
                     android:id="@+id/back_button"
-                    android:layout_width="48dp"
-                    android:layout_height="56dp"
+                    style="@style/AppBarButton"
                     android:layout_gravity="center"
                     android:visibility="visible"
                     android:background="@drawable/icon_ripple"
@@ -47,11 +46,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginHorizontal="18dp"
-                    android:text="Results for filter"
+                    android:layout_marginHorizontal="16dp"
+                    android:text="Filter"
                     android:textColor="@color/text3"
                     style="@style/HeaderText"/>
             </LinearLayout>
+
+            <Button
+                android:id="@+id/edit_button"
+                style="@style/OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="46dp"
+                android:text="@string/edit"
+                android:layout_gravity="center|end"/>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 

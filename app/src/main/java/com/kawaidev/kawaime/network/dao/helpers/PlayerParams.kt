@@ -1,7 +1,9 @@
 package com.kawaidev.kawaime.network.dao.helpers
 
 import com.kawaidev.kawaime.network.dao.streaming.Episodes
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class PlayerParams(
     var animeEpisodeId: String = "",
     var episode: String = "",

@@ -1,18 +1,18 @@
 package com.kawaidev.kawaime.ui.dialogs
 
-import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.InsetDrawable
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
-import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
-import com.google.android.material.card.MaterialCardView
+import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.kawaidev.kawaime.R
+import com.kawaidev.kawaime.Strings
 import com.kawaidev.kawaime.ui.activity.MainActivity
 
 class Dialogs(private val activity: MainActivity) {
@@ -96,5 +96,58 @@ class Dialogs(private val activity: MainActivity) {
             onSelected(selectedQuality)
         }
         dialog.show(activity.supportFragmentManager, "QualityDialog")
+    }
+
+    fun onGenres(view: MaterialAutoCompleteTextView) {
+        val fragmentManager = activity.supportFragmentManager
+        val genresDialog = GenresDialog.newInstance()
+
+        val selectedGenresText = view.text.toString()
+        val selectedGenresArray = selectedGenresText.split(", ").map { it.trim() }
+        val selectedGenresBooleanArray = BooleanArray(Strings.genres.size) { false }
+
+        // Mark the selected genres as true in the array
+        for (i in Strings.genres.indices) {
+            if (selectedGenresArray.contains(Strings.genres[i])) {
+                selectedGenresBooleanArray[i] = true
+            }
+        }
+
+        // Pass the selected genres to the dialog
+        genresDialog.setInitialSelectedGenres(selectedGenresBooleanArray)
+
+        genresDialog.setOnResetListener {
+            view.setText("All")
+        }
+
+        genresDialog.setOnApplyListener { selectedGenres ->
+            val selectedGenresString = selectedGenres.joinToString(", ")
+            view.text = Editable.Factory.getInstance().newEditable(selectedGenresString)
+        }
+
+        genresDialog.show(fragmentManager, "GenresDialog")
+    }
+
+    fun onYear(view: MaterialAutoCompleteTextView) {
+        val fragmentManager = activity.supportFragmentManager
+
+        val yearDialog = YearDialog.newInstance()
+
+        yearDialog.setOnResetListener {
+            view.setText("All")
+        }
+
+        yearDialog.setOnApplyListener {  startDate, endDate ->
+            val yearList = listOf(startDate, endDate)
+
+            view.setText(yearList.joinToString(" - "))
+        }
+
+        if (view.text.toString() != "All") {
+            val yearRange = view.text.toString().split(" - ")
+            yearDialog.setInitialYears(yearRange[0].toInt(), yearRange[1].toInt())
+        }
+
+        yearDialog.show(fragmentManager, "GenresDialog")
     }
 }

@@ -81,4 +81,7 @@
     <string name="spotlight">Spotlight №%1$s</string>
     <string name="top_upcoming">Top Upcoming</string>
     <string name="unavailable">Unavailable</string>
+    <string name="reset">Reset</string>
+    <string name="apply">Apply</string>
+    <string name="edit">Edit</string>
 </resources>

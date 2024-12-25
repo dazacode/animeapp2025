@@ -81,4 +81,11 @@
     <color name="buttonColor3">#252525</color>
     <color name="buttonColor4">#252525</color>
     <color name="buttonColor5">#252525</color>
+
+    <color name="strokeColor">#565656</color>
+
+    <color name="uncheckedColor">#e1dfe0</color>
+    <color name="uncheckedColor1">#727272</color>
+
+    <color name="hint">#949494</color>
 </resources>

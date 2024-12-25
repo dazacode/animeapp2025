@@ -12,4 +12,5 @@
     <dimen name="player_top_padding">32dp</dimen>
     <dimen name="icon_size_small">20dp</dimen>
     <dimen name="icon_size_large">26dp</dimen>
+    <dimen name="bottomPadding">8dp</dimen>
 </resources>

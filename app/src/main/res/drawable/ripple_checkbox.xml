@@ -2,11 +2,13 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="oval">
-            <solid android:color="@color/background"/>
+            <solid android:color="@android:color/transparent"/>
         </shape>
     </item>
 
     <item>
         <ripple android:color="@color/checkbox_ripl_color" android:radius="20dp"/>
     </item>
+
+    <item android:drawable="?android:attr/listChoiceIndicatorMultiple"/>
 </layer-list>

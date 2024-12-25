@@ -38,139 +38,19 @@
             android:layout_gravity="start"
             style="@style/AnimeTitleText"/>
 
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/cardsRecycler"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
-            android:paddingVertical="8dp">
-            <androidx.cardview.widget.CardView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/background"
-                app:cardElevation="0dp"
-                app:cardCornerRadius="4dp"
-                app:cardBackgroundColor="@color/statusCard">
-                <TextView
-                    android:id="@+id/type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="TV"
-                    android:textSize="12sp"
-                    android:paddingHorizontal="6dp"
-                    android:paddingVertical="2dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:textColor="@color/text"/>
-            </androidx.cardview.widget.CardView>
+            android:paddingVertical="8dp"
+            android:clipToPadding="false"/>
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/ratingCard"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/background"
-                android:layout_marginStart="8dp"
-                app:cardElevation="0dp"
-                app:cardCornerRadius="4dp"
-                app:cardBackgroundColor="@color/red">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="18+"
-                    android:textSize="12sp"
-                    android:paddingHorizontal="6dp"
-                    android:paddingVertical="2dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:textColor="@color/white"/>
-            </androidx.cardview.widget.CardView>
-
-            <Space
-                android:layout_width="8dp"
-                android:layout_height="wrap_content"/>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/background"
-                app:cardElevation="0dp"
-                app:cardCornerRadius="4dp"
-                app:cardBackgroundColor="@color/statusCard">
-                <TextView
-                    android:id="@+id/rating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="G"
-                    android:textSize="12sp"
-                    android:paddingHorizontal="6dp"
-                    android:paddingVertical="2dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:textColor="@color/text"/>
-            </androidx.cardview.widget.CardView>
-        </LinearLayout>
-
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/detailsRecycler"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start">
-            <TextView
-                android:id="@+id/season"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Fall 2024"
-                android:textSize="13sp"
-                android:textColor="@color/text4"/>
-
-            <Space
-                android:layout_width="8dp"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:id="@+id/status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Airing"
-                android:textSize="13sp"
-                android:textColor="@color/text4"/>
-
-            <Space
-                android:layout_width="8dp"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:id="@+id/duration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="24m"
-                android:textSize="13sp"
-                android:textColor="@color/text4"/>
-
-            <Space
-                android:layout_width="8dp"
-                android:layout_height="wrap_content"/>
-
-            <LinearLayout
-                android:id="@+id/scoreLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:id="@+id/star"
-                    android:layout_width="13dp"
-                    android:layout_height="13dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/star"
-                    app:tint="@color/text4" />
-
-                <Space
-                    android:layout_width="4dp"
-                    android:layout_height="wrap_content"/>
-
-                <TextView
-                    android:id="@+id/score"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="7.8"
-                    android:textSize="13sp"
-                    android:textColor="@color/text4"/>
-            </LinearLayout>
-        </LinearLayout>
+            android:layout_gravity="start"/>
 
         <Space
             android:layout_width="wrap_content"
@@ -192,6 +72,18 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/shareButton"
+                android:layout_width="46dp"
+                android:layout_height="46dp"
+                android:src="@drawable/share"
+                android:background="@drawable/icon_ripple"
+                app:tint="@color/icon" />
+
+            <Space
+                android:layout_width="8dp"
+                android:layout_height="wrap_content"/>
 
             <Button android:id="@+id/watch_button"
                 app:layout_constraintStart_toEndOf="@id/space"

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/CustomTextInputStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textInputLayout"
+        android:hint="Filter"
+        app:hintTextAppearance="@style/HintAppearance">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/autoCompleteTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="All"
+            android:textColor="@color/text3"
+            android:textSize="16sp"
+            android:inputType="none"
+            app:dropDownBackgroundTint="@color/OnBackground" />
+
+        <TextView
+            android:id="@+id/helperText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="Helper"
+            android:textAppearance="@style/HelperAppearance"
+            android:textColor="@color/text2" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Clickable overlay view -->
+    <View
+        android:id="@+id/clickableOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        android:background="@android:color/transparent" />
+</FrameLayout>

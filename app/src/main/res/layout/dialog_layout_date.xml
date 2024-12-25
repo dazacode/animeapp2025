@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingVertical="16dp"
+        android:background="@drawable/dialog_shape">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <!-- Title TextView -->
+            <TextView
+                android:id="@+id/dialog_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Year filter"
+                android:textColor="@color/text3"
+                android:textSize="18dp"
+                android:paddingHorizontal="20dp"
+                android:letterSpacing="-0.02"
+                android:fontFamily="@font/inter_semibold" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="20dp">
+            <NumberPicker
+                android:id="@+id/startDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+            <Space
+                android:layout_width="16dp"
+                android:layout_height="wrap_content"/>
+
+            <NumberPicker
+                android:id="@+id/endDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp">
+            <Button
+                android:id="@+id/reset_button"
+                style="@style/OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:text="@string/reset"
+                app:layout_constraintEnd_toStartOf="@id/space"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <Button
+                android:id="@+id/apply_button"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                style="@style/FilledButton"
+                android:text="@string/apply"
+                app:layout_constraintStart_toEndOf="@id/space"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

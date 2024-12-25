@@ -23,6 +23,7 @@ import com.kawaidev.kawaime.ui.adapters.SearchHistoryAdapter
 import com.kawaidev.kawaime.ui.adapters.anime.helpers.AnimeHelper
 import com.kawaidev.kawaime.ui.adapters.anime.helpers.AnimeParams
 import com.kawaidev.kawaime.ui.fragments.search.helpers.SearchHelpers
+import com.kawaidev.kawaime.ui.fragments.search.helpers.SearchHelpers.updateVisibility
 import com.kawaidev.kawaime.ui.listeners.SearchListener
 import com.kawaidev.kawaime.ui.models.SearchViewModel
 import icepick.Icepick
@@ -34,82 +35,88 @@ class SearchFragment : Fragment(), SearchListener {
     lateinit var searchRecycler: RecyclerView
     lateinit var historyRecycler: RecyclerView
     lateinit var searchViewModel: SearchViewModel
-
     lateinit var micButton: ImageButton
     lateinit var clearButton: ImageButton
-
     lateinit var animeAdapter: AnimeAdapter
     lateinit var historyAdapter: SearchHistoryAdapter
-
     lateinit var prefs: Prefs
 
-    @State
-    var isLoading = false
+    @State var isLoading = false
     @State private var isEmpty = false
-    @State
-    var hasNextPage = false
-    @State
-    var error: Exception? = null
-    @State private var isAppBarHidden: Boolean = false
-    @State private var isInit: Boolean = false
+    @State var hasNextPage = false
+    @State var error: Exception? = null
+    @State private var isAppBarHidden = false
+    @State private var isInit = false
     @State private var anime: List<BasicRelease> = emptyList()
 
-    var initSearch: String? = null
+    private var initSearch: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Icepick.restoreInstanceState(this, savedInstanceState)
-
         initialize()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.fragment_search, container, false).also {
-        textField = it.findViewById(R.id.textField)
-        historyRecycler = it.findViewById(R.id.historyRecycler)
-        searchRecycler = it.findViewById(R.id.searchRecycler)
+    ): View = inflater.inflate(R.layout.fragment_search, container, false).also { view ->
+        initializeViews(view)
+        setupListeners(view)
+        setupRecyclerViews()
+        observeViewModel()
+    }
 
-        animeAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-
-        micButton = it.findViewById(R.id.mic_button)
-        clearButton = it.findViewById(R.id.clear_button)
-
-        val back: ImageButton = it.findViewById(R.id.back_button)
-
-        back.setOnClickListener {
-            (activity as? MainActivity)?.popFragment()
+    private fun initialize() {
+        initSearch = arguments?.getString(INIT_SEARCH)
+        searchViewModel = SearchViewModel()
+        prefs = App.prefs.apply { setSearchListener(this@SearchFragment) }
+        animeAdapter = AnimeAdapter(AnimeParams(this, anime)) {
+            searchViewModel.refreshSearch(textField.text.toString())
         }
+        historyAdapter = SearchHistoryAdapter(this, prefs.getRecentSearches())
+    }
 
-        val appBarLayout = it.findViewById<AppBarLayout>(R.id.appBarLayout)
+    private fun initializeViews(view: View) {
+        textField = view.findViewById(R.id.textField)
+        historyRecycler = view.findViewById(R.id.historyRecycler)
+        searchRecycler = view.findViewById(R.id.searchRecycler)
+        micButton = view.findViewById(R.id.mic_button)
+        clearButton = view.findViewById(R.id.clear_button)
+        val back: ImageButton = view.findViewById(R.id.back_button)
+        back.setOnClickListener { (activity as? MainActivity)?.popFragment() }
 
-        if (isAppBarHidden) {
-            appBarLayout.setExpanded(false, false)
-        } else {
-            appBarLayout.setExpanded(true, false)
-        }
+        val appBarLayout = view.findViewById<AppBarLayout>(R.id.appBarLayout)
+        appBarLayout.setExpanded(!isAppBarHidden, false)
 
-        SearchHelpers.setupAppBar(it, this)
+        SearchHelpers.setupAppBar(view, this)
         setupAppBarListener(appBarLayout)
+    }
+
+    private fun setupListeners(view: View) {
+        micButton.setOnClickListener {
+            SearchHelpers.hideSoftKeyboard(view)
+            SearchHelpers.startVoiceSearch(result)
+        }
+
+        clearButton.setOnClickListener {
+            clearText()
+            updateVisibility(true, this)
+        }
+    }
+
+    private fun setupRecyclerViews() {
         SearchHelpers.setupRecyclerView(requireContext(), this)
-
-        handleObserve()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        handleInitSearch()
-    }
-
-    private fun handleObserve() {
+    private fun observeViewModel() {
         searchViewModel.searchResults.observe(viewLifecycleOwner) { searchResults ->
             AnimeHelper.updateGridData(animeAdapter, searchResults, searchRecycler)
         }
 
         searchViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             if (isLoading) animeAdapter.setLoading()
-            this@SearchFragment.isLoading = isLoading
+            this.isLoading = isLoading
         }
 
         searchViewModel.hasNextPage.observe(viewLifecycleOwner) {
@@ -125,9 +132,18 @@ class SearchFragment : Fragment(), SearchListener {
         }
     }
 
-    private fun handleInitSearch() {
+    fun handleInitSearch() {
         if (!isInit) {
-            SearchHelpers.handleInitSearch(requireView(), this)
+            initSearch?.let { search ->
+                textField.setText(search)
+                searchViewModel.searchAnime(search)
+
+                SearchHelpers.updateVisibilityBut(true, this)
+                SearchHelpers.updateVisibilityRec(false, this)
+            } ?: run {
+                textField.requestFocus()
+                updateVisibility(true, this)
+            }
             isInit = true
         }
     }
@@ -157,24 +173,10 @@ class SearchFragment : Fragment(), SearchListener {
         }
     }
 
-    private fun initialize() {
-        initSearch = arguments?.getString(INIT_SEARCH)
-
-        searchViewModel = SearchViewModel()
-
-        prefs = App.prefs
-        prefs.setSearchListener(this)
-
-        animeAdapter = AnimeAdapter(AnimeParams(this, anime)) {
-            searchViewModel.refreshSearch(textField.text.toString())
-        }
-
-        historyAdapter = SearchHistoryAdapter(this, prefs.getRecentSearches())
-    }
-
     val result = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val results = result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+            clearText()
             textField.setText(results?.get(0))
         }
     }
