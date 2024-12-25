@@ -13,39 +13,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Set up Java for Gradle
       - name: Set up Java
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      # Set up Android SDK (Targeting API level 31)
       - name: Set up Android SDK
         uses: android-actions/setup-android@v2
         with:
-          api-level: 31 # Target API level 31
-          build-tools: '30.0.3'  # Use the build tools version compatible with API level 31
-          ndk: '21.4.7075529'   # Optional: specify NDK version if needed
+          api-level: 31
+          build-tools: '30.0.3'
+          ndk: '21.4.7075529'
 
-      # Grant Gradle execution permissions and build the project
       - name: Build project
         run: |
           chmod +x ./gradlew
           ./gradlew assembleRelease
 
-      # Archive build artifacts (e.g., APK files)
       - name: Archive APK artifacts
         uses: actions/upload-artifact@v3
         with:
           name: apk-artifacts
           path: app/build/outputs/apk/release/*.apk
 
-      # Generate changelog
       - name: Generate changelog
         id: changelog
         uses: TriPSs/conventional-changelog-action@v5
@@ -53,21 +47,13 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           skip-version-file: false
           skip-on-empty: false
-          version-file: ./package.json
-          version-path: version
 
-      - name: Debug changelog output
-        run: |
-          echo "Changelog output: ${{ steps.changelog.outputs.new_version }}"
-          echo "Changelog body: ${{ steps.changelog.outputs.clean_changelog }}"    
-
-      # Create a GitHub release
       - name: Create GitHub release
         uses: ncipollo/release-action@v1
         with:
+          generateReleaseNotes: true
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag: "v${{ steps.changelog.outputs.new_version }}"
-          name: "Release v${{ steps.changelog.outputs.new_version }}"
+          tag: ${{ steps.changelog.outputs.tag }}
+          name: ${{ steps.changelog.outputs.tag }}
           body: ${{ steps.changelog.outputs.clean_changelog }}
-          files: app/build/outputs/apk/release/app-release.apk
           allowUpdates: true
