@@ -55,6 +55,11 @@ jobs:
           debug: true
           skip-on-empty: false
 
+      - name: Debug changelog output
+        run: |
+          echo "Changelog output: ${{ steps.changelog.outputs.new_version }}"
+          echo "Changelog body: ${{ steps.changelog.outputs.clean_changelog }}"    
+
       # Create a GitHub release
       - name: Create GitHub release
         uses: ncipollo/release-action@v1
@@ -63,5 +68,5 @@ jobs:
           tag: "v${{ steps.changelog.outputs.new_version }}"
           name: "Release v${{ steps.changelog.outputs.new_version }}"
           body: ${{ steps.changelog.outputs.clean_changelog }}
-          files: app/build/outputs/apk/release/*.apk
+          files: app/build/outputs/apk/release/app-release.apk
           allowUpdates: true
