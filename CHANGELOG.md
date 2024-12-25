@@ -1,3 +1,12 @@
+# [0.3.0](https://github.com/daffineq/Kawaime/compare/v0.2.0...v0.3.0) (2024-12-25)
+
+
+### Features
+
+* update release.yml ([bdae10a](https://github.com/daffineq/Kawaime/commit/bdae10ae79754ee96f4d24d449ecef9ddd7e918e))
+
+
+
 # [0.2.0](https://github.com/daffineq/Kawaime/compare/v0.1.1...v0.2.0) (2024-12-25)
 
 
