@@ -1,3 +1,12 @@
+# [0.6.0](https://github.com/daffineq/Kawaime/compare/v0.5.0...v0.6.0) (2024-12-28)
+
+
+### Features
+
+* PiP mode implemented ([b6d96f8](https://github.com/daffineq/Kawaime/commit/b6d96f89fe3a413d59736a7fbc6e8ede8dc4601f))
+
+
+
 # [0.5.0](https://github.com/daffineq/Kawaime/compare/v0.4.0...v0.5.0) (2024-12-25)
 
 
@@ -31,10 +40,6 @@
 ### Features
 
 * update release.yml ([ffe921b](https://github.com/daffineq/Kawaime/commit/ffe921b177700b741c8c4f483ce6fa8b27a0423e))
-
-
-
-## [0.1.1](https://github.com/daffineq/Kawaime/compare/v0.1.0...v0.1.1) (2024-12-25)
 
 
 
