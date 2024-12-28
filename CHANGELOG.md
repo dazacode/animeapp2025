@@ -1,3 +1,12 @@
+# [0.7.0](https://github.com/daffineq/Kawaime/compare/v0.6.0...v0.7.0) (2024-12-28)
+
+
+### Features
+
+* Code refactor ([af0b301](https://github.com/daffineq/Kawaime/commit/af0b30121d996953ed22026659b1672d7655d674))
+
+
+
 # [0.6.0](https://github.com/daffineq/Kawaime/compare/v0.5.0...v0.6.0) (2024-12-28)
 
 
@@ -31,15 +40,6 @@
 ### Features
 
 * update release.yml ([bdae10a](https://github.com/daffineq/Kawaime/commit/bdae10ae79754ee96f4d24d449ecef9ddd7e918e))
-
-
-
-# [0.2.0](https://github.com/daffineq/Kawaime/compare/v0.1.1...v0.2.0) (2024-12-25)
-
-
-### Features
-
-* update release.yml ([ffe921b](https://github.com/daffineq/Kawaime/commit/ffe921b177700b741c8c4f483ce6fa8b27a0423e))
 
 
 
