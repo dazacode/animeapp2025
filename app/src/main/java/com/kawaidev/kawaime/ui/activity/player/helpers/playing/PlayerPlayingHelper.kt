@@ -1,4 +1,4 @@
-package com.kawaidev.kawaime.ui.activity.player.helpers
+package com.kawaidev.kawaime.ui.activity.player.helpers.playing
 
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
@@ -6,11 +6,14 @@ import com.kawaidev.kawaime.network.dao.api_utils.StreamingParams
 import com.kawaidev.kawaime.network.dao.streaming.EpisodeServers
 import com.kawaidev.kawaime.network.dao.streaming.Server
 import com.kawaidev.kawaime.ui.activity.player.PlayerActivity
+import com.kawaidev.kawaime.ui.activity.player.helpers.PlayerHelper
+import com.kawaidev.kawaime.ui.activity.player.helpers.navigation.PlayerNavigationHelper
+import com.kawaidev.kawaime.ui.activity.player.helpers.playerUI.PlayerUIHelper
 import kotlinx.coroutines.launch
 
 object PlayerPlayingHelper {
     fun playNextEpisode(activity: PlayerActivity) {
-        if (!PlayerHelper.hasNextEpisode(activity)) return
+        if (!PlayerNavigationHelper.hasNextEpisode(activity)) return
 
         val currentEpisodeIndex = activity.params.episodes.episodes?.indexOfFirst { it.episodeId == activity.params.animeEpisodeId } ?: -1
 
@@ -18,7 +21,7 @@ object PlayerPlayingHelper {
     }
 
     fun playPreviousEpisode(activity: PlayerActivity) {
-        if (!PlayerHelper.hasPreviousEpisode(activity)) return
+        if (!PlayerNavigationHelper.hasPreviousEpisode(activity)) return
 
         val currentEpisodeIndex = activity.params.episodes.episodes?.indexOfFirst { it.episodeId == activity.params.animeEpisodeId } ?: -1
 
@@ -51,7 +54,7 @@ object PlayerPlayingHelper {
                     activity.playerViewModel.player?.clearMediaItems()
 
                     PlayerHelper.initializePlayer(activity)
-                    PlayerHelper.initializePlayerUI(activity)
+                    PlayerUIHelper.initializePlayerUI(activity)
                 } else {
                     Toast.makeText(activity, "No available server found", Toast.LENGTH_SHORT).show()
                 }

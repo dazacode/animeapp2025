@@ -21,7 +21,9 @@ import com.kawaidev.kawaime.network.interfaces.StreamingService
 import com.kawaidev.kawaime.ui.activity.player.helpers.PiP.PiPActionReceiver
 import com.kawaidev.kawaime.ui.activity.player.helpers.PiP.PiPHelper
 import com.kawaidev.kawaime.ui.activity.player.helpers.PlayerHelper
-import com.kawaidev.kawaime.ui.activity.player.helpers.PlayerLifecycleObserver
+import com.kawaidev.kawaime.ui.activity.player.helpers.lifecycle.PlayerLifecycleObserver
+import com.kawaidev.kawaime.ui.activity.player.helpers.playerUI.PlayerUIHelper
+import com.kawaidev.kawaime.ui.activity.player.helpers.utils.PlayerUtils
 import com.kawaidev.kawaime.ui.models.PlayerViewModel
 import icepick.Icepick
 import icepick.State
@@ -36,7 +38,6 @@ class PlayerActivity : AppCompatActivity() {
 
     var streaming: Streaming = Streaming()
     var params: PlayerParams = PlayerParams()
-    private var download: Boolean = false
 
     lateinit var service: StreamingService
     lateinit var playerViewModel: PlayerViewModel
@@ -86,7 +87,7 @@ class PlayerActivity : AppCompatActivity() {
             isPlayerReady = true
         }
 
-        PlayerHelper.initializePlayerUI(this)
+        PlayerUIHelper.initializePlayerUI(this)
     }
 
     fun save() {
@@ -103,7 +104,7 @@ class PlayerActivity : AppCompatActivity() {
         playerViewModel.playWhenReady = savedInstanceState.getBoolean("playWhenReady", true)
         Icepick.restoreInstanceState(this, savedInstanceState)
 
-        if (showSystemUi) PlayerHelper.showSystemUI(this) else PlayerHelper.hideSystemUI(this)
+        if (showSystemUi) PlayerUtils.showSystemUI(this) else PlayerUtils.hideSystemUI(this)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

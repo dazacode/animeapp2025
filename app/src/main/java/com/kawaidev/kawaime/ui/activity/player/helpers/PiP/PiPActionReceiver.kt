@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.kawaidev.kawaime.ui.activity.player.PlayerActivity
-import com.kawaidev.kawaime.ui.activity.player.helpers.PlayerPlayingHelper
+import com.kawaidev.kawaime.ui.activity.player.helpers.playing.PlayerPlayingHelper
 
 class PiPActionReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {

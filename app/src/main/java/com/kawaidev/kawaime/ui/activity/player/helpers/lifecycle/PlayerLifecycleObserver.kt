@@ -1,4 +1,4 @@
-package com.kawaidev.kawaime.ui.activity.player.helpers
+package com.kawaidev.kawaime.ui.activity.player.helpers.lifecycle
 
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner

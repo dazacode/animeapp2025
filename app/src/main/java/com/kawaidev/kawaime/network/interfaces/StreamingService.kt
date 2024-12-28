@@ -1,8 +1,6 @@
 package com.kawaidev.kawaime.network.interfaces
 
-import com.kawaidev.kawaime.App
 import com.kawaidev.kawaime.network.dao.api_utils.StreamingParams
-import com.kawaidev.kawaime.network.dao.helpers.PlayerParams
 import com.kawaidev.kawaime.network.dao.streaming.EpisodeServers
 import com.kawaidev.kawaime.network.dao.streaming.Episodes
 import com.kawaidev.kawaime.network.dao.streaming.Streaming
@@ -15,7 +13,7 @@ interface StreamingService {
 
     companion object {
         fun create(): StreamingService {
-            return StreamingServiceImpl(client = App.httpClient)
+            return StreamingServiceImpl()
         }
     }
 }

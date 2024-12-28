@@ -17,7 +17,6 @@ class SearchViewModel : ViewModel() {
     private val strings = Strings
 
     private val _query = MutableLiveData<String>()
-    val query: LiveData<String> get() = _query
 
     private val _searchResults = MutableLiveData<MutableList<BasicRelease>>()
     val searchResults: LiveData<MutableList<BasicRelease>> get() = _searchResults
@@ -32,7 +31,6 @@ class SearchViewModel : ViewModel() {
     val error: LiveData<Exception?> get() = _error
 
     private val _currentPage = MutableLiveData<Int>().apply { value = 1 }
-    val currentPage: LiveData<Int> get() = _currentPage
 
     private val _isEmpty = MutableLiveData<Boolean>()
     val isEmpty: LiveData<Boolean> get() = _isEmpty
@@ -41,35 +39,50 @@ class SearchViewModel : ViewModel() {
 
     fun searchAnime(query: String) {
         updateCategoryEmptyState(false)
-
         _isLoading.postValue(true)
         searchJob?.cancel()
         _query.postValue(query)
         _currentPage.postValue(1)
         _error.postValue(null)
 
+        executeSearch(query, 1)
+    }
+
+    fun loadNextSearch() {
+        if (_isLoading.value == true) return
+
+        _isLoading.postValue(true)
+        updateCategoryEmptyState(false)
+
+        val nextPage = (_currentPage.value ?: 1) + 1
+        _currentPage.postValue(nextPage)
+
+        val currentQuery = _query.value ?: return
+        _error.postValue(null)
+
+        executeSearch(currentQuery, nextPage)
+    }
+
+    private fun executeSearch(query: String, page: Int) {
         searchJob = viewModelScope.launch {
             try {
-                val queryGenres = query.split(",")
-                    .map { it.trim().lowercase().replace(" ", "-") }
-                    .filter { it.isNotEmpty() }
+                val searchParams = buildSearchParams(query, page)
+                val wrapper = animeService.searchAnime(searchParams)
 
-                val genres = strings.genres.map { it.lowercase().replace(" ", "-") }
-                val isGenreSearch = queryGenres.all { genre -> genres.contains(genre) }
-
-                val searchParams = if (isGenreSearch) {
-                    SearchParams(genres = queryGenres.joinToString(","))
-                } else {
-                    SearchParams(q = query)
-                }
-
-                val (animeList, hasNextPage) = animeService.searchAnime(searchParams)
                 _isLoading.postValue(false)
 
-                _searchResults.postValue(animeList.toMutableList())
-                _nextPage.postValue(hasNextPage)
+                if (page == 1) {
+                    _searchResults.postValue(wrapper.animes.toMutableList())
+                } else {
+                    val currentResults = _searchResults.value ?: mutableListOf()
+                    val updatedResults = currentResults.toMutableList().apply {
+                        addAll(wrapper.animes)
+                    }
+                    _searchResults.postValue(updatedResults)
+                }
 
-                if (animeList.isEmpty()) updateCategoryEmptyState(true)
+                _nextPage.postValue(wrapper.hasNextPage)
+                updateCategoryEmptyState(wrapper.animes.isEmpty())
 
             } catch (e: Exception) {
                 if (e !is CancellationException) {
@@ -81,58 +94,18 @@ class SearchViewModel : ViewModel() {
         }
     }
 
-    fun loadNextSearch() {
-        if (_isLoading.value == true) return
+    private fun buildSearchParams(query: String, page: Int): SearchParams {
+        val queryGenres = query.split(",")
+            .map { it.trim().lowercase().replace(" ", "-") }
+            .filter { it.isNotEmpty() }
 
-        _isLoading.postValue(true)
+        val genres = strings.genres.map { it.lowercase().replace(" ", "-") }
+        val isGenreSearch = queryGenres.all { genre -> genres.contains(genre) }
 
-        updateCategoryEmptyState(false)
-
-        val nextPage = (_currentPage.value ?: 1) + 1
-        _currentPage.postValue(nextPage)
-
-        val currentQuery = _query.value ?: return
-        _error.postValue(null)
-
-        searchJob = viewModelScope.launch {
-            try {
-                val queryGenres = currentQuery.split(",")
-                    .map { it.trim().lowercase() }
-                    .filter { it.isNotEmpty() }
-
-                val genres = strings.genres.map { it.lowercase() }
-                val isGenreSearch = queryGenres.all { genre -> genres.contains(genre) }
-
-                val searchParams = if (isGenreSearch) {
-                    SearchParams(genres = queryGenres.joinToString(","), page = nextPage)
-                } else {
-                    SearchParams(q = currentQuery, page = nextPage)
-                }
-
-                val (animeList, hasNextPage) = animeService.searchAnime(searchParams)
-
-                _isLoading.postValue(false)
-
-                val currentResults = _searchResults.value ?: mutableListOf()
-                val updatedResults = currentResults.toMutableList().apply {
-                    addAll(animeList)
-                }
-
-                if (updatedResults.isEmpty()) {
-                    updateCategoryEmptyState(true)
-                } else {
-                    updateCategoryEmptyState(false)
-                }
-
-                _searchResults.postValue(updatedResults)
-                _nextPage.postValue(hasNextPage)
-            } catch (e: Exception) {
-                if (e !is CancellationException) {
-                    _error.postValue(e)
-                }
-            } finally {
-                _isLoading.postValue(false)
-            }
+        return if (isGenreSearch) {
+            SearchParams(genres = queryGenres.joinToString(","), page = page)
+        } else {
+            SearchParams(q = query, page = page)
         }
     }
 

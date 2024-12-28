@@ -73,5 +73,7 @@ object PiPHelper {
     @OptIn(UnstableApi::class)
     fun onPiPClosed(activity: PlayerActivity) {
         activity.playerView.useController = true
+
+        activity.playerViewModel.playWhenReady = activity.playerViewModel.player?.isPlaying == true
     }
 }

@@ -1,4 +1,4 @@
-package com.kawaidev.kawaime.ui.activity.player.helpers
+package com.kawaidev.kawaime.ui.activity.player.helpers.download
 
 import android.app.DownloadManager
 import android.content.Context

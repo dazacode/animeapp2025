@@ -1,133 +1,60 @@
 package com.kawaidev.kawaime.ui.fragments.result
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageButton
-import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.SimpleItemAnimator
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.google.android.material.appbar.AppBarLayout
 import com.kawaidev.kawaime.R
-import com.kawaidev.kawaime.network.dao.anime.BasicRelease
 import com.kawaidev.kawaime.network.dao.api_utils.SearchParams
-import com.kawaidev.kawaime.network.interfaces.AnimeService
 import com.kawaidev.kawaime.ui.activity.MainActivity
 import com.kawaidev.kawaime.ui.adapters.anime.AnimeAdapter
 import com.kawaidev.kawaime.ui.adapters.anime.helpers.AnimeHelper
 import com.kawaidev.kawaime.ui.adapters.anime.helpers.AnimeParams
-import com.kawaidev.kawaime.ui.adapters.helpers.GridRecycler
-import icepick.Icepick
-import icepick.State
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 
-class ResultFragment : Fragment() {
-    private lateinit var service: AnimeService
-    private lateinit var adapter: AnimeAdapter
-    private lateinit var recycler: RecyclerView
-
+class ResultFragment : BaseAnimeFragment() {
     private var searchParams: SearchParams = SearchParams()
-
-    @State private var isLoading = false
-    @State private var isEmpty = false
-    @State private var hasNextPage = false
-    @State private var error: Exception? = null
-    @State private var isAppBarHidden: Boolean = false
-    @State private var anime: List<BasicRelease> = emptyList()
-    @State private var page: Int = 1
-    @State private var isFetched: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Icepick.restoreInstanceState(this, savedInstanceState)
-
         arguments?.let {
             searchParams = Json.decodeFromString(it.getString(SEARCH_PARAMS) ?: "")
         }
-
-        service = AnimeService.create()
-
         adapter = AnimeAdapter(AnimeParams(this, anime)) {
-            searchAnime(searchParams, 1)
+            fetchAnimeData(1)
         }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_result, container, false)
+    ): View {
+        val view = super.onCreateView(inflater, container, savedInstanceState)
 
-        recycler = view.findViewById(R.id.recycler)
+        val edit: Button = view!!.findViewById(R.id.edit_button)
+        edit.setOnClickListener { (activity as? MainActivity)?.popFragment() }
 
-        val back: ImageButton = view.findViewById(R.id.back_button)
-
-        back.setOnClickListener {
-            (activity as? MainActivity)?.popFragment()
-        }
-
-        val edit: Button = view.findViewById(R.id.edit_button)
-
-        edit.setOnClickListener {
-            (activity as? MainActivity)?.popFragment()
-        }
-
-        recycler.apply {
-            post {
-                GridRecycler.setup(requireContext(), this@ResultFragment.adapter, recycler, anime)
-            }
-            adapter = this@ResultFragment.adapter
-            addOnScrollListener(scrollListener())
-
-            (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
-        }
-
-        if (!isFetched) searchAnime(searchParams, page)
-
-        val appBarLayout = view.findViewById<AppBarLayout>(R.id.appBarLayout)
-
-        if (isAppBarHidden) {
-            appBarLayout.setExpanded(false, false)
-        } else {
-            appBarLayout.setExpanded(true, false)
-        }
-
-        setupAppBarListener(appBarLayout)
-
+        if (!isFetched) fetchAnimeData(page)
         return view
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        Icepick.saveInstanceState(this, outState)
-    }
-
-    fun searchAnime(searchParams: SearchParams, page: Int = 1) {
+    override fun fetchAnimeData(page: Int) {
         isLoading = true
         adapter.setLoading()
 
-        this@ResultFragment.page = page
-
+        this.page = page
         searchParams.page = page
 
         viewLifecycleOwner.lifecycleScope.launch {
             try {
-                val (animeList, hasNextPage) = service.searchAnime(searchParams)
-
-                AnimeHelper.updateGridData(adapter, this@ResultFragment.anime + animeList, recycler)
+                val wrapper = service.searchAnime(searchParams)
+                hasNextPage = wrapper.hasNextPage
+                anime += wrapper.animes
+                AnimeHelper.updateGridData(adapter, anime, recycler)
                 adapter.setNextPage(hasNextPage)
-
-                this@ResultFragment.hasNextPage = hasNextPage
-
-                this@ResultFragment.anime += animeList
             } catch (e: Exception) {
                 adapter.setError()
             } finally {
@@ -135,30 +62,6 @@ class ResultFragment : Fragment() {
                 isFetched = true
             }
         }
-    }
-
-    private fun scrollListener() = object : RecyclerView.OnScrollListener() {
-        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-            val layoutManager = recyclerView.layoutManager ?: return
-            val totalItemCount = layoutManager.itemCount
-            val lastVisibleItem = when (layoutManager) {
-                is LinearLayoutManager -> layoutManager.findLastVisibleItemPosition()
-                is StaggeredGridLayoutManager -> layoutManager.findLastVisibleItemPositions(null).maxOrNull() ?: 0
-                else -> 0
-            }
-            if (!isLoading && hasNextPage) {
-                if (totalItemCount <= lastVisibleItem + 5) {
-                    searchAnime(searchParams, page = page + 1)
-                }
-            }
-        }
-    }
-
-    private fun setupAppBarListener(appBarLayout: AppBarLayout) {
-        appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
-            val isCollapsed = Math.abs(verticalOffset) == appBarLayout.totalScrollRange
-            isAppBarHidden = isCollapsed
-        })
     }
 
     companion object {
