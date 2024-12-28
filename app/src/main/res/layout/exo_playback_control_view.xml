@@ -55,6 +55,9 @@
             <ImageButton android:id="@id/exo_subtitle"
                 style="@style/ExoStyledControls.Button.Bottom.CC"/>
 
+            <ImageButton android:id="@+id/PiP"
+                style="@style/ExoStyledControls.Button.Bottom.PiP"/>
+
             <ImageButton android:id="@+id/skip"
                 style="@style/ExoStyledControls.Button.Bottom.Skip"/>
 

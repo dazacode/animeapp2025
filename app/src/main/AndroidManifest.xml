@@ -29,7 +29,8 @@
         <activity
             android:name=".ui.activity.player.PlayerActivity"
             android:exported="false"
-            android:configChanges="orientation|screenSize"
+            android:supportsPictureInPicture="true"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|density|keyboardHidden|keyboard|navigation"
             android:theme="@style/PlayerTheme"/>
         <activity
             android:name=".ui.activity.MainActivity"
@@ -37,15 +38,17 @@
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:scheme="https"
-                    android:host="www.kawaime.com"
+                    android:scheme="http"
+                    android:host="api.veanime.cc:8080"
                     android:pathPattern="/details/.*" />
             </intent-filter>
         </activity>

@@ -15,16 +15,14 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.annotation.OptIn
-import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.media3.common.util.UnstableApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
-import com.grzegorzojdana.spacingitemdecoration.Spacing
-import com.grzegorzojdana.spacingitemdecoration.SpacingItemDecoration
 import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.network.dao.anime.Release
+import com.kawaidev.kawaime.network.routes.AnimeRoutes
 import com.kawaidev.kawaime.ui.activity.MainActivity
 import com.kawaidev.kawaime.ui.adapters.decoration.LinearDecoration
 import com.kawaidev.kawaime.ui.adapters.details.CardAdapter
@@ -191,11 +189,11 @@ object DetailsHelper {
         val shareButton = itemView.findViewById<ImageButton>(R.id.shareButton)
 
         shareButton.setOnClickListener {
-            share(itemView.context, "https://www.kawaime.com/details/${release.anime?.info?.id}")
+            share(itemView.context, "${AnimeRoutes.BASE_JAVA}details/${release.anime?.info?.id}")
         }
     }
 
-    fun share(context: Context, link: String) {
+    private fun share(context: Context, link: String) {
         val shareIntent = Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
             putExtra(Intent.EXTRA_TEXT, link)

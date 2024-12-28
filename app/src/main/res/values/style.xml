@@ -247,7 +247,11 @@
     <style name="ExoStyledControls.Button.Bottom.Skip">
         <item name="android:src">@drawable/skip</item>
         <item name="android:scaleType">center</item>
-        <item name="android:contentDescription">@string/exo_controls_fullscreen_enter_description</item>
+    </style>
+
+    <style name="ExoStyledControls.Button.Bottom.PiP">
+        <item name="android:src">@drawable/round_picture_in_picture_24</item>
+        <item name="android:scaleType">center</item>
     </style>
 
     <style name="CustomTabTextAppearance" parent="TextAppearance.Design.Tab">

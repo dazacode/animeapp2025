@@ -1,7 +1,9 @@
 package com.kawaidev.kawaime.ui.activity.player
 
+import android.annotation.SuppressLint
+import android.content.IntentFilter
+import android.content.res.Configuration
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
@@ -12,13 +14,12 @@ import androidx.media3.ui.PlayerView
 import com.kawaidev.kawaime.App
 import com.kawaidev.kawaime.Prefs
 import com.kawaidev.kawaime.R
-import com.kawaidev.kawaime.network.dao.api_utils.StreamingParams
 import com.kawaidev.kawaime.network.dao.helpers.PlayerParams
 import com.kawaidev.kawaime.network.dao.helpers.WatchedRelease
-import com.kawaidev.kawaime.network.dao.streaming.EpisodeDetail
-import com.kawaidev.kawaime.network.dao.streaming.Episodes
 import com.kawaidev.kawaime.network.dao.streaming.Streaming
 import com.kawaidev.kawaime.network.interfaces.StreamingService
+import com.kawaidev.kawaime.ui.activity.player.helpers.PiP.PiPActionReceiver
+import com.kawaidev.kawaime.ui.activity.player.helpers.PiP.PiPHelper
 import com.kawaidev.kawaime.ui.activity.player.helpers.PlayerHelper
 import com.kawaidev.kawaime.ui.activity.player.helpers.PlayerLifecycleObserver
 import com.kawaidev.kawaime.ui.models.PlayerViewModel
@@ -28,6 +29,7 @@ import kotlinx.serialization.json.Json
 
 
 class PlayerActivity : AppCompatActivity() {
+    lateinit var pipActionReceiver: PiPActionReceiver
     private lateinit var player: ExoPlayer
     lateinit var playerView: PlayerView
     lateinit var prefs: Prefs
@@ -44,6 +46,7 @@ class PlayerActivity : AppCompatActivity() {
 
     private var isPlayerReady = false
 
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +68,14 @@ class PlayerActivity : AppCompatActivity() {
         initialize(savedInstanceState)
 
         lifecycle.addObserver(PlayerLifecycleObserver(this))
+
+        pipActionReceiver = PiPActionReceiver()
+        val filter = IntentFilter().apply {
+            addAction("PLAY_PAUSE")
+            addAction("PREVIOUS")
+            addAction("NEXT")
+        }
+        registerReceiver(pipActionReceiver, filter)
     }
 
     @OptIn(UnstableApi::class)
@@ -100,5 +111,16 @@ class PlayerActivity : AppCompatActivity() {
         outState.putLong("playbackPosition", playerViewModel.playbackPosition)
         outState.putBoolean("playWhenReady", playerViewModel.playWhenReady)
         Icepick.saveInstanceState(this, outState)
+    }
+
+    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration) {
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+        if (isInPictureInPictureMode) {
+            PiPHelper.enterPiPMode(this)
+        } else {
+            if (isFinishing) finish()
+
+            PiPHelper.onPiPClosed(this)
+        }
     }
 }

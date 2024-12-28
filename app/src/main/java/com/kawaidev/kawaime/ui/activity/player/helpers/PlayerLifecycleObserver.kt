@@ -9,23 +9,37 @@ class PlayerLifecycleObserver(
 ) : DefaultLifecycleObserver {
 
     override fun onPause(owner: LifecycleOwner) {
-        activity.save()
+        super.onPause(owner)
 
-        activity.playerViewModel.player?.pause()
+        // Only pause if the activity is not in PiP mode
+        if (!activity.isInPictureInPictureMode) {
+            activity.save()  // Save the state
+            activity.playerViewModel.player?.pause()  // Pause the player
+        }
     }
 
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
-        activity.save()
 
-        activity.playerViewModel.player?.release()
-        activity.playerViewModel.player = null
+        // Only release player if not in PiP mode
+        if (!activity.isInPictureInPictureMode) {
+            activity.save()  // Save the state
+            activity.playerViewModel.player?.release()
+            activity.playerViewModel.player = null
+
+            activity.unregisterReceiver(activity.pipActionReceiver)
+        }
     }
 
     override fun onResume(owner: LifecycleOwner) {
-        when(activity.playerViewModel.playWhenReady) {
-            true -> activity.playerViewModel.player?.play()
-            false -> activity.playerViewModel.player?.pause()
+        super.onResume(owner)
+
+        // Resume the player only if not in PiP mode
+        if (!activity.isInPictureInPictureMode) {
+            when(activity.playerViewModel.playWhenReady) {
+                true -> activity.playerViewModel.player?.play()
+                false -> activity.playerViewModel.player?.pause()
+            }
         }
     }
 }

@@ -3,15 +3,11 @@ package com.kawaidev.kawaime.ui.activity.player.helpers
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.graphics.Color
-import android.graphics.PorterDuff
 import android.net.Uri
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.view.ViewTreeObserver
-import android.widget.FrameLayout
 import android.widget.ImageButton
-import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -20,24 +16,20 @@ import androidx.annotation.OptIn
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MimeTypes
 import androidx.media3.common.Player
-import androidx.media3.common.StreamKey
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.exoplayer.offline.Download
-import androidx.media3.exoplayer.offline.DownloadRequest
-import androidx.media3.exoplayer.offline.DownloadService
 import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
 import androidx.media3.ui.CaptionStyleCompat
 import androidx.media3.ui.PlayerView
 import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.network.dao.streaming.Streaming
 import com.kawaidev.kawaime.ui.activity.player.PlayerActivity
+import com.kawaidev.kawaime.ui.activity.player.helpers.PiP.PiPHelper
 import com.kawaidev.kawaime.utils.Converts
 import kotlinx.coroutines.launch
 import kotlin.math.max
@@ -71,15 +63,15 @@ object PlayerHelper {
                     val wasPlaying = activity.playerViewModel.playWhenReady
                     activity.playerViewModel.player?.setHandleAudioBecomingNoisy(true)
 
+                    val watched = activity.prefs.findByEpisodeId(activity.params.animeEpisodeId)
+                    if (watched != null) {
+                        activity.playerViewModel.player?.seekTo(watched.watchedTo)
+                    }
+
                     activity.playerViewModel.player?.addListener(object : Player.Listener {
                         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
                             if (playbackState == Player.STATE_READY) {
                                 setTint(activity.playerView.findViewById(R.id.skip), true)
-
-                                val watched = activity.prefs.findByEpisodeId(activity.params.animeEpisodeId)
-                                if (watched != null) {
-                                    activity.playerViewModel.player?.seekTo(watched.watchedTo)
-                                }
 
                                 activity.playerViewModel.player?.removeListener(this)
 
@@ -134,6 +126,12 @@ object PlayerHelper {
             }
         }
 
+        activity.playerView.findViewById<ImageButton>(R.id.PiP).apply {
+            setOnClickListener {
+                PiPHelper.enterPiPMode(activity)
+            }
+        }
+
         activity.playerView.findViewById<ImageButton>(R.id.skip).apply {
             setOnClickListener {
                 val currentPosition = activity.playerViewModel.player?.currentPosition ?: 0L
@@ -169,14 +167,12 @@ object PlayerHelper {
             }
         }
 
-        val currentIndex = getCurrentEpisodeIndex(activity)
-
         activity.playerView.findViewById<ImageButton>(R.id.next).apply {
             setOnClickListener {
                 PlayerPlayingHelper.playNextEpisode(activity)
             }
 
-            isEnabled = currentIndex < (activity.params.episodes.episodes?.size ?: 0) - 1
+            isEnabled = hasNextEpisode(activity)
 
             setTint(activity.playerView.findViewById(R.id.next), isEnabled)
         }
@@ -186,7 +182,7 @@ object PlayerHelper {
                 PlayerPlayingHelper.playPreviousEpisode(activity)
             }
 
-            isEnabled = currentIndex > 0
+            isEnabled = hasPreviousEpisode(activity)
 
             setTint(activity.playerView.findViewById(R.id.prev), isEnabled)
         }
@@ -292,6 +288,22 @@ object PlayerHelper {
 
     private fun getCurrentEpisodeIndex(activity: PlayerActivity): Int {
         return activity.params.episodes.episodes?.indexOfFirst { it.episodeId == activity.params.animeEpisodeId } ?: -1
+    }
+
+    /**
+     * Returns true if there is a next episode available.
+     */
+    fun hasNextEpisode(activity: PlayerActivity): Boolean {
+        val currentIndex = getCurrentEpisodeIndex(activity)
+        return currentIndex < (activity.params.episodes.episodes?.size ?: 0) - 1
+    }
+
+    /**
+     * Returns true if there is a previous episode available.
+     */
+    fun hasPreviousEpisode(activity: PlayerActivity): Boolean {
+        val currentIndex = getCurrentEpisodeIndex(activity)
+        return currentIndex > 0
     }
 
     @SuppressLint("PrivateResource")

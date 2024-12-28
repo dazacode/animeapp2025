@@ -10,24 +10,24 @@ import kotlinx.coroutines.launch
 
 object PlayerPlayingHelper {
     fun playNextEpisode(activity: PlayerActivity) {
-        val currentEpisodeIndex = activity.params.episodes.episodes?.indexOfFirst { it.episodeId == activity.params.animeEpisodeId } ?: -1
+        if (!PlayerHelper.hasNextEpisode(activity)) return
 
-        activity.save()
-        activity.playerViewModel.player?.clearMediaItems()
+        val currentEpisodeIndex = activity.params.episodes.episodes?.indexOfFirst { it.episodeId == activity.params.animeEpisodeId } ?: -1
 
         handleEpisodePlayback(activity, currentEpisodeIndex + 1) { "No next episode available" }
     }
 
     fun playPreviousEpisode(activity: PlayerActivity) {
-        val currentEpisodeIndex = activity.params.episodes.episodes?.indexOfFirst { it.episodeId == activity.params.animeEpisodeId } ?: -1
+        if (!PlayerHelper.hasPreviousEpisode(activity)) return
 
-        activity.save()
-        activity.playerViewModel.player?.clearMediaItems()
+        val currentEpisodeIndex = activity.params.episodes.episodes?.indexOfFirst { it.episodeId == activity.params.animeEpisodeId } ?: -1
 
         handleEpisodePlayback(activity, currentEpisodeIndex - 1) { "No previous episode available" }
     }
 
     private fun handleEpisodePlayback(activity: PlayerActivity, episodeIndex: Int, onError: () -> String) {
+        activity.save()
+
         activity.lifecycleScope.launch {
             val episodes = activity.params.episodes.episodes
             if (episodes != null && episodeIndex in episodes.indices) {
@@ -48,6 +48,7 @@ object PlayerPlayingHelper {
                     )
 
                     activity.streaming = streaming
+                    activity.playerViewModel.player?.clearMediaItems()
 
                     PlayerHelper.initializePlayer(activity)
                     PlayerHelper.initializePlayerUI(activity)
