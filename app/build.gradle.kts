@@ -59,7 +59,6 @@ dependencies {
     implementation(libs.okhttp)
 
     implementation(libs.androidx.recyclerview)
-    implementation(libs.blurview)
 
     implementation(libs.spacingitemdecoration)
 
