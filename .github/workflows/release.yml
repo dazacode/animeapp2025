@@ -31,7 +31,11 @@ jobs:
 
       - name: Decode Keystore File
         run: |
-          echo "${{ secrets.ANDROID_KEYSTORE }}" | base64 --decode > android.jks
+          echo "${{ secrets.ANDROID_KEYSTORE }}" | base64 --decode > app/android.jks
+          ls -la app/ # Check that the file exists
+
+      - name: Set Permissions for Keystore
+        run: chmod 600 app/android.jks
 
       - name: Build project
         env:
@@ -40,7 +44,7 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
           chmod +x ./gradlew
-          ./gradlew assembleRelease -Pandroid.injected.signing.store.file=android.jks \
+          ./gradlew assembleRelease -Pandroid.injected.signing.store.file=app/android.jks \
             -Pandroid.injected.signing.store.password=$STORE_PASSWORD \
             -Pandroid.injected.signing.key.alias=$KEY_ALIAS \
             -Pandroid.injected.signing.key.password=$KEY_PASSWORD
