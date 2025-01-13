@@ -100,9 +100,17 @@ object PlayerUIHelper {
                         playPause.visibility = View.GONE
                         loadingIndicator.visibility = View.VISIBLE
                     }
-                    Player.STATE_READY, Player.STATE_ENDED, Player.STATE_IDLE -> {
+                    Player.STATE_READY -> {
                         playPause.visibility = View.VISIBLE
                         loadingIndicator.visibility = View.GONE
+                    }
+                    Player.STATE_ENDED -> {
+                        playPause.visibility = View.VISIBLE
+                        loadingIndicator.visibility = View.GONE
+                    }
+                    Player.STATE_IDLE -> {
+                        playPause.visibility = View.GONE
+                        loadingIndicator.visibility = View.VISIBLE
                     }
                 }
             }

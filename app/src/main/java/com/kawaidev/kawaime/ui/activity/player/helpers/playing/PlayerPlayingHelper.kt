@@ -1,7 +1,11 @@
 package com.kawaidev.kawaime.ui.activity.player.helpers.playing
 
+import android.view.View
+import android.widget.ImageButton
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.network.dao.api_utils.StreamingParams
 import com.kawaidev.kawaime.network.dao.streaming.EpisodeServers
 import com.kawaidev.kawaime.network.dao.streaming.Server
@@ -30,6 +34,8 @@ object PlayerPlayingHelper {
 
     private fun handleEpisodePlayback(activity: PlayerActivity, episodeIndex: Int, onError: () -> String) {
         activity.save()
+
+        activity.playerViewModel.player?.stop()
 
         activity.lifecycleScope.launch {
             val episodes = activity.params.episodes.episodes
