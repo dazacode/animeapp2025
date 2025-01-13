@@ -29,14 +29,6 @@ jobs:
           build-tools: '30.0.3'
           ndk: '21.4.7075529'
 
-      - name: Decode Keystore File
-        run: |
-          echo "${{ secrets.ANDROID_KEYSTORE }}" | base64 --decode > app/android.jks
-          ls -la app/ # Verify the keystore file is in the correct location
-
-      - name: Set Permissions for Keystore
-        run: chmod 600 app/android.jks
-
       - name: Build project
         env:
           STORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
@@ -44,10 +36,7 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
           chmod +x ./gradlew
-          ./gradlew assembleRelease -Pandroid.injected.signing.store.file=app/android.jks \
-            -Pandroid.injected.signing.store.password=$STORE_PASSWORD \
-            -Pandroid.injected.signing.key.alias=$KEY_ALIAS \
-            -Pandroid.injected.signing.key.password=$KEY_PASSWORD
+          ./gradlew assembleRelease
 
       - name: Archive APK artifacts
         uses: actions/upload-artifact@v3
