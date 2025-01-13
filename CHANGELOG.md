@@ -1,3 +1,12 @@
+## [0.7.3](https://github.com/daffineq/Kawaime/compare/v0.7.2...v0.7.3) (2025-01-13)
+
+
+### Bug Fixes
+
+* **Gradle:** path fixed ([4ab2602](https://github.com/daffineq/Kawaime/commit/4ab2602b19c2ae932aacae1d4381fdb36fcf3ef7))
+
+
+
 ## [0.7.2](https://github.com/daffineq/Kawaime/compare/v0.7.1...v0.7.2) (2024-12-28)
 
 
@@ -21,15 +30,6 @@
 ### Features
 
 * PiP mode implemented ([b6d96f8](https://github.com/daffineq/Kawaime/commit/b6d96f89fe3a413d59736a7fbc6e8ede8dc4601f))
-
-
-
-# [0.5.0](https://github.com/daffineq/Kawaime/compare/v0.4.0...v0.5.0) (2024-12-25)
-
-
-### Features
-
-* update release.yml, path adjusted [#2](https://github.com/daffineq/Kawaime/issues/2) ([01e16c0](https://github.com/daffineq/Kawaime/commit/01e16c0cc271f5246afd1a69a4401f8c640591bf))
 
 
 
