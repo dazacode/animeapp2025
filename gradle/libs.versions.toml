@@ -26,6 +26,8 @@ stfalconimageviewer = "v1.0.1"
 swiperefreshlayout = "1.1.0"
 preference = "1.2.1"
 media3Session = "1.4.1"
+annotation = "1.6.0"
+lifecycleLivedataKtx = "2.8.7"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -62,6 +64,8 @@ stfalconimageviewer = { module = "com.github.stfalcon-studio:StfalconImageViewer
 androidx-swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefreshlayout" }
 androidx-preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
 androidx-media3-session = { group = "androidx.media3", name = "media3-session", version.ref = "media3Session" }
+androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
+androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

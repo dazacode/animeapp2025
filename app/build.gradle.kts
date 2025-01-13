@@ -20,6 +20,15 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file("D:/Android Studio/keystores/android.jks")
+            storePassword = "12345678"
+            keyAlias = "AndroidKey"
+            keyPassword = "12345678"
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -27,15 +36,20 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("release")
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+    buildFeatures {
+        viewBinding = true
     }
 }
 
@@ -64,6 +78,8 @@ dependencies {
     implementation(libs.androidx.swiperefreshlayout)
     implementation(libs.icepick)
     implementation(libs.androidx.preference)
+    implementation(libs.androidx.annotation)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
     annotationProcessor(libs.icepick.processor)
 
     implementation(libs.kotlinx.coroutines.core)

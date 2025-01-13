@@ -15,6 +15,9 @@ import com.kawaidev.kawaime.Strings
 import com.kawaidev.kawaime.network.dao.anime.BasicRelease
 import com.kawaidev.kawaime.network.dao.anime.Home
 import com.kawaidev.kawaime.ui.activity.MainActivity
+import com.kawaidev.kawaime.ui.adapters.anime.AnimeAdapter
+import com.kawaidev.kawaime.ui.adapters.anime.helpers.AnimeParams
+import com.kawaidev.kawaime.ui.adapters.anime.helpers.TitleHeader
 import com.kawaidev.kawaime.ui.adapters.diffs.HomeDiffCallback
 import com.kawaidev.kawaime.ui.adapters.helpers.HorizontalRecycler
 import com.kawaidev.kawaime.ui.adapters.home.helpers.ViewTypes
@@ -137,12 +140,9 @@ class HomeAdapter(
         private lateinit var currentData: List<BasicRelease>
 
         fun bind(newData: List<BasicRelease>, title: String) {
-            val titleTextView: TextView = itemView.findViewById(R.id.title)
-            titleTextView.text = title
-
             if (!::currentData.isInitialized || currentData != newData) {
                 currentData = newData
-                HorizontalRecycler.setup(fragment, currentData, itemView)
+                HorizontalRecycler.setup(itemView, AnimeAdapter(AnimeParams(fragment, currentData)), headerData = TitleHeader(title))
             }
         }
     }

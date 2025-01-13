@@ -107,4 +107,6 @@
     <color name="uncheckedColor1">#a0a2a1</color>
 
     <color name="hint">#b6b6b6</color>
+
+    <color name="grayColor">#f7f7f7</color>
 </resources>

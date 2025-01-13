@@ -16,6 +16,7 @@ import com.kawaidev.kawaime.ui.activity.MainActivity
 import com.kawaidev.kawaime.ui.adapters.anime.helpers.AnimeAdapterState
 import com.kawaidev.kawaime.ui.adapters.anime.helpers.AnimeViewType
 import com.kawaidev.kawaime.ui.adapters.anime.helpers.AnimeParams
+import com.kawaidev.kawaime.ui.adapters.anime.helpers.TitleHeader
 import com.kawaidev.kawaime.ui.adapters.diffs.AnimeDiffCallback
 import com.kawaidev.kawaime.ui.fragments.details.DetailsFragment
 import com.kawaidev.kawaime.utils.LoadImage
@@ -171,7 +172,7 @@ class AnimeAdapter(
     private fun clearSpecialStateItem() {
         when (state) {
             AnimeAdapterState.LOADING, AnimeAdapterState.ERROR, AnimeAdapterState.EMPTY -> {
-                notifyItemRemoved(0)
+                notifyDataSetChanged()
             }
             else -> Unit
         }

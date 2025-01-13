@@ -38,6 +38,6 @@ class AnimeServiceImpl : AnimeService {
     override suspend fun getSchedule(date: LocalDate): List<Schedule> {
         val formattedDate = date.format(DateTimeFormatter.ISO_LOCAL_DATE)
         val url = "${routes.SCHEDULE}$formattedDate"
-        return Request.getRequest(url, "data")
+        return Request.getRequest(url, "data.scheduledAnimes")
     }
 }

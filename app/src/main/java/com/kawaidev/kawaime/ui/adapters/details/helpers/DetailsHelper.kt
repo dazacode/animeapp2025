@@ -147,7 +147,7 @@ object DetailsHelper {
         val watchButton = itemView.findViewById<MaterialButton>(R.id.watch_button)
         val animeId = release.anime?.info?.id ?: ""
 
-        val isNotYetAired = release.anime?.moreInfo?.status == "Not yet aired"
+        val isNotYetAired = release.anime?.moreInfo?.status == "Not yet aired" && true == false
         watchButton.text = if (isNotYetAired) {
             itemView.context.getString(R.string.unavailable)
         } else {

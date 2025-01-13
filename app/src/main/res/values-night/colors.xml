@@ -88,4 +88,6 @@
     <color name="uncheckedColor1">#727272</color>
 
     <color name="hint">#949494</color>
+
+    <color name="grayColor">#191919</color>
 </resources>

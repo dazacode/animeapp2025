@@ -157,9 +157,6 @@ class ExploreAdapter(
 
     inner class LatestNewsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind() {
-            val titleTextView: TextView = itemView.findViewById(R.id.title)
-            titleTextView.text = itemView.context.getString(R.string.latest_news)
-            
             VerticalNewsRecycler.setup(fragment, news, itemView)
         }
     }

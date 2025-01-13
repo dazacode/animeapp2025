@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 class LinearDecoration(
     private val vertical: Int = 0,
     private val horizontal: Int = 0,
-    private val edges: Int = 0
+    private val edges: Rect = Rect()
 ) : RecyclerView.ItemDecoration() {
 
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
@@ -21,7 +21,7 @@ class LinearDecoration(
         outRect.top = vertical
         outRect.bottom = vertical
 
-        outRect.left = if (position == 0) edges else horizontal / 2
-        outRect.right = if (position == itemCount - 1) edges else horizontal / 2
+        outRect.left = if (position == 0) edges.left else horizontal / 2
+        outRect.right = if (position == itemCount - 1) edges.right else horizontal / 2
     }
 }
