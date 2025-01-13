@@ -189,7 +189,7 @@ object DetailsHelper {
         val shareButton = itemView.findViewById<ImageButton>(R.id.shareButton)
 
         shareButton.setOnClickListener {
-            share(itemView.context, "${AnimeRoutes.BASE_JAVA}details/${release.anime?.info?.id}")
+            share(itemView.context, "${itemView.context.getString(R.string.share_url)}release/${release.anime?.info?.id}")
         }
     }
 

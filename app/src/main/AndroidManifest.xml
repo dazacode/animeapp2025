@@ -30,10 +30,6 @@
         <activity
             android:name=".ui.activity.auth.AuthActivity"
             android:exported="false" />
-        <activity
-            android:name=".ui.login.AuthActivity"
-            android:exported="false"
-            android:label="@string/title_activity_auth" />
 
         <meta-data
             android:name="asset_statements"
@@ -61,8 +57,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="kawaime-p9kd5eijx-danyas-projects-54483db4.vercel.app"
-                    android:pathPattern="/details/.*"
+                    android:host="@string/share_url"
+                    android:pathPattern="/release/.*"
                     android:scheme="https" />
             </intent-filter>
         </activity>
