@@ -1,3 +1,7 @@
+## [0.7.4](https://github.com/daffineq/Kawaime/compare/v0.7.3...v0.7.4) (2025-05-19)
+
+
+
 ## [0.7.3](https://github.com/daffineq/Kawaime/compare/v0.7.2...v0.7.3) (2025-01-13)
 
 
@@ -21,15 +25,6 @@
 ### Features
 
 * Code refactor ([af0b301](https://github.com/daffineq/Kawaime/commit/af0b30121d996953ed22026659b1672d7655d674))
-
-
-
-# [0.6.0](https://github.com/daffineq/Kawaime/compare/v0.5.0...v0.6.0) (2024-12-28)
-
-
-### Features
-
-* PiP mode implemented ([b6d96f8](https://github.com/daffineq/Kawaime/commit/b6d96f89fe3a413d59736a7fbc6e8ede8dc4601f))
 
 
 
