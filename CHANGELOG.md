@@ -1,3 +1,7 @@
+## [0.7.5](https://github.com/daffineq/Kawaime/compare/v0.7.4...v0.7.5) (2025-05-19)
+
+
+
 ## [0.7.4](https://github.com/daffineq/Kawaime/compare/v0.7.3...v0.7.4) (2025-05-19)
 
 
@@ -16,15 +20,6 @@
 
 
 ## [0.7.1](https://github.com/daffineq/Kawaime/compare/v0.7.0...v0.7.1) (2024-12-28)
-
-
-
-# [0.7.0](https://github.com/daffineq/Kawaime/compare/v0.6.0...v0.7.0) (2024-12-28)
-
-
-### Features
-
-* Code refactor ([af0b301](https://github.com/daffineq/Kawaime/commit/af0b30121d996953ed22026659b1672d7655d674))
 
 
 
