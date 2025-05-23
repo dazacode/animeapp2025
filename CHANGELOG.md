@@ -1,3 +1,7 @@
+## [0.7.6](https://github.com/daffineq/Kawaime/compare/v0.7.5...v0.7.6) (2025-05-23)
+
+
+
 ## [0.7.5](https://github.com/daffineq/Kawaime/compare/v0.7.4...v0.7.5) (2025-05-19)
 
 
@@ -16,10 +20,6 @@
 
 
 ## [0.7.2](https://github.com/daffineq/Kawaime/compare/v0.7.1...v0.7.2) (2024-12-28)
-
-
-
-## [0.7.1](https://github.com/daffineq/Kawaime/compare/v0.7.0...v0.7.1) (2024-12-28)
 
 
 
