@@ -22,7 +22,7 @@
     android:layout_width="52dp"
     android:layout_height="52dp"
     android:layout_gravity="start|top"
-    android:layout_marginStart="4dp"
+    android:layout_marginStart="3dp"
     android:layout_marginTop="2dp"
     android:visibility="visible"
     android:background="@drawable/icon_ripple1"
