@@ -22,8 +22,8 @@ import com.kawaidev.kawaime.ui.fragments.streaming.episodes.helpers.EpisodesUtil
 import com.kawaidev.kawaime.ui.listeners.WatchedListener
 import com.kawaidev.kawaime.ui.models.details.episodes.EpisodesViewModel
 import com.kawaidev.kawaime.ui.models.details.episodes.EpisodesViewModelFactory
-import icepick.Icepick
-import icepick.State
+// import icepick.Icepick  // Temporarily disabled for hot reload
+// import icepick.State    // Temporarily disabled for hot reload
 
 class EpisodesFragment : Fragment(), WatchedListener {
     private lateinit var adapter: EpisodesAdapter
@@ -37,14 +37,14 @@ class EpisodesFragment : Fragment(), WatchedListener {
     private var id: String = ""
     var title: String = ""
 
-    @State private var isCollapsed: Boolean = false
-    @State private var isFetched: Boolean = false
-    @State private var isReversed: Boolean = false
+    var isCollapsed: Boolean = false
+    var isFetched: Boolean = false
+    var isReversed: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Icepick.restoreInstanceState(this, savedInstanceState)
+        // Icepick.restoreInstanceState(this, savedInstanceState)
 
         arguments?.let {
             id = it.getString(ID) ?: ""
@@ -121,7 +121,7 @@ class EpisodesFragment : Fragment(), WatchedListener {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        Icepick.saveInstanceState(this, outState)
+        // Icepick.saveInstanceState(this, outState)
     }
 
     companion object {

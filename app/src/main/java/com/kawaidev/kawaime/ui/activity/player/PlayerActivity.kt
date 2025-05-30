@@ -25,8 +25,8 @@ import com.kawaidev.kawaime.ui.activity.player.helpers.lifecycle.PlayerLifecycle
 import com.kawaidev.kawaime.ui.activity.player.helpers.playerUI.PlayerUIHelper
 import com.kawaidev.kawaime.ui.activity.player.helpers.utils.PlayerUtils
 import com.kawaidev.kawaime.ui.models.PlayerViewModel
-import icepick.Icepick
-import icepick.State
+// import icepick.Icepick  // Temporarily disabled for hot reload
+// import icepick.State    // Temporarily disabled for hot reload
 import kotlinx.serialization.json.Json
 
 
@@ -42,8 +42,10 @@ class PlayerActivity : AppCompatActivity() {
     lateinit var service: StreamingService
     lateinit var playerViewModel: PlayerViewModel
 
-    @State var url: String = ""
-    @State var showSystemUi = true
+    // @JvmField @State var url: String = ""  // Temporarily disabled for hot reload
+    // @JvmField @State var showSystemUi = true  // Temporarily disabled for hot reload
+    var url: String = ""
+    var showSystemUi = true
 
     private var isPlayerReady = false
 
@@ -102,7 +104,7 @@ class PlayerActivity : AppCompatActivity() {
         super.onRestoreInstanceState(savedInstanceState)
         playerViewModel.playbackPosition = savedInstanceState.getLong("playbackPosition", 0)
         playerViewModel.playWhenReady = savedInstanceState.getBoolean("playWhenReady", true)
-        Icepick.restoreInstanceState(this, savedInstanceState)
+        // Icepick.restoreInstanceState(this, savedInstanceState)
 
         if (showSystemUi) PlayerUtils.showSystemUI(this) else PlayerUtils.hideSystemUI(this)
     }
@@ -111,7 +113,7 @@ class PlayerActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
         outState.putLong("playbackPosition", playerViewModel.playbackPosition)
         outState.putBoolean("playWhenReady", playerViewModel.playWhenReady)
-        Icepick.saveInstanceState(this, outState)
+        // Icepick.saveInstanceState(this, outState)
     }
 
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration) {

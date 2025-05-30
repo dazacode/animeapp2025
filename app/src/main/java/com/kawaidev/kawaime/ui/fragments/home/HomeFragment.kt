@@ -15,8 +15,8 @@ import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.network.dao.anime.Home
 import com.kawaidev.kawaime.network.interfaces.AnimeService
 import com.kawaidev.kawaime.ui.adapters.home.HomeAdapter
-import icepick.Icepick
-import icepick.State
+// import icepick.Icepick  // Temporarily disabled for hot reload
+// import icepick.State    // Temporarily disabled for hot reload
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -25,6 +25,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
+    // Test comment for hot reload verification
     private lateinit var adapter: HomeAdapter
     private lateinit var service: AnimeService
 
@@ -32,13 +33,13 @@ class HomeFragment : Fragment() {
     private lateinit var recycler: RecyclerView
     private lateinit var layoutManager: LinearLayoutManager
 
-    @State private var home: Home = Home()
-    @State private var isFetched: Boolean = false
+    var home: Home = Home()
+    var isFetched: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Icepick.restoreInstanceState(this, savedInstanceState)
+        // Icepick.restoreInstanceState(this, savedInstanceState)
 
         adapter = HomeAdapter(this, home)
         service = AnimeService.create()
@@ -113,7 +114,7 @@ class HomeFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        Icepick.saveInstanceState(this, outState);
+        // Icepick.saveInstanceState(this, outState);
     }
 
     companion object {

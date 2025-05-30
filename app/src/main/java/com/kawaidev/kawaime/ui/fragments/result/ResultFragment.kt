@@ -23,9 +23,10 @@ class ResultFragment : BaseAnimeFragment() {
         arguments?.let {
             searchParams = Json.decodeFromString(it.getString(SEARCH_PARAMS) ?: "")
         }
-        adapter = AnimeAdapter(AnimeParams(this, anime)) {
-            fetchAnimeData(1)
-        }
+        adapter = AnimeAdapter(
+            animeParams = AnimeParams(this, anime),
+            onAgain = { fetchAnimeData(1) }
+        )
     }
 
     override fun onCreateView(

@@ -30,25 +30,35 @@
                 android:id="@+id/spotlight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Spotlight №1"
+                android:text="✨ Spotlight №1"
                 android:maxLines="1"
                 android:ellipsize="end"
-                android:textSize="15sp"
-                android:textColor="@color/text3" />
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/text3"
+                android:shadowColor="#80000000"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="3" />
 
             <Space
                 android:layout_width="wrap_content"
-                android:layout_height="4dp"/>
+                android:layout_height="6dp"/>
 
             <TextView
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Naruto"
-                android:maxLines="1"
+                android:maxLines="2"
                 android:ellipsize="end"
                 style="@style/BoldText"
-                android:textColor="@color/text3" />
+                android:textSize="24sp"
+                android:textColor="@color/text3"
+                android:shadowColor="#80000000"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="4" />
 
             <TextView
                 android:id="@+id/desc"
@@ -56,20 +66,26 @@
                 android:layout_height="wrap_content"
                 android:text="Some description"
                 style="@style/MediumText"
-                android:maxLines="4"
+                android:maxLines="3"
                 android:ellipsize="end"
-                android:textColor="@color/text3" />
+                android:textColor="@color/text3"
+                android:shadowColor="#80000000"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="2"
+                android:layout_marginTop="4dp" />
 
             <Button
                 android:id="@+id/details_button"
-                android:layout_width="146dp"
-                android:layout_height="44dp"
+                android:layout_width="160dp"
+                android:layout_height="48dp"
                 style="@style/FilledButton"
-                app:icon="@drawable/info"
+                app:icon="@drawable/play"
                 app:iconTint="@color/text"
                 app:iconGravity="textStart"
-                android:text="@string/details"
-                android:layout_marginTop="16dp"
+                android:text="🎬 Watch Now"
+                android:textStyle="bold"
+                android:layout_marginTop="20dp"
                 app:layout_constraintStart_toEndOf="@id/space"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

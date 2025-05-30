@@ -18,7 +18,7 @@ object DetailsRecycler {
     fun animeBind(itemView: View, fragment: DetailsFragment, items: List<BasicRelease>, title: String) {
         HorizontalRecycler.setup(
             itemView,
-            AnimeAdapter(AnimeParams(fragment, items)),
+            AnimeAdapter(animeParams = AnimeParams(fragment, items)),
             horizontalPadding = Strings.DETAILS_PADDING,
             headerData = TitleHeader(title)
         )

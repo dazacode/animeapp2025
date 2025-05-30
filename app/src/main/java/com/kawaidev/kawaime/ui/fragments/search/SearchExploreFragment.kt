@@ -19,21 +19,22 @@ import com.kawaidev.kawaime.Strings
 import com.kawaidev.kawaime.ui.activity.MainActivity
 import com.kawaidev.kawaime.ui.adapters.GenreAdapter
 import com.kawaidev.kawaime.utils.Converts
-import icepick.Icepick
-import icepick.State
+// import icepick.Icepick  // Temporarily disabled for hot reload
+// import icepick.State    // Temporarily disabled for hot reload
 
 class SearchExploreFragment : Fragment() {
     private lateinit var adapter: GenreAdapter
     private lateinit var strings: Strings
 
-    @State private var isAppBarHidden: Boolean = false
+    // @State var isAppBarHidden: Boolean = false  // Temporarily disabled for hot reload
+    var isAppBarHidden: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
 
         }
-        Icepick.restoreInstanceState(this, savedInstanceState)
+        // Icepick.restoreInstanceState(this, savedInstanceState)
 
         strings = Strings
         adapter = GenreAdapter(this, strings.genres.toList())
@@ -114,7 +115,7 @@ class SearchExploreFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        Icepick.saveInstanceState(this, outState)
+        // Icepick.saveInstanceState(this, outState)
     }
 
     companion object {

@@ -20,7 +20,7 @@ import com.kawaidev.kawaime.ui.adapters.helpers.GridRecycler
 import com.kawaidev.kawaime.ui.listeners.FavoriteListener
 import com.kawaidev.kawaime.ui.models.favorite.FavoriteViewModel
 import com.kawaidev.kawaime.ui.models.favorite.FavoriteViewModelFactory
-import icepick.Icepick
+// import icepick.Icepick  // Temporarily disabled for hot reload
 
 class FavoriteFragment : Fragment(), FavoriteListener {
 
@@ -34,9 +34,10 @@ class FavoriteFragment : Fragment(), FavoriteListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        adapter = AnimeAdapter(AnimeParams(this, emptyList(), emptyMessage = "Opps, nothing is here! \n Your favorite added anime will appear here!")) {
-            getAnime()
-        }
+        adapter = AnimeAdapter(
+            animeParams = AnimeParams(this, emptyList(), emptyMessage = "Opps, nothing is here! \n Your favorite added anime will appear here!"),
+            onAgain = { getAnime() }
+        )
 
         service = AnimeService.create()
         prefs = App.prefs
@@ -117,7 +118,7 @@ class FavoriteFragment : Fragment(), FavoriteListener {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        Icepick.saveInstanceState(this, outState)
+        // Icepick.saveInstanceState(this, outState)
     }
 
     private fun getAnime(isRefresh: Boolean = false, isReload: Boolean = false) {

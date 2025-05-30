@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
 
-    id("kotlin-kapt")
+    // id("kotlin-kapt")  // Temporarily disabled for hot reload
     kotlin("plugin.serialization") version "1.9.10"
 }
 
@@ -30,6 +30,12 @@ android {
     }
 
     buildTypes {
+        debug {
+            isDebuggable = true
+            isMinifyEnabled = false
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-debug"
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -75,11 +81,11 @@ dependencies {
     implementation(libs.glide)
     implementation(libs.glide.transformations)
     implementation(libs.androidx.swiperefreshlayout)
-    implementation(libs.icepick)
+    // implementation(libs.icepick)  // Temporarily disabled for hot reload
     implementation(libs.androidx.preference)
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.lifecycle.livedata.ktx)
-    annotationProcessor(libs.icepick.processor)
+    // kapt(libs.icepick.processor)  // Temporarily disabled for hot reload
 
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)

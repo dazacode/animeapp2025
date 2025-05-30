@@ -142,7 +142,23 @@ class HomeAdapter(
         fun bind(newData: List<BasicRelease>, title: String) {
             if (!::currentData.isInitialized || currentData != newData) {
                 currentData = newData
-                HorizontalRecycler.setup(itemView, AnimeAdapter(AnimeParams(fragment, currentData)), headerData = TitleHeader(title))
+                
+                // 🔥 Determine section type for special styling
+                val sectionType = when {
+                    title.contains("Latest") -> "latest"
+                    title.contains("Trending") -> "trending"
+                    title.contains("Top Airing") -> "top_airing"
+                    else -> null
+                }
+                
+                HorizontalRecycler.setup(
+                    itemView, 
+                    AnimeAdapter(
+                        animeParams = AnimeParams(fragment, currentData), 
+                        sectionType = sectionType
+                    ), 
+                    headerData = TitleHeader(title)
+                )
             }
         }
     }

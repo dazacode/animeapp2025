@@ -59,6 +59,28 @@
                 android:textColor="@color/white"/>
         </androidx.cardview.widget.CardView>
 
+        <!-- 🆕 NEW Badge for latest episodes -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/newBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_margin="4dp"
+            android:visibility="gone"
+            app:cardElevation="2dp"
+            app:cardCornerRadius="8dp"
+            app:cardBackgroundColor="@color/main">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🆕 NEW"
+                android:textSize="10sp"
+                android:paddingHorizontal="6dp"
+                android:paddingVertical="2dp"
+                android:fontFamily="sans-serif-black"
+                android:textColor="@color/white"/>
+        </androidx.cardview.widget.CardView>
+
         <FrameLayout
             android:id="@+id/imageButton"
             android:layout_width="match_parent"

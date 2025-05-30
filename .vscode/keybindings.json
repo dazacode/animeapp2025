@@ -1,0 +1,32 @@
+[
+    {
+        "key": "ctrl+f5",
+        "command": "workbench.action.tasks.runTask",
+        "args": "Quick Build (Super Fast)"
+    },
+    {
+        "key": "ctrl+f9",
+        "command": "workbench.action.tasks.runTask",
+        "args": "Build Debug APK"
+    },
+    {
+        "key": "ctrl+f10",
+        "command": "workbench.action.tasks.runTask",
+        "args": "Install Debug (Hot Reload)"
+    },
+    {
+        "key": "ctrl+alt+p",
+        "command": "workbench.action.tasks.runTask",
+        "args": "Install Debug (Hot Reload)"
+    },
+    {
+        "key": "ctrl+alt+f10", 
+        "command": "workbench.action.tasks.runTask",
+        "args": "Build Debug APK"
+    },
+    {
+        "key": "ctrl+shift+f10",
+        "command": "workbench.action.tasks.runTask", 
+        "args": "Build Release APK"
+    }
+] 

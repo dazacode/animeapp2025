@@ -18,11 +18,54 @@ class SpotlightPagerAdapter(private val fragment: Fragment, private val spotligh
 
     inner class SpotlightItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(anime: BasicRelease) {
-            itemView.findViewById<TextView>(R.id.spotlight).text = itemView.context.getString(R.string.spotlight, anime.rank.toString())
+            itemView.alpha = 0f
+            itemView.translationY = 50f
+            itemView.animate()
+                .alpha(1f)
+                .translationY(0f)
+                .setDuration(300)
+                .start()
+            
+            itemView.findViewById<TextView>(R.id.spotlight).text = "✨ Spotlight №${anime.rank}"
             itemView.findViewById<TextView>(R.id.title).text = anime.name
             itemView.findViewById<TextView>(R.id.desc).text = anime.description
 
-            itemView.findViewById<Button>(R.id.details_button).setOnClickListener {
+            val detailsButton = itemView.findViewById<Button>(R.id.details_button)
+            
+            detailsButton.setOnTouchListener { v, event ->
+                when (event.action) {
+                    android.view.MotionEvent.ACTION_DOWN -> {
+                        v.animate()
+                            .scaleX(0.95f)
+                            .scaleY(0.95f)
+                            .setDuration(100)
+                            .start()
+                    }
+                    android.view.MotionEvent.ACTION_UP, android.view.MotionEvent.ACTION_CANCEL -> {
+                        v.animate()
+                            .scaleX(1.0f)
+                            .scaleY(1.0f)
+                            .setDuration(100)
+                            .start()
+                    }
+                }
+                false
+            }
+            
+            detailsButton.setOnClickListener {
+                it.animate()
+                    .scaleX(1.1f)
+                    .scaleY(1.1f)
+                    .setDuration(50)
+                    .withEndAction {
+                        it.animate()
+                            .scaleX(1.0f)
+                            .scaleY(1.0f)
+                            .setDuration(100)
+                            .start()
+                    }
+                    .start()
+                
                 val bundle = Bundle().apply {
                     putString("id", anime.id)
                 }

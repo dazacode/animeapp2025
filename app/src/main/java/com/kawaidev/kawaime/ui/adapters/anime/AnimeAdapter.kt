@@ -23,7 +23,8 @@ import com.kawaidev.kawaime.utils.LoadImage
 
 class AnimeAdapter(
     var animeParams: AnimeParams,
-    private var onAgain: (() -> Unit?)? = null
+    private var onAgain: (() -> Unit?)? = null,
+    private var sectionType: String? = null
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemId(position: Int): Long {
@@ -71,15 +72,62 @@ class AnimeAdapter(
 
     inner class AnimeViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(anime: BasicRelease) {
+            itemView.alpha = 0f
+            itemView.translationY = 30f
+            itemView.animate()
+                .alpha(1f)
+                .translationY(0f)
+                .setDuration(200)
+                .setStartDelay((bindingAdapterPosition % 6) * 50L)
+                .start()
+            
             LoadImage().loadImage(itemView.context, anime.poster, itemView.findViewById(R.id.animeImage))
 
             val rating = anime.rating
             val adultRatings = listOf("R", "R+", "Rx", "18+")
             itemView.findViewById<CardView>(R.id.ratingCard).visibility = if (rating != null && rating in adultRatings) View.VISIBLE else View.GONE
 
+            val newBadge = itemView.findViewById<CardView>(R.id.newBadge)
+            newBadge.visibility = if (sectionType == "latest") View.VISIBLE else View.GONE
+
             itemView.findViewById<TextView>(R.id.title).text = anime.name
 
-            itemView.findViewById<FrameLayout>(R.id.imageButton).setOnClickListener {
+            val imageButton = itemView.findViewById<FrameLayout>(R.id.imageButton)
+            
+            imageButton.setOnTouchListener { v, event ->
+                when (event.action) {
+                    android.view.MotionEvent.ACTION_DOWN -> {
+                        v.animate()
+                            .scaleX(0.95f)
+                            .scaleY(0.95f)
+                            .setDuration(100)
+                            .start()
+                    }
+                    android.view.MotionEvent.ACTION_UP, android.view.MotionEvent.ACTION_CANCEL -> {
+                        v.animate()
+                            .scaleX(1.0f)
+                            .scaleY(1.0f)
+                            .setDuration(100)
+                            .start()
+                    }
+                }
+                false
+            }
+            
+            imageButton.setOnClickListener {
+                it.animate()
+                    .scaleX(1.05f)
+                    .scaleY(1.05f)
+                    .setDuration(50)
+                    .withEndAction {
+                        it.animate()
+                            .scaleX(1.0f)
+                            .scaleY(1.0f)
+                            .setDuration(100)
+                            .start()
+                    }
+                    .start()
+                
                 val bundle = Bundle().apply { putString("id", anime.id) }
                 val detailsFragment = DetailsFragment().apply { arguments = bundle }
                 (animeParams.fragment.requireActivity() as MainActivity).pushFragment(detailsFragment)

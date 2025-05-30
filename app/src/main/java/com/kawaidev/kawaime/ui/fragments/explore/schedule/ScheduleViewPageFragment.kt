@@ -15,8 +15,8 @@ import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.network.dao.anime.Schedule
 import com.kawaidev.kawaime.network.interfaces.AnimeService
 import com.kawaidev.kawaime.ui.adapters.schedule.ScheduleAdapter
-import icepick.Icepick
-import icepick.State
+// import icepick.Icepick  // Temporarily disabled for hot reload
+// import icepick.State    // Temporarily disabled for hot reload
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -30,12 +30,14 @@ class ScheduleViewPageFragment : Fragment() {
 
     private var position: Int = 0
 
-    @State private var schedule: List<Schedule> = emptyList()
-    @State private var isFetched: Boolean = false
+    // @State var schedule: List<Schedule> = emptyList()  // Temporarily disabled for hot reload
+    // @State var isFetched: Boolean = false             // Temporarily disabled for hot reload
+    var schedule: List<Schedule> = emptyList()
+    var isFetched: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Icepick.restoreInstanceState(this, savedInstanceState)
+        // Icepick.restoreInstanceState(this, savedInstanceState)
 
         arguments?.let {
             position = it.getInt(POSITION)
@@ -117,7 +119,7 @@ class ScheduleViewPageFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        Icepick.saveInstanceState(this, outState)
+        // Icepick.saveInstanceState(this, outState)
     }
 
     companion object {

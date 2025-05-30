@@ -8,7 +8,7 @@ import okhttp3.OkHttpClient
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
-class App : Application() {
+open class App : Application() {
     companion object {
         lateinit var instance: App
             private set

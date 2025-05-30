@@ -23,10 +23,9 @@ import com.kawaidev.kawaime.R
 import com.kawaidev.kawaime.ui.bottomSheets.BottomSheets
 import com.kawaidev.kawaime.ui.dialogs.Dialogs
 import com.kawaidev.kawaime.ui.fragments.details.DetailsFragment
-import com.kawaidev.kawaime.ui.fragments.favorite.FavoriteFragment
-import com.kawaidev.kawaime.ui.fragments.explore.ExploreFragment
 import com.kawaidev.kawaime.ui.fragments.home.HomeFragment
-import com.kawaidev.kawaime.ui.fragments.search.SearchExploreFragment
+import com.kawaidev.kawaime.ui.fragments.user.UserHomeFragment
+import com.kawaidev.kawaime.ui.fragments.manga.MangaFragment
 import com.ncapdevi.fragnav.FragNavController
 import java.util.Locale
 
@@ -37,7 +36,7 @@ class MainActivity : AppCompatActivity(), FragNavController.TransactionListener,
     private lateinit var frame: LinearLayout
     private lateinit var bottomFrame: LinearLayout
 
-    override val numberOfRootFragments: Int = 4
+    override val numberOfRootFragments: Int = 3
 
     val dialogs: Dialogs by lazy { Dialogs(this) }
     val bottomSheets: BottomSheets by lazy { BottomSheets(this) }
@@ -62,21 +61,30 @@ class MainActivity : AppCompatActivity(), FragNavController.TransactionListener,
         bottomFrame = findViewById(R.id.bottomNavigationContainer)
 
         bottomNavigationView.setOnNavigationItemSelectedListener {
+            bottomNavigationView.animate()
+                .scaleX(0.95f)
+                .scaleY(0.95f)
+                .setDuration(50)
+                .withEndAction {
+                    bottomNavigationView.animate()
+                        .scaleX(1.0f)
+                        .scaleY(1.0f)
+                        .setDuration(100)
+                        .start()
+                }
+                .start()
+            
             when (it.itemId) {
-                R.id.navigation_home -> {
+                R.id.navigation_anime -> {
                     fragNavController.switchTab(FragNavController.TAB1)
                     true
                 }
-                R.id.navigation_explore -> {
+                R.id.navigation_home -> {
                     fragNavController.switchTab(FragNavController.TAB2)
                     true
                 }
-                R.id.navigation_search -> {
+                R.id.navigation_manga -> {
                     fragNavController.switchTab(FragNavController.TAB3)
-                    true
-                }
-                R.id.navigation_favorite -> {
-                    fragNavController.switchTab(FragNavController.TAB4)
                     true
                 }
                 else -> false
@@ -153,9 +161,8 @@ class MainActivity : AppCompatActivity(), FragNavController.TransactionListener,
     override fun getRootFragment(index: Int): Fragment {
         return when (index) {
             FragNavController.TAB1 -> HomeFragment().apply { retainInstance = true }
-            FragNavController.TAB2 -> ExploreFragment().apply { retainInstance = true }
-            FragNavController.TAB3 -> SearchExploreFragment().apply { retainInstance = true }
-            FragNavController.TAB4 -> FavoriteFragment().apply { retainInstance = true }
+            FragNavController.TAB2 -> UserHomeFragment().apply { retainInstance = true }
+            FragNavController.TAB3 -> MangaFragment().apply { retainInstance = true }
             else -> throw IllegalStateException("Invalid tab index")
         }
     }

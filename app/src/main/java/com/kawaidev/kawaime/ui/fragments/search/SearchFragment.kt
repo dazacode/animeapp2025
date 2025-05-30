@@ -26,8 +26,8 @@ import com.kawaidev.kawaime.ui.fragments.search.helpers.SearchHelpers
 import com.kawaidev.kawaime.ui.fragments.search.helpers.SearchHelpers.updateVisibility
 import com.kawaidev.kawaime.ui.listeners.SearchListener
 import com.kawaidev.kawaime.ui.models.SearchViewModel
-import icepick.Icepick
-import icepick.State
+// import icepick.Icepick  // Temporarily disabled for hot reload
+// import icepick.State    // Temporarily disabled for hot reload
 import kotlin.math.abs
 
 class SearchFragment : Fragment(), SearchListener {
@@ -41,19 +41,19 @@ class SearchFragment : Fragment(), SearchListener {
     lateinit var historyAdapter: SearchHistoryAdapter
     lateinit var prefs: Prefs
 
-    @State var isLoading = false
-    @State private var isEmpty = false
-    @State var hasNextPage = false
-    @State var error: Exception? = null
-    @State private var isAppBarHidden = false
-    @State private var isInit = false
-    @State private var anime: List<BasicRelease> = emptyList()
+    var isLoading = false
+    var isEmpty = false
+    var hasNextPage = false
+    var error: Exception? = null
+    var isAppBarHidden = false
+    var isInit = false
+    var anime: List<BasicRelease> = emptyList()
 
     private var initSearch: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Icepick.restoreInstanceState(this, savedInstanceState)
+        // Icepick.restoreInstanceState(this, savedInstanceState)
         initialize()
     }
 
@@ -71,9 +71,10 @@ class SearchFragment : Fragment(), SearchListener {
         initSearch = arguments?.getString(INIT_SEARCH)
         searchViewModel = SearchViewModel()
         prefs = App.prefs.apply { setSearchListener(this@SearchFragment) }
-        animeAdapter = AnimeAdapter(AnimeParams(this, anime)) {
-            searchViewModel.refreshSearch(textField.text.toString())
-        }
+        animeAdapter = AnimeAdapter(
+            animeParams = AnimeParams(this, anime),
+            onAgain = { searchViewModel.refreshSearch(textField.text.toString()) }
+        )
         historyAdapter = SearchHistoryAdapter(this, prefs.getRecentSearches())
     }
 
@@ -163,7 +164,7 @@ class SearchFragment : Fragment(), SearchListener {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        Icepick.saveInstanceState(this, outState)
+        // Icepick.saveInstanceState(this, outState)
     }
 
     private fun setupAppBarListener(appBar: AppBarLayout) {

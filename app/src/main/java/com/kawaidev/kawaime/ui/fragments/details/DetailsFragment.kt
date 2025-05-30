@@ -24,8 +24,8 @@ import com.kawaidev.kawaime.ui.listeners.FavoriteListener
 import com.kawaidev.kawaime.ui.models.details.DetailsViewModel
 import com.kawaidev.kawaime.utils.LoadImage
 import com.stfalcon.imageviewer.StfalconImageViewer
-import icepick.Icepick
-import icepick.State
+// import icepick.Icepick  // Temporarily disabled for hot reload
+// import icepick.State    // Temporarily disabled for hot reload
 
 class DetailsFragment : Fragment(), FavoriteListener {
     private lateinit var adapter: DetailsAdapter
@@ -38,8 +38,8 @@ class DetailsFragment : Fragment(), FavoriteListener {
 
     private var isLandscape: Boolean = false
 
-    @State private var release: Release = Release()
-    @State private var isFetched: Boolean = false
+    var release: Release = Release()
+    var isFetched: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +47,7 @@ class DetailsFragment : Fragment(), FavoriteListener {
            id = it.getString(ID) ?: ""
         }
 
-        Icepick.restoreInstanceState(this, savedInstanceState)
+        // Icepick.restoreInstanceState(this, savedInstanceState)
 
         adapter = DetailsAdapter(this, release)
         viewModel = ViewModelProvider(this).get(DetailsViewModel::class.java)
@@ -108,7 +108,7 @@ class DetailsFragment : Fragment(), FavoriteListener {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        Icepick.saveInstanceState(this, outState)
+        // Icepick.saveInstanceState(this, outState)
     }
 
     private fun handleObservers() {

@@ -21,15 +21,16 @@ import com.kawaidev.kawaime.ui.adapters.filter.helpers.FilterItem
 import com.kawaidev.kawaime.ui.adapters.filter.helpers.FilterType
 import com.kawaidev.kawaime.ui.fragments.result.ResultFragment
 import com.kawaidev.kawaime.utils.Converts
-import icepick.Icepick
-import icepick.State
+// import icepick.Icepick  // Temporarily disabled for hot reload
+// import icepick.State    // Temporarily disabled for hot reload
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 class FilterFragment : Fragment() {
     private lateinit var adapter: FilterAdapter
 
-    @State private var filters: MutableList<FilterItem> = mutableListOf()
+    // @State var filters: MutableList<FilterItem> = mutableListOf()  // Temporarily disabled for hot reload
+    var filters: MutableList<FilterItem> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,14 +107,14 @@ class FilterFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        Icepick.saveInstanceState(this, outState)
+        // Icepick.saveInstanceState(this, outState)
         outState.putParcelableArrayList("filters", ArrayList(filters))
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
         if (savedInstanceState != null) {
-            Icepick.restoreInstanceState(this, savedInstanceState)
+            // Icepick.restoreInstanceState(this, savedInstanceState)
             filters = savedInstanceState.getParcelableArrayList("filters") ?: mutableListOf()
             adapter.notifyDataSetChanged()
         }

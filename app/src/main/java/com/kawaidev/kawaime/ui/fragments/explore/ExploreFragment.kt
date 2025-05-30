@@ -23,7 +23,7 @@ import com.kawaidev.kawaime.ui.activity.MainActivity
 import com.kawaidev.kawaime.ui.adapters.explore.ExploreAdapter
 import com.kawaidev.kawaime.ui.fragments.search.SearchFragment
 import com.kawaidev.kawaime.utils.Converts
-import icepick.State
+// import icepick.State  // Temporarily disabled for hot reload
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
@@ -36,8 +36,10 @@ class ExploreFragment : Fragment() {
     private lateinit var recycler: RecyclerView
     private lateinit var layoutManager: LinearLayoutManager
 
-    @State private var news: List<News> = emptyList()
-    @State private var isFetched: Boolean = false
+    // @State var news: List<News> = emptyList()  // Temporarily disabled for hot reload
+    // @State var isFetched: Boolean = false      // Temporarily disabled for hot reload
+    var news: List<News> = emptyList()
+    var isFetched: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

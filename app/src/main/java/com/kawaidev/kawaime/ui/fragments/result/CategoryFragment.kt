@@ -23,9 +23,10 @@ class CategoryFragment : BaseAnimeFragment() {
             category = it.getString(CATEGORY) ?: ""
             title = it.getString(TITLE) ?: ""
         }
-        adapter = AnimeAdapter(AnimeParams(this, anime)) {
-            fetchAnimeData(1)
-        }
+        adapter = AnimeAdapter(
+            animeParams = AnimeParams(this, anime),
+            onAgain = { fetchAnimeData(1) }
+        )
     }
 
     override fun onCreateView(
