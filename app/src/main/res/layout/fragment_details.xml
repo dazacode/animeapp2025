@@ -10,7 +10,8 @@
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="56dp">
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler"
             android:layout_width="match_parent"
@@ -23,7 +24,7 @@
     android:layout_height="52dp"
     android:layout_gravity="start|top"
     android:layout_marginStart="3dp"
-    android:layout_marginTop="2dp"
+    android:layout_marginTop="58dp"
     android:visibility="visible"
     android:background="@drawable/icon_ripple1"
     android:src="@drawable/arrow_back"

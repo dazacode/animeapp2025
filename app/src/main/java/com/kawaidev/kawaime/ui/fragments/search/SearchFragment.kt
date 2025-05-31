@@ -85,7 +85,7 @@ class SearchFragment : Fragment(), SearchListener {
         micButton = view.findViewById(R.id.mic_button)
         clearButton = view.findViewById(R.id.clear_button)
         val back: ImageButton = view.findViewById(R.id.back_button)
-        back.setOnClickListener { (activity as? MainActivity)?.popFragment() }
+        back.setOnClickListener { (activity as? MainActivity)?.hideSearchModal() }
 
         val appBarLayout = view.findViewById<AppBarLayout>(R.id.appBarLayout)
         appBarLayout.setExpanded(!isAppBarHidden, false)

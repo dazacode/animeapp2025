@@ -7,8 +7,11 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.widget.FrameLayout
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -26,6 +29,7 @@ import com.kawaidev.kawaime.ui.fragments.details.DetailsFragment
 import com.kawaidev.kawaime.ui.fragments.home.HomeFragment
 import com.kawaidev.kawaime.ui.fragments.user.UserHomeFragment
 import com.kawaidev.kawaime.ui.fragments.manga.MangaFragment
+import com.kawaidev.kawaime.ui.fragments.search.SearchFragment
 import com.ncapdevi.fragnav.FragNavController
 import java.util.Locale
 
@@ -35,6 +39,9 @@ class MainActivity : AppCompatActivity(), FragNavController.TransactionListener,
     private lateinit var fragNavController: FragNavController
     private lateinit var frame: LinearLayout
     private lateinit var bottomFrame: LinearLayout
+    private lateinit var searchButton: ImageButton
+    private lateinit var profileButton: ImageButton
+    private lateinit var modalContainer: FrameLayout
 
     override val numberOfRootFragments: Int = 3
 
@@ -42,6 +49,7 @@ class MainActivity : AppCompatActivity(), FragNavController.TransactionListener,
     val bottomSheets: BottomSheets by lazy { BottomSheets(this) }
 
     private var backPressedOnce = false
+    private var isModalOpen = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +67,11 @@ class MainActivity : AppCompatActivity(), FragNavController.TransactionListener,
         bottomNavigationView = findViewById(R.id.bottom_navigation)
         frame = findViewById(R.id.frameLinear)
         bottomFrame = findViewById(R.id.bottomNavigationContainer)
+        searchButton = findViewById(R.id.btn_search)
+        profileButton = findViewById(R.id.btn_profile)
+        modalContainer = findViewById(R.id.modal_container)
+
+        setupTopBarButtons()
 
         bottomNavigationView.setOnNavigationItemSelectedListener {
             bottomNavigationView.animate()
@@ -108,6 +121,93 @@ class MainActivity : AppCompatActivity(), FragNavController.TransactionListener,
         handleDeepLink(intent)
     }
 
+    private fun setupTopBarButtons() {
+        searchButton.setOnClickListener {
+            // Add search button animation
+            searchButton.animate()
+                .scaleX(0.9f)
+                .scaleY(0.9f)
+                .setDuration(100)
+                .withEndAction {
+                    searchButton.animate()
+                        .scaleX(1.0f)
+                        .scaleY(1.0f)
+                        .setDuration(100)
+                        .start()
+                }
+                .start()
+            
+            // Navigate to search fragment as modal
+            showSearchModal()
+        }
+
+        profileButton.setOnClickListener {
+            // Add profile button animation
+            profileButton.animate()
+                .scaleX(0.9f)
+                .scaleY(0.9f)
+                .setDuration(100)
+                .withEndAction {
+                    profileButton.animate()
+                        .scaleX(1.0f)
+                        .scaleY(1.0f)
+                        .setDuration(100)
+                        .start()
+                }
+                .start()
+            
+            // Navigate to profile/user settings
+            navigateToProfile()
+        }
+    }
+
+    private fun showSearchModal() {
+        if (isModalOpen) return
+        
+        val searchFragment = SearchFragment().apply {
+            retainInstance = true
+        }
+        
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.modal_container, searchFragment)
+            .commitAllowingStateLoss()
+        
+        modalContainer.visibility = View.VISIBLE
+        isModalOpen = true
+    }
+
+    fun hideSearchModal() {
+        if (!isModalOpen) return
+        
+        val modalFragment = supportFragmentManager.findFragmentById(R.id.modal_container)
+        if (modalFragment != null) {
+            supportFragmentManager.beginTransaction()
+                .remove(modalFragment)
+                .commitAllowingStateLoss()
+        }
+        
+        modalContainer.visibility = View.GONE
+        isModalOpen = false
+    }
+
+    private fun navigateToSearch() {
+        val searchFragment = SearchFragment().apply {
+            retainInstance = true
+        }
+        pushFragment(searchFragment)
+    }
+
+    private fun navigateToProfile() {
+        // For now, show a toast. You can implement profile fragment later
+        showSnackbar("Profile feature coming soon!")
+        
+        // Uncomment when you have a profile fragment:
+        // val profileFragment = ProfileFragment().apply {
+        //     retainInstance = true
+        // }
+        // pushFragment(profileFragment)
+    }
+
     private fun handleDeepLink(intent: Intent?) {
         val data: Uri? = intent?.data
         if (data != null) {
@@ -147,6 +247,11 @@ class MainActivity : AppCompatActivity(), FragNavController.TransactionListener,
     }
 
     override fun onBackPressed() {
+        if (isModalOpen) {
+            hideSearchModal()
+            return
+        }
+        
         if (fragNavController.isRootFragment) {
             if (backPressedOnce) {
                 super.onBackPressed()

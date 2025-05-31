@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:orientation="horizontal"
+    android:background="@android:color/transparent"
+    android:gravity="center_vertical|end"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp">
+
+    <!-- Search Button with rounded background -->
+    <ImageButton
+        android:id="@+id/btn_search"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/top_bar_button_background"
+        android:src="@drawable/search"
+        android:contentDescription="Search"
+        android:scaleType="center"
+        app:tint="@color/icon" />
+
+    <!-- Profile Button with rounded background -->
+    <ImageButton
+        android:id="@+id/btn_profile"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/top_bar_button_background"
+        android:src="@drawable/ic_profile"
+        android:contentDescription="Profile"
+        android:scaleType="center"
+        app:tint="@color/icon" />
+
+</LinearLayout> 

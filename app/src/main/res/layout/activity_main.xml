@@ -18,6 +18,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+            
             <FrameLayout
                 android:id="@+id/frame"
                 android:layout_width="match_parent"
@@ -90,4 +91,19 @@
             </FrameLayout>
         </LinearLayout>
     </FrameLayout>
+
+    <!-- Top App Bar as overlay -->
+    <include layout="@layout/top_app_bar" 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top" />
+
+    <!-- Modal Fragment Container (for search and other modals) -->
+    <FrameLayout
+        android:id="@+id/modal_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="8dp"
+        android:visibility="gone" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
