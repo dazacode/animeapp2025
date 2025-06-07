@@ -23,6 +23,7 @@ import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.kawaidev.kawaime.R
+import com.kawaidev.kawaime.Prefs
 import com.kawaidev.kawaime.ui.bottomSheets.BottomSheets
 import com.kawaidev.kawaime.ui.dialogs.Dialogs
 import com.kawaidev.kawaime.ui.fragments.details.DetailsFragment
@@ -53,6 +54,16 @@ class MainActivity : AppCompatActivity(), FragNavController.TransactionListener,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Check if user is logged in, if not redirect to WelcomeActivity
+        val prefs = Prefs.getInstance(this)
+        if (!prefs.isLoggedIn()) {
+            val intent = Intent(this, WelcomeActivity::class.java)
+            startActivity(intent)
+            finish()
+            return
+        }
+        
         setContentView(R.layout.activity_main)
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)

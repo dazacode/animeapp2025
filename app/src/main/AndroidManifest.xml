@@ -42,7 +42,7 @@
             android:supportsPictureInPicture="true"
             android:theme="@style/PlayerTheme" />
         <activity
-            android:name=".ui.activity.MainActivity"
+            android:name=".ui.activity.WelcomeActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
@@ -50,6 +50,12 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        
+        <activity
+            android:name=".ui.activity.MainActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
 

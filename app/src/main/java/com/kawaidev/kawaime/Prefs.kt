@@ -142,4 +142,19 @@ class Prefs private constructor(context: Context) {
         sharedPreferences.edit().putString("favorites", jsonStr).apply()
     }
 
+    // Login status methods
+    fun isLoggedIn(): Boolean {
+        // For now, always return false to show welcome screen every time
+        // TODO: Implement proper login system
+        return sharedPreferences.getBoolean("is_logged_in", false)
+    }
+
+    fun setLoggedIn(isLoggedIn: Boolean) {
+        sharedPreferences.edit().putBoolean("is_logged_in", isLoggedIn).apply()
+    }
+
+    fun logout() {
+        sharedPreferences.edit().putBoolean("is_logged_in", false).apply()
+    }
+
 }
